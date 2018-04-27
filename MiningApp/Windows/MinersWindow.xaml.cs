@@ -10,28 +10,22 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MiningApp
+namespace MiningApp.Windows
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MinersWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MinersWindow : Window
     {
-        WindowController Controller = new WindowController();
+        private MinersViewModel _view;
 
-        public MainWindow()
+        public MinersWindow()
         {
             InitializeComponent();
 
-            Startup();
-        }
-
-        private void Startup()
-        {
-            this.Visibility = Visibility.Collapsed;
+            _view = new MinersViewModel(this);
         }
     }
 }

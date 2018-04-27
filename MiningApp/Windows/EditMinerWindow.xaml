@@ -1,0 +1,23 @@
+﻿<Window x:Class="MiningApp.Windows.EditMinerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MiningApp.Windows"
+        mc:Ignorable="d"
+        Title="EditMinerWindow" Height="500" Width="600" FontFamily="Verdana" FontSize="15">
+    <Grid>
+        <Label x:Name="TitleLabel" Content="Miner Setup" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Verdana" FontSize="28"/>
+        <Label x:Name="NameLabel" Content="Name" HorizontalAlignment="Left" Margin="71,147,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="NameTextBox" HorizontalAlignment="Left" Height="24" Margin="130,149,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="412" VerticalContentAlignment="Center"/>
+        <Label x:Name="PathLabel" Content="Path" HorizontalAlignment="Left" Margin="82,185,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="PathTextBox" HorizontalAlignment="Left" Height="24" Margin="130,187,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="336" VerticalContentAlignment="Center"/>
+        <Button x:Name="BrowseButton" Content="Browse" HorizontalAlignment="Left" Margin="471,187,0,0" VerticalAlignment="Top" Width="71" Height="24" FontSize="13"/>
+        <Label x:Name="ArgumentsLabel" Content="Arguments" HorizontalAlignment="Left" Margin="33,225,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="ArgumentsTextBox" HorizontalAlignment="Left" Height="24" Margin="130,227,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="412" VerticalContentAlignment="Center"/>
+        <Label x:Name="MinerLabel" Content="Miner" HorizontalAlignment="Left" Margin="71,108,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="MinerComboBox" HorizontalAlignment="Left" Margin="130,110,0,0" VerticalAlignment="Top" Width="412" Height="24"/>
+        <Button x:Name="FinishButton" Content="Finish" HorizontalAlignment="Left" Margin="475,422,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
+
+    </Grid>
+</Window>

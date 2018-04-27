@@ -1,0 +1,16 @@
+﻿<Window x:Class="MiningApp.Windows.HomeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MiningApp.Windows"
+        mc:Ignorable="d"
+        Title="HomeWindow" Height="500" Width="175">
+    <Grid>
+        <Button x:Name="MinersButton" Content="Miners" HorizontalAlignment="Left" Margin="45,45,0,0" VerticalAlignment="Top" Width="74"/>
+        <Button x:Name="PoolsButton" Content="Pools" HorizontalAlignment="Left" Margin="45,110,0,0" VerticalAlignment="Top" Width="74"/>
+        <Button x:Name="WalletsButton" Content="Wallets" HorizontalAlignment="Left" Margin="45,175,0,0" VerticalAlignment="Top" Width="74"/>
+        <Button x:Name="LogsButton" Content="Logs" HorizontalAlignment="Left" Margin="45,240,0,0" VerticalAlignment="Top" Width="74"/>
+
+    </Grid>
+</Window>
