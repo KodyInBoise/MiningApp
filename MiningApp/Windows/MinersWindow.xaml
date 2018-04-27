@@ -5,11 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MiningApp.Windows"
         mc:Ignorable="d"
-        Title="MinersWindow" Height="500" Width="600">
+        Title="MinersWindow" Height="500" Width="600" FontFamily="Verdana" FontSize="15">
     <Grid>
-        <Button x:Name="NewButton" Content="New" HorizontalAlignment="Left" Margin="42,422,0,0" VerticalAlignment="Top" Width="74"/>
-        <Button x:Name="EditButton" Content="Edit" HorizontalAlignment="Left" Margin="176,422,0,0" VerticalAlignment="Top" Width="76"/>
-        <Button x:Name="LaunchButton" Content="Launch" HorizontalAlignment="Left" Margin="322,422,0,0" VerticalAlignment="Top" Width="74"/>
+        <Label x:Name="TitleLabel" Content="Active Miners" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Verdana" FontSize="28"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="100" Margin="20,352,0,0" VerticalAlignment="Top" Width="545"/>
+        <Button x:Name="NewButton" Content="New" HorizontalAlignment="Left" Margin="42,391,0,0" VerticalAlignment="Top" Width="74"/>
+        <Button x:Name="EditButton" Content="Edit" HorizontalAlignment="Left" Margin="176,391,0,0" VerticalAlignment="Top" Width="76"/>
+        <Button x:Name="LaunchButton" Content="Launch" HorizontalAlignment="Left" Margin="322,391,0,0" VerticalAlignment="Top" Width="74"/>
+        <Label x:Name="ViewingLabel" Content="1 of 5" HorizontalAlignment="Left" Margin="250,55,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <Label x:Name="NameLabel" Content="Name: " HorizontalAlignment="Left" Margin="65,115,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="PathLabel" Content="Path: " HorizontalAlignment="Left" Margin="76,153,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="StatusLabel" Content="Status: " HorizontalAlignment="Left" Margin="60,191,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="OutputLabel" Content="Output: " HorizontalAlignment="Left" Margin="57,229,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="PreviousButton" Content="Previous" HorizontalAlignment="Left" Margin="40,315,0,0" VerticalAlignment="Top" Width="76"/>
+        <Button x:Name="NextButton" Content="Next" HorizontalAlignment="Left" Margin="469,315,0,0" VerticalAlignment="Top" Width="76"/>
 
     </Grid>
 </Window>

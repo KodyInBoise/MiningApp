@@ -10,6 +10,7 @@ namespace MiningApp
     public class MinersViewModel
     {
         private MinersWindow _window;
+        private List<MinerModel> _allMiners;
 
         public MinersViewModel(MinersWindow window)
         {
@@ -18,9 +19,11 @@ namespace MiningApp
             ShowWindow();
         }
 
-        private void ShowWindow()
+        private async void ShowWindow()
         {
             WindowController.Instance.MinersView = this;
+
+            _allMiners = await WindowController.Instance.LoadMiners();
 
             _window.NewButton.Click += (s, e) => NewButton_Clicked();
             _window.EditButton.Click += (s, e) => EditButton_Clicked();
@@ -56,6 +59,11 @@ namespace MiningApp
             WindowController.Instance.MinersView = null;
 
             _window.Close();
+        }
+
+        private void DisplayMiner(MinerModel miner)
+        {
+
         }
     }
 }
