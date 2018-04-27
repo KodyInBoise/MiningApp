@@ -56,11 +56,18 @@ namespace MiningApp
             _minersWin = new MinersWindow();
         }
 
-        public void ShowEditMiner()
+        public void ShowNewMiner()
         {
             EditMinersView?.Dispose();
 
             _editMinerWin = new EditMinerWindow();
+        }
+
+        public void ShowEditMiner()
+        {
+            EditMinersView?.Dispose();
+
+            _editMinerWin = new EditMinerWindow(new MinerModel());
         }
 
         public async Task<string> GetFilePath()
@@ -81,6 +88,11 @@ namespace MiningApp
         public void InsertMiner(MinerModel miner)
         {
             _dataHelper.InsertMiner(miner);
+        }
+
+        public Task<List<MinerModel>> LoadMiners()
+        {
+            return _dataHelper.GetMiners();
         }
     }
 }

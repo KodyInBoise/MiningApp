@@ -21,11 +21,11 @@ namespace MiningApp.Windows
     {
         private EditMinerViewModel _view;
 
-        public EditMinerWindow()
+        public EditMinerWindow(MinerModel miner = null)
         {
             InitializeComponent();
 
-            _view = new EditMinerViewModel(this);
+            _view = new EditMinerViewModel(this, miner);
         }
     }
 }

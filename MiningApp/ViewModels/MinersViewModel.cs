@@ -34,7 +34,9 @@ namespace MiningApp
 
         public void NewButton_Clicked()
         {
+            WindowController.Instance.ShowNewMiner();
 
+            Dispose();
         }
 
         public void EditButton_Clicked()

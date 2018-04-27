@@ -12,6 +12,7 @@ namespace MiningApp
     {
         private EditMinerWindow _window;
         private MinerModel _miner;
+        private List<MinerModel> _allMiners;
 
         public EditMinerViewModel(EditMinerWindow window, MinerModel miner = null)
         {
@@ -21,7 +22,7 @@ namespace MiningApp
             ShowWindow();
         }
 
-        private void ShowWindow()
+        private async void ShowWindow()
         {
             WindowController.Instance.EditMinersView = this;
 
@@ -32,7 +33,18 @@ namespace MiningApp
 
                 _miner = new MinerModel();
             }
+            else
+            {
+                _allMiners = await WindowController.Instance.LoadMiners();
+                _allMiners.ForEach(x => _window.MinerComboBox.Items.Add(x));
 
+                _window.MinerLabel.Visibility =
+                _window.MinerComboBox.Visibility = Visibility.Visible;
+
+                DisplayMiner(_miner);
+            }
+
+            _window.MinerComboBox.DropDownClosed += (s, e) => MinerComboBox_DropDownClosed();
             _window.BrowseButton.Click += (s, e) => BrowseButton_Clicked();
             _window.FinishButton.Click += (s, e) => FinishButton_Clicked();
 
@@ -66,6 +78,25 @@ namespace MiningApp
             _miner.Arguments = _window.ArgumentsTextBox.Text;
 
             Task.Run(() => WindowController.Instance.InsertMiner(_miner));
+        }
+
+        private void MinerComboBox_DropDownClosed()
+        {
+            var selectedMiner = (MinerModel)_window.MinerComboBox.SelectedItem;
+
+            if (_miner != selectedMiner)
+            {
+                DisplayMiner(selectedMiner);
+            }
+        }
+
+        private void DisplayMiner(MinerModel miner)
+        {
+            _window.NameTextBox.Text = miner.Name;
+            _window.PathTextBox.Text = ElementHelper.TrimPath(miner.Path);
+            _window.ArgumentsTextBox.Text = miner.Arguments;
+
+            _miner = miner;
         }
     }
 }
