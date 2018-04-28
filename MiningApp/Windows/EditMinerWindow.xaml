@@ -17,6 +17,7 @@
         <TextBox x:Name="ArgumentsTextBox" HorizontalAlignment="Left" Height="24" Margin="130,227,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="412" VerticalContentAlignment="Center"/>
         <Label x:Name="MinerLabel" Content="Miner" HorizontalAlignment="Left" Margin="71,108,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="MinerComboBox" HorizontalAlignment="Left" Margin="130,110,0,0" VerticalAlignment="Top" Width="412" Height="24"/>
+        <Button x:Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="20,422,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
         <Button x:Name="FinishButton" Content="Finish" HorizontalAlignment="Left" Margin="475,422,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
 
     </Grid>

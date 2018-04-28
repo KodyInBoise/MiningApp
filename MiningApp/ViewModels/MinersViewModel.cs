@@ -28,9 +28,13 @@ namespace MiningApp
             _window.NewButton.Click += (s, e) => NewButton_Clicked();
             _window.EditButton.Click += (s, e) => EditButton_Clicked();
             _window.LaunchButton.Click += (s, e) => LaunchButton_Clicked();
+            _window.PreviousButton.Click += (s, e) => PreviousButton_Clicked();
+            _window.NextButton.Click += (s, e) => NextButton_Clicked();
 
             _window.Left = WindowController.Instance.WindowLeft;
             _window.Top = WindowController.Instance.WindowTop;
+
+            DisplayMiner(_allMiners[_index]);
 
             _window.Show();
         }
@@ -44,7 +48,7 @@ namespace MiningApp
 
         public void EditButton_Clicked()
         {
-            WindowController.Instance.ShowEditMiner();
+            WindowController.Instance.ShowEditMiner(_allMiners[_index]);
 
             Dispose();
         }
@@ -63,7 +67,29 @@ namespace MiningApp
 
         private void DisplayMiner(MinerModel miner)
         {
+            _window.NameLabel.Content = $"Name: {miner.Name}";
+            _window.PathLabel.Content = $"Path: {ElementHelper.TrimPath(miner.Path)}";
+            _window.StatusLabel.Content = $"Status: {miner.Status}";
+            _window.OutputLabel.Content = $"Output: {miner.Output}";
 
+            _window.ViewingLabel.Content = $"{_index + 1} of {_allMiners.Count}";
+        }
+
+        int _index = 0;
+        private void PreviousButton_Clicked()
+        {
+            if (_index == 0) _index = _allMiners.Count - 1;
+            else _index--;
+
+            DisplayMiner(_allMiners[_index]);
+        }
+
+        private void NextButton_Clicked()
+        {
+            if (_index == _allMiners.Count - 1) _index = 0;
+            else _index++;
+
+            DisplayMiner(_allMiners[_index]);
         }
     }
 }

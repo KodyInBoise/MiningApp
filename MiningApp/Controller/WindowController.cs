@@ -63,11 +63,11 @@ namespace MiningApp
             _editMinerWin = new EditMinerWindow();
         }
 
-        public void ShowEditMiner()
+        public void ShowEditMiner(MinerModel miner)
         {
             EditMinersView?.Dispose();
 
-            _editMinerWin = new EditMinerWindow(new MinerModel());
+            _editMinerWin = new EditMinerWindow(miner);
         }
 
         public async Task<string> GetFilePath()
@@ -93,6 +93,16 @@ namespace MiningApp
         public Task<List<MinerModel>> LoadMiners()
         {
             return _dataHelper.GetMiners();
+        }
+
+        public void DeleteMiner(MinerModel miner)
+        {
+            _dataHelper.DeleteMiner(miner.ID);
+        }
+
+        public void UpdateMiner(MinerModel miner)
+        {
+            _dataHelper.UpdateMiner(miner);
         }
     }
 }

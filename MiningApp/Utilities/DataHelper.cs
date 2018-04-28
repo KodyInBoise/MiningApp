@@ -66,9 +66,20 @@ namespace MiningApp
             }
         }
 
-        public async Task<MinerModel> GetMinerByID(int ID)
+        public async Task<MinerModel> GetMinerByID(int minerID)
         {
-            using (_database) return _minerCollection.FindById(ID);
+            using (_database)
+            {
+                return _minerCollection.FindById(minerID);
+            }
+        }
+
+        public void DeleteMiner(int minerID)
+        {
+            using (_database)
+            {
+                _minerCollection.Delete(minerID);
+            }
         }
     }
 }
