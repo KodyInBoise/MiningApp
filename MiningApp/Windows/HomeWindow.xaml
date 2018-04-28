@@ -11,6 +11,7 @@
         <Button x:Name="PoolsButton" Content="Pools" HorizontalAlignment="Left" Margin="45,110,0,0" VerticalAlignment="Top" Width="74"/>
         <Button x:Name="WalletsButton" Content="Wallets" HorizontalAlignment="Left" Margin="45,175,0,0" VerticalAlignment="Top" Width="74"/>
         <Button x:Name="LogsButton" Content="Logs" HorizontalAlignment="Left" Margin="45,240,0,0" VerticalAlignment="Top" Width="74"/>
+        <Button x:Name="TestButton" Content="Test" HorizontalAlignment="Left" Margin="45,419,0,0" VerticalAlignment="Top" Width="74"/>
 
     </Grid>
 </Window>

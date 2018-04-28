@@ -14,6 +14,7 @@ namespace MiningApp
 
         private DataHelper _dataHelper { get; set; } = null;
         private ProcessHelper _procHelper { get; set; } = null;
+        private CryptoHelper _cryptoHelper { get; set; } = null;
 
         private HomeWindow _homeWin { get; set; }
         private MinersWindow _minersWin { get; set; }
@@ -38,8 +39,12 @@ namespace MiningApp
 
             _dataHelper = new DataHelper();
             _procHelper = new ProcessHelper();
+            _cryptoHelper = new CryptoHelper();
 
             ShowHome();
+
+            //Testing
+            _homeWin.TestButton.Click += (s, e) => TestVoid();
         }
 
         public void ShowHome()
@@ -108,6 +113,13 @@ namespace MiningApp
         public void LaunchMiner(MinerModel miner)
         {
             _procHelper.StartMiner(miner);
+        }
+
+        public async void TestVoid()
+        {
+            var tickers = await CryptoHelper.Instance.GetTickers;
+
+            var t = tickers[0];
         }
     }
 }
