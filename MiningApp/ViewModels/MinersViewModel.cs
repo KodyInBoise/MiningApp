@@ -23,7 +23,7 @@ namespace MiningApp
         {
             WindowController.Instance.MinersView = this;
 
-            _allMiners = await WindowController.Instance.LoadMiners();
+            _allMiners = await WindowController.Instance.GetMiners();
 
             _window.NewButton.Click += (s, e) => NewButton_Clicked();
             _window.EditButton.Click += (s, e) => EditButton_Clicked();
@@ -55,7 +55,7 @@ namespace MiningApp
 
         public void LaunchButton_Clicked()
         {
-
+            WindowController.Instance.LaunchMiner(_allMiners[_index]);
         }
 
         public void Dispose()

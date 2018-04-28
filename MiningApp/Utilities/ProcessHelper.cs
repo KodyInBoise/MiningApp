@@ -11,11 +11,41 @@ namespace MiningApp
 {
     public class ProcessHelper
     {
-        private List<Process> _activeProcesses = new List<Process>();
+        private WindowController _controller => WindowController.Instance;
+
+        private List<MinerModel> _allMiners = new List<MinerModel>();
+        private List<Process> _minerProcesses = new List<Process>();
 
         public ProcessHelper()
         {
+            UpdateMiners();
+            GetRunningMiners();
+        }
 
+        private async void UpdateMiners()
+        {
+            _allMiners = await _controller.GetMiners();
+        }
+
+        private void GetRunningMiners()
+        {
+            foreach (var miner in _allMiners)
+            {
+                var proc = miner.GetProcess();
+
+                if (proc != null)
+                {
+                    _minerProcesses.Add(proc);
+                }
+            }
+
+            //Testing
+            _minerProcesses.ForEach(x => Console.WriteLine(x.ProcessName));
+        }
+
+        public void StartMiner(MinerModel miner)
+        {
+            
         }
     }
 }

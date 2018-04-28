@@ -35,7 +35,7 @@ namespace MiningApp
             }
             else
             {
-                _allMiners = await WindowController.Instance.LoadMiners();
+                _allMiners = await WindowController.Instance.GetMiners();
                 _allMiners.ForEach(x => _window.MinerComboBox.Items.Add(x));
 
                 _window.MinerLabel.Visibility =

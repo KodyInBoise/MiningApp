@@ -90,7 +90,7 @@ namespace MiningApp
             _dataHelper.InsertMiner(miner);
         }
 
-        public Task<List<MinerModel>> LoadMiners()
+        public Task<List<MinerModel>> GetMiners()
         {
             return _dataHelper.GetMiners();
         }
@@ -103,6 +103,11 @@ namespace MiningApp
         public void UpdateMiner(MinerModel miner)
         {
             _dataHelper.UpdateMiner(miner);
+        }
+
+        public void LaunchMiner(MinerModel miner)
+        {
+            _procHelper.StartMiner(miner);
         }
     }
 }
