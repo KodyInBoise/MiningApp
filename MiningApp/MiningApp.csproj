@@ -85,10 +85,14 @@
     <Compile Include="Utilities\DataHelper.cs" />
     <Compile Include="Utilities\ElementHelper.cs" />
     <Compile Include="Utilities\ProcessHelper.cs" />
+    <Compile Include="ViewModels\CryptosViewModel.cs" />
     <Compile Include="ViewModels\EditMinerViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MinersViewModel.cs" />
     <Compile Include="ViewModels\ViewMinerViewModel.cs" />
+    <Compile Include="Windows\CryptosWindow.xaml.cs">
+      <DependentUpon>CryptosWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\EditMinerWindow.xaml.cs">
       <DependentUpon>EditMinerWindow.xaml</DependentUpon>
     </Compile>
@@ -110,6 +114,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\CryptosWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\EditMinerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

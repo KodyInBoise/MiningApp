@@ -19,11 +19,13 @@ namespace MiningApp
         private HomeWindow _homeWin { get; set; }
         private MinersWindow _minersWin { get; set; }
         private EditMinerWindow _editMinerWin { get; set; }
+        private CryptosWindow _cryptosWin { get; set; }
 
         public HomeViewModel HomeView { get; set; } = null;
         public MinersViewModel MinersView { get; set; } = null;
         public EditMinerViewModel EditMinersView { get; set; } = null;
         public ViewMinerViewModel ViewMinerView { get; set; } = null;
+        public CryptosViewModel CryptosView { get; set; } = null;
 
         public double WindowLeft => _homeWin.Left + _homeWin.Width;
         public double WindowTop => _homeWin.Top;
@@ -113,6 +115,13 @@ namespace MiningApp
         public void LaunchMiner(MinerModel miner)
         {
             _procHelper.StartMiner(miner);
+        }
+
+        public void ShowCryptos()
+        {
+            CryptosView?.Dispose();
+
+            _cryptosWin = new CryptosWindow();
         }
 
         public async void TestVoid()

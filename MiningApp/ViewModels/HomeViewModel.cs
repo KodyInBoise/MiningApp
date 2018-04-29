@@ -23,13 +23,9 @@ namespace MiningApp
             WindowController.Instance.HomeView = this;
 
             _window.MinersButton.Click += (s, e) => MinersButton_Clicked();
+            _window.CryptosButton.Click += (s, e) => CryptosButton_Clicked();
 
             _window.Show();
-        }
-
-        private void MinersButton_Clicked()
-        {
-            WindowController.Instance.ShowMiners();
         }
 
         public void Dispose()
@@ -37,6 +33,16 @@ namespace MiningApp
             WindowController.Instance.HomeView = null;
 
             _window.Close();
+        }
+
+        private void MinersButton_Clicked()
+        {
+            WindowController.Instance.ShowMiners();
+        }
+
+        private void CryptosButton_Clicked()
+        {
+            WindowController.Instance.ShowCryptos();
         }
     }
 }
