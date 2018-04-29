@@ -13,8 +13,9 @@ namespace MiningApp
         public static CryptoHelper Instance;
 
         private CoinMarketCapClient _client;
+        private List<CryptoModel> _cryptos;
 
-        public Task<List<TickerEntity>> GetTickers => GetTickerList();
+        public Task<List<TickerEntity>> GetTickers() => GetTickerList();
 
         public List<string> SupportedList = new List<string>()
         {
@@ -33,6 +34,38 @@ namespace MiningApp
             var tickers = await _client.GetTickerListAsync();
 
             return tickers;
+        }
+
+        public void CreateCryptoFromTicker(TickerEntity ticker)
+        {
+            var crypto = CryptoModel.CreateFromTicker(ticker);
+
+            _cryptos.Add(crypto);
+        }
+
+        public async void CreateCryptos()
+        {
+            var tickers = await GetTickerList();
+
+            foreach (var ticker in tickers)
+            {
+                var crypto = CryptoModel.CreateFromTicker(ticker);
+                _cryptos.Add(crypto);
+            }
+        }
+
+        public async Task<List<CryptoModel>> GetTopCryptos()
+        {
+            var cryptos = new List<CryptoModel>();
+
+            var tickers = await GetTickers();
+            foreach (var ticker in tickers)
+            {
+                var crypto = CryptoModel.CreateFromTicker(ticker);
+                cryptos.Add(crypto);
+            }
+
+            return cryptos;
         }
     }
 }

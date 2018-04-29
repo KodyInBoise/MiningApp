@@ -117,9 +117,8 @@ namespace MiningApp
 
         public async void TestVoid()
         {
-            var tickers = await CryptoHelper.Instance.GetTickers;
-
-            var t = tickers[0];
+            var cryptos = await CryptoHelper.Instance.GetTopCryptos();
+            var a = "a";
         }
     }
 }

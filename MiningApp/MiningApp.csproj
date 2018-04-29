@@ -79,6 +79,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controller\WindowController.cs" />
+    <Compile Include="Models\CryptoModel.cs" />
     <Compile Include="Models\MinerModel.cs" />
     <Compile Include="Utilities\CryptoHelper.cs" />
     <Compile Include="Utilities\DataHelper.cs" />
