@@ -46,7 +46,7 @@ namespace MiningApp
 
         public void Dispose()
         {
-            WindowController.Instance.HomeView = null;
+            WindowController.Instance.ControlBarView = null;
 
             _window.Close();
         }

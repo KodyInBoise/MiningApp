@@ -17,19 +17,21 @@ namespace MiningApp
         private ProcessHelper _procHelper { get; set; } = null;
         private CryptoHelper _cryptoHelper { get; set; } = null;
 
-        private HomeWindow _homeWin { get; set; }
+        private ControlBarWindow _controlBarWin { get; set; }
+        private HomeWindow _homeWin { get; set;}
         private MinersWindow _minersWin { get; set; }
         private EditMinerWindow _editMinerWin { get; set; }
         private CryptosWindow _cryptosWin { get; set; }
 
+        public ControlBarViewModel ControlBarView { get; set; } = null;
         public HomeViewModel HomeView { get; set; } = null;
         public MinersViewModel MinersView { get; set; } = null;
         public EditMinerViewModel EditMinersView { get; set; } = null;
         public ViewMinerViewModel ViewMinerView { get; set; } = null;
         public CryptosViewModel CryptosView { get; set; } = null;
 
-        public double WindowLeft => _homeWin.Left + _homeWin.Width;
-        public double WindowTop => _homeWin.Top;
+        public double WindowLeft => _controlBarWin.Left + _controlBarWin.Width;
+        public double WindowTop => _controlBarWin.Top;
 
         public WindowController()
         {
@@ -46,10 +48,11 @@ namespace MiningApp
 
             User = DataHelper.LoadUserSettings();
 
+            _controlBarWin = new ControlBarWindow();
             ShowHome();
 
             //Testing
-            _homeWin.TestButton.Click += (s, e) => TestVoid();
+            _controlBarWin.TestButton.Click += (s, e) => TestVoid();
         }
 
         public void ShowHome()
@@ -129,8 +132,7 @@ namespace MiningApp
 
         public async void TestVoid()
         {
-            var cryptos = await CryptoHelper.Instance.GetTopCryptos();
-            var a = "a";
+            var crypto = await CryptoHelper.Instance.CreateCryptoFromName(_homeWin.WatchingSymbolsListBox.SelectedItem.ToString());
         }
     }
 }

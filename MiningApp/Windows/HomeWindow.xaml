@@ -5,14 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MiningApp.Windows"
         mc:Ignorable="d"
-        Title="HomeWindow" Height="600" Width="200">
+        Title="HomeWindow" Height="600" Width="700">
     <Grid>
-        <Button x:Name="MinersButton" Content="Miners" HorizontalAlignment="Left" Margin="57,83,0,0" VerticalAlignment="Top" Width="74"/>
-        <Button x:Name="PoolsButton" Content="Pools" HorizontalAlignment="Left" Margin="57,278,0,0" VerticalAlignment="Top" Width="74"/>
-        <Button x:Name="WalletsButton" Content="Wallets" HorizontalAlignment="Left" Margin="57,213,0,0" VerticalAlignment="Top" Width="74"/>
-        <Button x:Name="LogsButton" Content="Logs" HorizontalAlignment="Left" Margin="57,343,0,0" VerticalAlignment="Top" Width="74"/>
-        <Button x:Name="TestButton" Content="Test" HorizontalAlignment="Left" Margin="57,457,0,0" VerticalAlignment="Top" Width="74"/>
-        <Button x:Name="CryptosButton" Content="Cryptos" HorizontalAlignment="Left" Margin="57,148,0,0" VerticalAlignment="Top" Width="74"/>
-
+        <Label x:Name="TitleLabel" Content="Home" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Verdana" FontSize="28"/>
+        <ListBox x:Name="WatchingSymbolsListBox" HorizontalAlignment="Left" Height="400" Margin="25,125,0,0" VerticalAlignment="Top" Width="125"/>
+        <Label x:Name="WatchingSymbolsLabel" Content="Watching" HorizontalAlignment="Left" Margin="45,91,0,0" VerticalAlignment="Top" FontFamily="Verdana" FontSize="16"/>
+        <TextBlock x:Name="NameTextBlock" HorizontalAlignment="Left" Margin="175,142,0,0" TextWrapping="Wrap" Text="Name: " VerticalAlignment="Top" Width="450" FontFamily="Verdana" FontSize="16"/>
+        <TextBlock x:Name="PriceUSDTextBlock" HorizontalAlignment="Left" Margin="175,171,0,0" TextWrapping="Wrap" Text="Price USD: " VerticalAlignment="Top" Width="450" FontFamily="Verdana" FontSize="16"/>
+        <TextBlock x:Name="PriceBTCTextBlock" HorizontalAlignment="Left" Margin="175,200,0,0" TextWrapping="Wrap" Text="Price BTC: " VerticalAlignment="Top" Width="450" FontFamily="Verdana" FontSize="16"/>
+        <TextBlock x:Name="VolumeTextBlock" HorizontalAlignment="Left" Margin="175,270,0,0" TextWrapping="Wrap" Text="24 Hour Volume: " VerticalAlignment="Top" Width="450" FontFamily="Verdana" FontSize="16"/>
+        <TextBlock x:Name="HourlyChangeTextBlock" HorizontalAlignment="Left" Margin="175,299,0,0" TextWrapping="Wrap" Text="Hourly Change: " VerticalAlignment="Top" Width="450" FontFamily="Verdana" FontSize="16"/>
+        <TextBlock x:Name="DailyChangeTextBlock" HorizontalAlignment="Left" Margin="175,328,0,0" TextWrapping="Wrap" Text="24 Hour Change: " VerticalAlignment="Top" Width="450" FontFamily="Verdana" FontSize="16"/>
+        <TextBlock x:Name="WeeklyChangeTextBlock" HorizontalAlignment="Left" Margin="175,357,0,0" TextWrapping="Wrap" Text="Weekly Change: " VerticalAlignment="Top" Width="450" FontFamily="Verdana" FontSize="16"/>
     </Grid>
 </Window>

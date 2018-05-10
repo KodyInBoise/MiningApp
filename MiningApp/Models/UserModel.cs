@@ -8,18 +8,18 @@ namespace MiningApp
 {
     public class UserModel
     {
-        public List<string> CryptoWatchList { get; set; }
+        public List<string> WatchingCryptos { get; set; }
 
         public UserModel()
         {
-            CryptoWatchList = new List<string>();
+            WatchingCryptos = new List<string>();
         }
 
         public void AddToCryptoWatchList(CryptoModel crypto)
         {
-            if (!CryptoWatchList.Contains(crypto.Symbol))
+            if (!WatchingCryptos.Contains(crypto.Name))
             {
-                CryptoWatchList.Add(crypto.Symbol);
+                WatchingCryptos.Add(crypto.Name);
 
                 SaveSettings();
             }

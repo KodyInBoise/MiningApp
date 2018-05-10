@@ -17,15 +17,15 @@ namespace MiningApp.Windows
     /// <summary>
     /// Interaction logic for HomeWindow.xaml
     /// </summary>
-    public partial class HomeWindow : Window
+    public partial class ControlBarWindow : Window
     {
-        private HomeViewModel _view { get; set; }
+        private ControlBarViewModel _view;
 
-        public HomeWindow()
+        public ControlBarWindow()
         {
             InitializeComponent();
 
-            _view = new HomeViewModel(this);
+            _view = new ControlBarViewModel(this);
         }
     }
 }

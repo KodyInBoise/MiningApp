@@ -67,5 +67,13 @@ namespace MiningApp
 
             return cryptos;
         }
+
+        public async Task<CryptoModel> CreateCryptoFromName(string name)
+        {
+            var ticker = await _client.GetTickerAsync(name);
+            var crypto = CryptoModel.CreateFromTicker(ticker);
+
+            return crypto;
+        }
     }
 }

@@ -90,6 +90,7 @@
     <Compile Include="Utilities\ServerHelper.cs" />
     <Compile Include="ViewModels\CryptosViewModel.cs" />
     <Compile Include="ViewModels\EditMinerViewModel.cs" />
+    <Compile Include="ViewModels\ControlBarViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MinersViewModel.cs" />
     <Compile Include="ViewModels\ViewMinerViewModel.cs" />
@@ -98,6 +99,9 @@
     </Compile>
     <Compile Include="Windows\EditMinerWindow.xaml.cs">
       <DependentUpon>EditMinerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ControlBarWindow.xaml.cs">
+      <DependentUpon>ControlBarWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\HomeWindow.xaml.cs">
       <DependentUpon>HomeWindow.xaml</DependentUpon>
@@ -122,6 +126,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\EditMinerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ControlBarWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
