@@ -12,20 +12,20 @@ namespace MiningApp
     {
         private TickerEntity _ticker;
 
-        public string Id;
-        public string Name;
-        public string Symbol;
-        public int Rank;
-        public double PriceUSD;
-        public double PriceBTC;
-        public double Volume24Hours;
-        public double MarketCap;
-        public double AvailableSupply;
-        public double TotalSupply;
-        public double Change1Hour;
-        public double Change24Hours;
-        public double Change7Days;
-        public DateTime LastUpdated;
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Symbol { get; set; }
+        public int Rank { get; set; }
+        public double PriceUSD { get; set; }
+        public double PriceBTC { get; set; }
+        public double Volume24Hours { get; set; }
+        public double MarketCap { get; set; }
+        public double AvailableSupply { get; set; }
+        public double TotalSupply { get; set; }
+        public double Change1Hour { get; set; }
+        public double Change24Hours { get; set; }
+        public double Change7Days { get; set; }
+        public DateTime LastUpdated { get; set; }
 
         public CryptoModel(TickerEntity ticker = null)
         {
