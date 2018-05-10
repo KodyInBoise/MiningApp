@@ -21,7 +21,7 @@ namespace MiningApp.Windows
     {
         private EditMinerViewModel _view;
 
-        public EditMinerWindow(MinerModel miner = null)
+        public EditMinerWindow(MinerConfigModel miner = null)
         {
             InitializeComponent();
 

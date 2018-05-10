@@ -5,20 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MiningApp.Windows"
         mc:Ignorable="d"
-        Title="CryptosWindow" Height="500" Width="600" FontFamily="Verdana" FontSize="15">
+        Title="CryptosWindow" Height="600" Width="700" FontFamily="Verdana" FontSize="15">
     <Window.Resources>
         <CollectionViewSource x:Key="GridItems" CollectionViewType="ListCollectionView"/>
     </Window.Resources>
     <Grid>
         <Label x:Name="TitleLabel" Content="Cryptocurrencies" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Verdana" FontSize="28"/>
         <Button x:Name="RefreshButton" Content="Refresh" HorizontalAlignment="Left" Margin="10,413,0,0" VerticalAlignment="Top" Width="85" Height="30"/>
-        
-        <DataGrid x:Name="CryptosDataGrid"  HorizontalAlignment="Left" Width="570" DataContext="{StaticResource GridItems}" ItemsSource="{Binding}" AutoGenerateColumns="False" Margin="10,62,0,64.5" FontFamily="Verdana" FontSize="14">
+
+        <DataGrid x:Name="CryptosDataGrid"  HorizontalAlignment="Left" Width="572" DataContext="{StaticResource GridItems}" ItemsSource="{Binding}" AutoGenerateColumns="False" Margin="10,62,0,10" FontFamily="Verdana" FontSize="14">
             <DataGrid.Columns>
                 <DataGridTextColumn Width="70" Header="Symbol" Binding="{Binding Symbol}"/>
                 <DataGridTextColumn Width="150" Header="Name" Binding="{Binding Name}"/>
                 <DataGridTextColumn Width="150" Header="Price" Binding="{Binding PriceUSD}"/>
             </DataGrid.Columns>
         </DataGrid>
+        <Button x:Name="WatchButton" Content="Watch" HorizontalAlignment="Left" Margin="587,62,0,0" VerticalAlignment="Top" Width="75"/>
     </Grid>
 </Window>

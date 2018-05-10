@@ -10,25 +10,32 @@ namespace MiningApp
     {
         public static string TrimPath(string path, int length = -1)
         {
-            var count = path?.Length;
-            var pathLength = length > 0 ? length : 30;
-
-            if (count > pathLength)
+            try
             {
-                var trimmedPath = string.Empty;
-                var dirs = path.Split('\\').ToList();
+                var count = path?.Length;
+                var pathLength = length > 0 ? length : 30;
 
-                for (var x = 0; count > pathLength; dirs.RemoveAt(x))
+                if (count > pathLength)
                 {
-                    trimmedPath = string.Empty;
-                    dirs.ForEach(d => trimmedPath += $"\\{d}");
+                    var trimmedPath = string.Empty;
+                    var dirs = path.Split('\\').ToList();
 
-                    count = trimmedPath.Length;
+                    for (var x = 0; count > pathLength; dirs.RemoveAt(x))
+                    {
+                        trimmedPath = string.Empty;
+                        dirs.ForEach(d => trimmedPath += $"\\{d}");
+
+                        count = trimmedPath.Length;
+                    }
+
+                    return $"...{trimmedPath}";
                 }
-
-                return $"...{trimmedPath}";
+                else
+                {
+                    return path;
+                }
             }
-            else
+            catch
             {
                 return path;
             }
