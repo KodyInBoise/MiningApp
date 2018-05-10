@@ -34,7 +34,7 @@ namespace MiningApp
             _window.Left = WindowController.Instance.WindowLeft;
             _window.Top = WindowController.Instance.WindowTop;
 
-            DisplayMiner(_allMiners[_index]);
+            DisplayMiner(_allMiners.Count > 0 ?_allMiners[_index] : new MinerModel());
 
             _window.Show();
         }
@@ -72,7 +72,8 @@ namespace MiningApp
             _window.StatusLabel.Content = $"Status: {miner.Status}";
             _window.OutputLabel.Content = $"Output: {miner.Output}";
 
-            _window.ViewingLabel.Content = $"{_index + 1} of {_allMiners.Count}";
+            int current = _allMiners.Count > 0 ? _index + 1 : 0;
+            _window.ViewingLabel.Content = $"{current} of {_allMiners.Count}";
         }
 
         int _index = 0;

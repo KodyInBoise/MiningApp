@@ -8,9 +8,11 @@
         Title="HomeWindow" Height="500" Width="175">
     <Grid>
         <Button x:Name="MinersButton" Content="Miners" HorizontalAlignment="Left" Margin="45,45,0,0" VerticalAlignment="Top" Width="74"/>
-        <Button x:Name="PoolsButton" Content="Pools" HorizontalAlignment="Left" Margin="45,110,0,0" VerticalAlignment="Top" Width="74"/>
+        <Button x:Name="PoolsButton" Content="Pools" HorizontalAlignment="Left" Margin="45,240,0,0" VerticalAlignment="Top" Width="74"/>
         <Button x:Name="WalletsButton" Content="Wallets" HorizontalAlignment="Left" Margin="45,175,0,0" VerticalAlignment="Top" Width="74"/>
-        <Button x:Name="LogsButton" Content="Logs" HorizontalAlignment="Left" Margin="45,240,0,0" VerticalAlignment="Top" Width="74"/>
+        <Button x:Name="LogsButton" Content="Logs" HorizontalAlignment="Left" Margin="45,305,0,0" VerticalAlignment="Top" Width="74"/>
+        <Button x:Name="TestButton" Content="Test" HorizontalAlignment="Left" Margin="45,419,0,0" VerticalAlignment="Top" Width="74"/>
+        <Button x:Name="CryptosButton" Content="Cryptos" HorizontalAlignment="Left" Margin="45,110,0,0" VerticalAlignment="Top" Width="74"/>
 
     </Grid>
 </Window>

@@ -14,15 +14,18 @@ namespace MiningApp
 
         private DataHelper _dataHelper { get; set; } = null;
         private ProcessHelper _procHelper { get; set; } = null;
+        private CryptoHelper _cryptoHelper { get; set; } = null;
 
         private HomeWindow _homeWin { get; set; }
         private MinersWindow _minersWin { get; set; }
         private EditMinerWindow _editMinerWin { get; set; }
+        private CryptosWindow _cryptosWin { get; set; }
 
         public HomeViewModel HomeView { get; set; } = null;
         public MinersViewModel MinersView { get; set; } = null;
         public EditMinerViewModel EditMinersView { get; set; } = null;
         public ViewMinerViewModel ViewMinerView { get; set; } = null;
+        public CryptosViewModel CryptosView { get; set; } = null;
 
         public double WindowLeft => _homeWin.Left + _homeWin.Width;
         public double WindowTop => _homeWin.Top;
@@ -38,8 +41,12 @@ namespace MiningApp
 
             _dataHelper = new DataHelper();
             _procHelper = new ProcessHelper();
+            _cryptoHelper = new CryptoHelper();
 
             ShowHome();
+
+            //Testing
+            _homeWin.TestButton.Click += (s, e) => TestVoid();
         }
 
         public void ShowHome()
@@ -108,6 +115,19 @@ namespace MiningApp
         public void LaunchMiner(MinerModel miner)
         {
             _procHelper.StartMiner(miner);
+        }
+
+        public void ShowCryptos()
+        {
+            CryptosView?.Dispose();
+
+            _cryptosWin = new CryptosWindow();
+        }
+
+        public async void TestVoid()
+        {
+            var cryptos = await CryptoHelper.Instance.GetTopCryptos();
+            var a = "a";
         }
     }
 }
