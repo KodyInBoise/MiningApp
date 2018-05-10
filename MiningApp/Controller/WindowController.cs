@@ -11,6 +11,7 @@ namespace MiningApp
     class WindowController
     {
         public static WindowController Instance;
+        public static UserModel User;
 
         private DataHelper _dataHelper { get; set; } = null;
         private ProcessHelper _procHelper { get; set; } = null;
@@ -43,6 +44,8 @@ namespace MiningApp
             _procHelper = new ProcessHelper();
             _cryptoHelper = new CryptoHelper();
 
+            User = DataHelper.LoadUserSettings();
+
             ShowHome();
 
             //Testing
@@ -70,7 +73,7 @@ namespace MiningApp
             _editMinerWin = new EditMinerWindow();
         }
 
-        public void ShowEditMiner(MinerModel miner)
+        public void ShowEditMiner(MinerConfigModel miner)
         {
             EditMinersView?.Dispose();
 
@@ -92,27 +95,27 @@ namespace MiningApp
             return path;
         }
 
-        public void InsertMiner(MinerModel miner)
+        public void InsertMiner(MinerConfigModel miner)
         {
             _dataHelper.InsertMiner(miner);
         }
 
-        public Task<List<MinerModel>> GetMiners()
+        public Task<List<MinerConfigModel>> GetMiners()
         {
             return _dataHelper.GetMiners();
         }
 
-        public void DeleteMiner(MinerModel miner)
+        public void DeleteMiner(MinerConfigModel miner)
         {
             _dataHelper.DeleteMiner(miner.ID);
         }
 
-        public void UpdateMiner(MinerModel miner)
+        public void UpdateMiner(MinerConfigModel miner)
         {
             _dataHelper.UpdateMiner(miner);
         }
 
-        public void LaunchMiner(MinerModel miner)
+        public void LaunchMiner(MinerConfigModel miner)
         {
             _procHelper.StartMiner(miner);
         }

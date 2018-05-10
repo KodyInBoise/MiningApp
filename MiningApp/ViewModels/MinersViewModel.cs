@@ -10,7 +10,7 @@ namespace MiningApp
     public class MinersViewModel
     {
         private MinersWindow _window;
-        private List<MinerModel> _allMiners;
+        private List<MinerConfigModel> _allMiners;
 
         public MinersViewModel(MinersWindow window)
         {
@@ -34,7 +34,7 @@ namespace MiningApp
             _window.Left = WindowController.Instance.WindowLeft;
             _window.Top = WindowController.Instance.WindowTop;
 
-            DisplayMiner(_allMiners.Count > 0 ?_allMiners[_index] : new MinerModel());
+            DisplayMiner(_allMiners.Count > 0 ?_allMiners[_index] : new MinerConfigModel());
 
             _window.Show();
         }
@@ -65,7 +65,7 @@ namespace MiningApp
             _window.Close();
         }
 
-        private void DisplayMiner(MinerModel miner)
+        private void DisplayMiner(MinerConfigModel miner)
         {
             _window.NameLabel.Content = $"Name: {miner.Name}";
             _window.PathLabel.Content = $"Path: {ElementHelper.TrimPath(miner.Path)}";
@@ -79,18 +79,32 @@ namespace MiningApp
         int _index = 0;
         private void PreviousButton_Clicked()
         {
-            if (_index == 0) _index = _allMiners.Count - 1;
-            else _index--;
+            try
+            {
+                if (_index == 0) _index = _allMiners.Count - 1;
+                else _index--;
 
-            DisplayMiner(_allMiners[_index]);
+                DisplayMiner(_allMiners[_index]);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+
+            }
         }
 
         private void NextButton_Clicked()
         {
-            if (_index == _allMiners.Count - 1) _index = 0;
-            else _index++;
+            try
+            {
+                if (_index == _allMiners.Count - 1) _index = 0;
+                else _index++;
 
-            DisplayMiner(_allMiners[_index]);
+                DisplayMiner(_allMiners[_index]);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+
+            }
         }
     }
 }

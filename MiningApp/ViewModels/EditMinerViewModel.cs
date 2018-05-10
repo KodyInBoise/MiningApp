@@ -11,10 +11,10 @@ namespace MiningApp
     public class EditMinerViewModel
     {
         private EditMinerWindow _window;
-        private MinerModel _miner;
-        private List<MinerModel> _allMiners;
+        private MinerConfigModel _miner;
+        private List<MinerConfigModel> _allMiners;
 
-        public EditMinerViewModel(EditMinerWindow window, MinerModel miner = null)
+        public EditMinerViewModel(EditMinerWindow window, MinerConfigModel miner = null)
         {
             _window = window;
             _miner = miner;
@@ -31,7 +31,7 @@ namespace MiningApp
                 _window.MinerLabel.Visibility =
                 _window.MinerComboBox.Visibility = Visibility.Collapsed;
 
-                _miner = new MinerModel();
+                _miner = new MinerConfigModel();
             }
             else
             {
@@ -106,7 +106,7 @@ namespace MiningApp
 
         private void MinerComboBox_DropDownClosed()
         {
-            var selectedMiner = (MinerModel)_window.MinerComboBox.SelectedItem;
+            var selectedMiner = (MinerConfigModel)_window.MinerComboBox.SelectedItem;
 
             if (_miner != selectedMiner)
             {
@@ -114,7 +114,7 @@ namespace MiningApp
             }
         }
 
-        private void DisplayMiner(MinerModel miner)
+        private void DisplayMiner(MinerConfigModel miner)
         {
             _window.MinerComboBox.Text = miner.Name;
             _window.NameTextBox.Text = miner.Name;

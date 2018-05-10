@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MiningApp.Windows"
         mc:Ignorable="d"
-        Title="HomeWindow" Height="500" Width="175">
+        Title="HomeWindow" Height="600" Width="200">
     <Grid>
-        <Button x:Name="MinersButton" Content="Miners" HorizontalAlignment="Left" Margin="45,45,0,0" VerticalAlignment="Top" Width="74"/>
-        <Button x:Name="PoolsButton" Content="Pools" HorizontalAlignment="Left" Margin="45,240,0,0" VerticalAlignment="Top" Width="74"/>
-        <Button x:Name="WalletsButton" Content="Wallets" HorizontalAlignment="Left" Margin="45,175,0,0" VerticalAlignment="Top" Width="74"/>
-        <Button x:Name="LogsButton" Content="Logs" HorizontalAlignment="Left" Margin="45,305,0,0" VerticalAlignment="Top" Width="74"/>
-        <Button x:Name="TestButton" Content="Test" HorizontalAlignment="Left" Margin="45,419,0,0" VerticalAlignment="Top" Width="74"/>
-        <Button x:Name="CryptosButton" Content="Cryptos" HorizontalAlignment="Left" Margin="45,110,0,0" VerticalAlignment="Top" Width="74"/>
+        <Button x:Name="MinersButton" Content="Miners" HorizontalAlignment="Left" Margin="57,83,0,0" VerticalAlignment="Top" Width="74"/>
+        <Button x:Name="PoolsButton" Content="Pools" HorizontalAlignment="Left" Margin="57,278,0,0" VerticalAlignment="Top" Width="74"/>
+        <Button x:Name="WalletsButton" Content="Wallets" HorizontalAlignment="Left" Margin="57,213,0,0" VerticalAlignment="Top" Width="74"/>
+        <Button x:Name="LogsButton" Content="Logs" HorizontalAlignment="Left" Margin="57,343,0,0" VerticalAlignment="Top" Width="74"/>
+        <Button x:Name="TestButton" Content="Test" HorizontalAlignment="Left" Margin="57,457,0,0" VerticalAlignment="Top" Width="74"/>
+        <Button x:Name="CryptosButton" Content="Cryptos" HorizontalAlignment="Left" Margin="57,148,0,0" VerticalAlignment="Top" Width="74"/>
 
     </Grid>
 </Window>

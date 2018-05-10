@@ -80,11 +80,14 @@
     </ApplicationDefinition>
     <Compile Include="Controller\WindowController.cs" />
     <Compile Include="Models\CryptoModel.cs" />
+    <Compile Include="Models\MinerConfigModel.cs" />
     <Compile Include="Models\MinerModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Utilities\CryptoHelper.cs" />
     <Compile Include="Utilities\DataHelper.cs" />
     <Compile Include="Utilities\ElementHelper.cs" />
     <Compile Include="Utilities\ProcessHelper.cs" />
+    <Compile Include="Utilities\ServerHelper.cs" />
     <Compile Include="ViewModels\CryptosViewModel.cs" />
     <Compile Include="ViewModels\EditMinerViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
