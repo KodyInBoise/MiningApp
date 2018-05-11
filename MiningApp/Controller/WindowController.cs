@@ -14,6 +14,8 @@ namespace MiningApp
 
         public static UserModel User;
 
+
+
         private DataHelper _dataHelper { get; set; } = null;
 
         private ProcessHelper _procHelper { get; set; } = null;
@@ -21,6 +23,8 @@ namespace MiningApp
         private CryptoHelper _cryptoHelper { get; set; } = null;
 
         private ServerHelper _serverHelper { get; set; } = null;
+
+        private MiningHelper _miningHelper { get; set; } = null;
 
         public ControlBarViewModel ControlBarView { get; set; } = null;
 
@@ -36,6 +40,10 @@ namespace MiningApp
 
         public UploadMinerViewModel UploadMinerView { get; set; } = null;
 
+        public WalletConfigViewModel WalletConfigView { get; set; } = null;
+
+
+
         public ControlBarWindow ControlBarWin { get; set; }
 
         private HomeWindow _homeWin { get; set; }
@@ -48,7 +56,12 @@ namespace MiningApp
 
         private UploadMinerWindow _uploadMinerWin { get; set; }
 
+        private WalletConfigWindow _walletConfigWin { get; set; }
+
+
+
         public double WindowLeft => ControlBarWin.Left + ControlBarWin.Width;
+
         public double WindowTop => ControlBarWin.Top;
 
         public WindowController()
@@ -64,6 +77,7 @@ namespace MiningApp
             _procHelper = new ProcessHelper();
             _cryptoHelper = new CryptoHelper();
             _serverHelper = new ServerHelper();
+            _miningHelper = new MiningHelper();
 
             User = DataHelper.LoadUserSettings();
 
@@ -163,6 +177,13 @@ namespace MiningApp
             User.SaveSettings();
 
             Environment.Exit(0);
+        }
+
+        public void ShowWalletConfig()
+        {
+            WalletConfigView?.Dispose();
+
+            _walletConfigWin = new WalletConfigWindow();
         }
 
         public async void TestVoid()

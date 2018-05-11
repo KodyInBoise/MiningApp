@@ -28,6 +28,7 @@ namespace MiningApp
             _window.MinersButton.Click += (s, e) => MinersButton_Clicked();
             _window.CryptosButton.Click += (s, e) => CryptosButton_Clicked();
             _window.HomeButton.Click += (s, e) => HomeButton_Clicked();
+            _window.WalletsButton.Click += (s, e) => WalletsButton_Clicked();
 
             _window.Show();
         }
@@ -52,6 +53,11 @@ namespace MiningApp
         private void HomeButton_Clicked()
         {
             WindowController.Instance.ShowHome();
+        }
+
+        private void WalletsButton_Clicked()
+        {
+            WindowController.Instance.ShowWalletConfig();
         }
     }
 }

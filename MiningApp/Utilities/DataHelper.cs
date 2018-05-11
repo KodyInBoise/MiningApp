@@ -11,18 +11,28 @@ namespace MiningApp
 {
     public class DataHelper
     {
+        public static DataHelper Instance { get; set; }
+
+
+
         public static string DataFilePath => Path.Combine(RootPath(), "simplemining.data");
 
         public static string MinerDirectory => Path.Combine(RootPath(), "Miners");
 
         public static string UserSettingsPath => Path.Combine(RootPath(), "usersettings.json");
 
+
+
         private LiteDatabase _database => GetDatabase();
 
         private LiteCollection<MiningConfigModel> _minerConfigCollection => GetMinerCollection();
 
+        private LiteCollection<WalletConfigModel> _walletConfigCollection => GetWalletCollection();
+
         public DataHelper()
         {
+            Instance = this;
+
             var root = RootPath();
              
             if (!Directory.Exists(root)) Directory.CreateDirectory(root);
@@ -44,6 +54,14 @@ namespace MiningApp
             using (_database)
             {
                 return _database.GetCollection<MiningConfigModel>("minerconfigs");
+            }
+        }
+
+        private LiteCollection<WalletConfigModel> GetWalletCollection()
+        {
+            using (_database)
+            {
+                return _database.GetCollection<WalletConfigModel>("walletconfigs");
             }
         }
 
@@ -105,6 +123,22 @@ namespace MiningApp
             catch
             {
                 return new UserModel();
+            }
+        }
+
+        public void InsertWalletConfig(WalletConfigModel wallet)
+        {
+            using (_database)
+            {
+                _walletConfigCollection.Insert(wallet);
+            }
+        }
+
+        public List<WalletConfigModel> GetWalletConfigs()
+        {
+            using (_database)
+            {
+                return _walletConfigCollection.FindAll().ToList();
             }
         }
     }

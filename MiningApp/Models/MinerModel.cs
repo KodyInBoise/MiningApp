@@ -10,7 +10,7 @@ namespace MiningApp
 {
     public class MinerModel
     {
-        public DateTime AddedTimestamp { get; set; }
+        public DateTime CreatedTimestamp { get; set; }
 
         public string Name { get; set; }
 

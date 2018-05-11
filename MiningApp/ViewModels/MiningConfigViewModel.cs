@@ -28,7 +28,7 @@ namespace MiningApp
 
             if (_miner == null)
             {
-                
+                //TODO
             }
             else
             {
@@ -88,7 +88,7 @@ namespace MiningApp
             }
             else
             {
-                _miner.Created = DateTime.Now;
+                _miner.CreatedTimestamp = DateTime.Now;
 
                 Task.Run(() => WindowController.Instance.InsertMiner(_miner));
             }

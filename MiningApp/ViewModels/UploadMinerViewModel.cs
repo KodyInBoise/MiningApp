@@ -124,7 +124,7 @@ namespace MiningApp
             {
                 return new MinerModel()
                 {
-                    AddedTimestamp = DateTime.Now,
+                    CreatedTimestamp = DateTime.Now,
                     Name = _window.NameTextBox.Text,
                     Cryptos = _window.CryptosListBox.Items.Cast<String>().ToList(),
                     Tags = _window.TagsListBox.Items.Cast<String>().ToList(),

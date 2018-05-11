@@ -84,9 +84,11 @@
     <Compile Include="Models\MiningConfigModel.cs" />
     <Compile Include="Models\MinerModel.cs" />
     <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\WalletConfigModel.cs" />
     <Compile Include="Utilities\CryptoHelper.cs" />
     <Compile Include="Utilities\DataHelper.cs" />
     <Compile Include="Utilities\ElementHelper.cs" />
+    <Compile Include="Utilities\MiningHelper.cs" />
     <Compile Include="Utilities\ProcessHelper.cs" />
     <Compile Include="Utilities\ServerHelper.cs" />
     <Compile Include="ViewModels\BrowseMinersViewModel.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="ViewModels\MinersViewModel.cs" />
     <Compile Include="ViewModels\UploadMinerViewModel.cs" />
     <Compile Include="ViewModels\ViewMinerViewModel.cs" />
+    <Compile Include="ViewModels\WalletConfigViewModel.cs" />
     <Compile Include="Windows\BrowseMinersWindow.xaml.cs">
       <DependentUpon>BrowseMinersWindow.xaml</DependentUpon>
     </Compile>
@@ -117,6 +120,9 @@
     </Compile>
     <Compile Include="Windows\UploadMinerWindow.xaml.cs">
       <DependentUpon>UploadMinerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\WalletConfigWindow.xaml.cs">
+      <DependentUpon>WalletConfigWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -155,6 +161,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\UploadMinerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\WalletConfigWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

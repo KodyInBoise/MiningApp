@@ -11,7 +11,7 @@ namespace MiningApp
     {
         public int ID { get; set; }
 
-        public DateTime Created { get; set; }
+        public DateTime CreatedTimestamp { get; set; }
 
         public CryptoModel Crypto { get; set; }
 
