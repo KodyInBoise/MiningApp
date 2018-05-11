@@ -34,6 +34,8 @@ namespace MiningApp
 
             _window.WatchingSymbolsListBox.SelectionChanged += (s, e) => CryptoListBox_SelectionChanged();
 
+            WindowController.Instance.ControlBarWin.LocationChanged += (s, e) => UpdateLocation();
+
             LoadUserInfo();
 
             _window.Show();
@@ -87,6 +89,12 @@ namespace MiningApp
             {
 
             }
+        }
+
+        private void UpdateLocation()
+        {
+            _window.Left = WindowController.Instance.WindowLeft;
+            _window.Top = WindowController.Instance.WindowTop;
         }
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using System.IO;
 using MiningApp.Windows;
 
 namespace MiningApp
@@ -30,6 +32,11 @@ namespace MiningApp
 
             _window.BrowseButton.Click += (s, e) => BrowseButton_Clicked();
             _window.CryptosAddButton.Click += (s, e) => CryptoAddButton_Clicked();
+            _window.CryptosAddTextBox.KeyDown += CryptoAddTextBox_KeyDown;
+            _window.TagsAddButton.Click += (s, e) => TagAddButton_Clicked();
+            _window.TagsAddTextBox.KeyDown += TagsAddTextBox_KeyDown;
+            _window.FinishButton.Click += (s, e) => FinishButton_Clicked();
+            
 
             _window.Show();
         }
@@ -75,12 +82,73 @@ namespace MiningApp
                     throw ex;
                 }
             }
+        }
 
+        private void CryptoAddTextBox_KeyDown(object s, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                CryptoAddButton_Clicked();
+            }
         }
 
         private void TagAddButton_Clicked()
         {
+            var tag = _window.TagsAddTextBox.Text;
 
+            if (!String.IsNullOrEmpty(tag) && !_window.TagsListBox.Items.Contains(tag))
+            {
+                _window.TagsListBox.Items.Add(tag);
+
+                _window.TagsAddTextBox.Clear();
+                _window.TagsAddTextBox.Focus();
+            }
+            else
+            {
+                _window.TagsAddTextBox.Focus();
+                _window.TagsAddTextBox.SelectAll();
+            }       
+        }
+
+        private void TagsAddTextBox_KeyDown(object s, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                TagAddButton_Clicked();
+            }
+        }
+
+        private MinerModel CreateNewMiner()
+        {
+            try
+            {
+                return new MinerModel()
+                {
+                    AddedTimestamp = DateTime.Now,
+                    Name = _window.NameTextBox.Text,
+                    Cryptos = _window.CryptosListBox.Items.Cast<String>().ToList(),
+                    Tags = _window.TagsListBox.Items.Cast<String>().ToList(),
+                    File = new FileInfo(_window.PathTextBox.Text)
+                };
+            }
+            catch
+            {
+                return new MinerModel();
+            }
+        }
+
+        private void FinishButton_Clicked()
+        {
+            try
+            {
+                _miner = CreateNewMiner();
+
+                ServerHelper.Instance.AddMiner(_miner);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

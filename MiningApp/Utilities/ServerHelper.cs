@@ -10,12 +10,16 @@ namespace MiningApp
 {
     public class ServerHelper
     {
+        public static ServerHelper Instance { get; set; }
+
         List<MinerModel> _allMiners { get; set; } = new List<MinerModel>();
 
         string _minersJsonPath { get; set; } = Path.Combine(DataHelper.RootPath(), "Miners", "allminers.json");
 
         public ServerHelper()
         {
+            Instance = this;
+
             _allMiners = GetAllMinersLocal();
         }
 
@@ -37,7 +41,7 @@ namespace MiningApp
         {
             try
             {
-                return JsonConvert.DeserializeObject<List<MinerModel>>(_minersJsonPath);
+                return JsonConvert.DeserializeObject<List<MinerModel>>(File.ReadAllText(_minersJsonPath));
             }
             catch
             {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace MiningApp
 
         public FileInfo File { get; set; }
 
+        [JsonIgnore]
         public string LocalDirectory  => GetLocalDirectory();
 
         public MinerModel()
