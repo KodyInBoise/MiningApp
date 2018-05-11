@@ -16,19 +16,33 @@ namespace MiningApp
         private DataHelper _dataHelper { get; set; } = null;
         private ProcessHelper _procHelper { get; set; } = null;
         private CryptoHelper _cryptoHelper { get; set; } = null;
-
-        private ControlBarWindow _controlBarWin { get; set; }
-        private HomeWindow _homeWin { get; set;}
-        private MinersWindow _minersWin { get; set; }
-        private EditMinerWindow _editMinerWin { get; set; }
-        private CryptosWindow _cryptosWin { get; set; }
+        private ServerHelper _serverHelper { get; set; } = null;
 
         public ControlBarViewModel ControlBarView { get; set; } = null;
+
         public HomeViewModel HomeView { get; set; } = null;
+
         public MinersViewModel MinersView { get; set; } = null;
+
         public EditMinerViewModel EditMinersView { get; set; } = null;
+
         public ViewMinerViewModel ViewMinerView { get; set; } = null;
+
         public CryptosViewModel CryptosView { get; set; } = null;
+
+        public UploadMinerViewModel UploadMinerView { get; set; } = null;
+
+        private ControlBarWindow _controlBarWin { get; set; }
+
+        private HomeWindow _homeWin { get; set; }
+
+        private MinersWindow _minersWin { get; set; }
+
+        private EditMinerWindow _editMinerWin { get; set; }
+
+        private CryptosWindow _cryptosWin { get; set; }
+
+        private UploadMinerWindow _uploadMinerWin { get; set; }
 
         public double WindowLeft => _controlBarWin.Left + _controlBarWin.Width;
         public double WindowTop => _controlBarWin.Top;
@@ -45,6 +59,7 @@ namespace MiningApp
             _dataHelper = new DataHelper();
             _procHelper = new ProcessHelper();
             _cryptoHelper = new CryptoHelper();
+            _serverHelper = new ServerHelper();
 
             User = DataHelper.LoadUserSettings();
 
@@ -130,9 +145,16 @@ namespace MiningApp
             _cryptosWin = new CryptosWindow();
         }
 
+        public void ShowUploadMiner()
+        {
+            UploadMinerView?.Dispose();
+
+            _uploadMinerWin = new UploadMinerWindow();
+        }
+
         public async void TestVoid()
         {
-            var crypto = await CryptoHelper.Instance.CreateCryptoFromName(_homeWin.WatchingSymbolsListBox.SelectedItem.ToString());
+            
         }
     }
 }

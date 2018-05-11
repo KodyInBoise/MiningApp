@@ -1,0 +1,27 @@
+﻿<Window x:Class="MiningApp.Windows.UploadMinerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MiningApp.Windows"
+        mc:Ignorable="d"
+        Title="UploadMinerWindow" Height="600" Width="700">
+    <Grid>
+        <Label x:Name="TitleLabel" Content="Upload Crypto Miner" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Verdana" FontSize="28"/>
+        <Label x:Name="NameLabel" Content="Name" HorizontalAlignment="Left" Margin="97,117,0,0" VerticalAlignment="Top" FontFamily="Verdana" FontSize="16"/>
+        <TextBox x:Name="NameTextBox" HorizontalAlignment="Left" Height="24" Margin="156,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="412" VerticalContentAlignment="Center"/>
+        <Label x:Name="PathLabel" Content="Path" HorizontalAlignment="Left" Margin="113,153,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <TextBox x:Name="PathTextBox" HorizontalAlignment="Left" Height="24" Margin="156,157,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="336" VerticalContentAlignment="Center"/>
+        <Button x:Name="BrowseButton" Content="Browse" HorizontalAlignment="Left" Margin="497,157,0,0" VerticalAlignment="Top" Width="71" Height="24" FontSize="13"/>
+        <Label x:Name="CryptosLabel" Content="Cryptos" HorizontalAlignment="Left" Margin="90,194,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <TextBox x:Name="CryptosAddTextBox" HorizontalAlignment="Left" Height="24" Margin="156,198,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="336" VerticalContentAlignment="Center"/>
+        <Button x:Name="CryptosAddButton" Content="Add" HorizontalAlignment="Left" Margin="497,198,0,0" VerticalAlignment="Top" Width="71" Height="24" FontSize="13"/>
+        <ListBox x:Name="CryptosListBox" HorizontalAlignment="Left" Height="93" Margin="156,232,0,0" VerticalAlignment="Top" Width="412"/>
+        <Label x:Name="TagsLabel" Content="Tags" HorizontalAlignment="Left" Margin="110,331,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <TextBox x:Name="TagsAddTextBox" HorizontalAlignment="Left" Height="24" Margin="156,335,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="336" VerticalContentAlignment="Center"/>
+        <Button x:Name="TagsAddButton" Content="Add" HorizontalAlignment="Left" Margin="497,335,0,0" VerticalAlignment="Top" Width="71" Height="24" FontSize="13"/>
+        <ListBox x:Name="TagsListBox" HorizontalAlignment="Left" Height="93" Margin="156,369,0,0" VerticalAlignment="Top" Width="412"/>
+        <Button x:Name="FinishButton" Content="Finish" HorizontalAlignment="Left" Margin="497,471,0,0" VerticalAlignment="Top" Width="71" Height="24" FontSize="13"/>
+
+    </Grid>
+</Window>

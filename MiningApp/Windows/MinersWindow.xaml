@@ -19,6 +19,7 @@
         <Label x:Name="OutputLabel" Content="Output: " HorizontalAlignment="Left" Margin="109,284,0,0" VerticalAlignment="Top"/>
         <Button x:Name="PreviousButton" Content="Previous" HorizontalAlignment="Left" Margin="92,370,0,0" VerticalAlignment="Top" Width="76"/>
         <Button x:Name="NextButton" Content="Next" HorizontalAlignment="Left" Margin="521,370,0,0" VerticalAlignment="Top" Width="76"/>
+        <Button x:Name="UploadButton" Content="Upload" HorizontalAlignment="Left" Margin="521,446,0,0" VerticalAlignment="Top" Width="74"/>
 
     </Grid>
 </Window>

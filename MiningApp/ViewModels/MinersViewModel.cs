@@ -30,6 +30,7 @@ namespace MiningApp
             _window.LaunchButton.Click += (s, e) => LaunchButton_Clicked();
             _window.PreviousButton.Click += (s, e) => PreviousButton_Clicked();
             _window.NextButton.Click += (s, e) => NextButton_Clicked();
+            _window.UploadButton.Click += (s, e) => UploadButton_Clicked();
 
             _window.Left = WindowController.Instance.WindowLeft;
             _window.Top = WindowController.Instance.WindowTop;
@@ -105,6 +106,13 @@ namespace MiningApp
             {
 
             }
+        }
+
+        private void UploadButton_Clicked()
+        {
+            WindowController.Instance.ShowUploadMiner();
+
+            Dispose();
         }
     }
 }
