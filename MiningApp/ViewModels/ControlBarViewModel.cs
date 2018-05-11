@@ -22,6 +22,9 @@ namespace MiningApp
         {
             WindowController.Instance.ControlBarView = this;
 
+            _window.Left = WindowController.User.ControlBarLeft ?? 25.0;
+            _window.Top = WindowController.User.ControlBarTop ?? 25.0;
+
             _window.MinersButton.Click += (s, e) => MinersButton_Clicked();
             _window.CryptosButton.Click += (s, e) => CryptosButton_Clicked();
             _window.HomeButton.Click += (s, e) => HomeButton_Clicked();

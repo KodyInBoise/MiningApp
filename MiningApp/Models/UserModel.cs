@@ -8,6 +8,10 @@ namespace MiningApp
 {
     public class UserModel
     {
+        public double? ControlBarLeft { get; set; }
+
+        public double? ControlBarTop { get; set; }
+
         public List<string> WatchingCryptos { get; set; }
 
         public UserModel()
@@ -25,9 +29,17 @@ namespace MiningApp
             }
         }
 
-        private void SaveSettings()
+        public void SaveSettings()
         {
+            GetWindowLocation();
+
             DataHelper.SaveUserSettings(this);
+        }
+
+        private void GetWindowLocation()
+        {
+            ControlBarLeft = WindowController.Instance.ControlBarWin.Left;
+            ControlBarTop = WindowController.Instance.ControlBarWin.Top;
         }
     }
 }

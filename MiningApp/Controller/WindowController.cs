@@ -32,7 +32,7 @@ namespace MiningApp
 
         public UploadMinerViewModel UploadMinerView { get; set; } = null;
 
-        private ControlBarWindow _controlBarWin { get; set; }
+        public ControlBarWindow ControlBarWin { get; set; }
 
         private HomeWindow _homeWin { get; set; }
 
@@ -44,8 +44,8 @@ namespace MiningApp
 
         private UploadMinerWindow _uploadMinerWin { get; set; }
 
-        public double WindowLeft => _controlBarWin.Left + _controlBarWin.Width;
-        public double WindowTop => _controlBarWin.Top;
+        public double WindowLeft => ControlBarWin.Left + ControlBarWin.Width;
+        public double WindowTop => ControlBarWin.Top;
 
         public WindowController()
         {
@@ -63,11 +63,13 @@ namespace MiningApp
 
             User = DataHelper.LoadUserSettings();
 
-            _controlBarWin = new ControlBarWindow();
+            ControlBarWin = new ControlBarWindow();
+            ControlBarWin.Closing += (s, e) => ShutdownApp();
+
             ShowHome();
 
             //Testing
-            _controlBarWin.TestButton.Click += (s, e) => TestVoid();
+            ControlBarWin.TestButton.Click += (s, e) => TestVoid();
         }
 
         public void ShowHome()
@@ -150,6 +152,13 @@ namespace MiningApp
             UploadMinerView?.Dispose();
 
             _uploadMinerWin = new UploadMinerWindow();
+        }
+
+        public void ShutdownApp()
+        {
+            User.SaveSettings();
+
+            Environment.Exit(0);
         }
 
         public async void TestVoid()
