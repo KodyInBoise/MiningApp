@@ -27,6 +27,8 @@ namespace MiningApp
 
         private void ShowWindow()
         {
+            WindowController.Instance.HomeView = this;
+
             _window.Left = WindowController.Instance.WindowLeft;
             _window.Top = WindowController.Instance.WindowTop;
 
