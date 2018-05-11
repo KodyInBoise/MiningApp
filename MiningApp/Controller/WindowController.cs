@@ -26,6 +26,10 @@ namespace MiningApp
 
         private MiningHelper _miningHelper { get; set; } = null;
 
+        private WalletHelper _walletHelper { get; set; } = null;
+
+
+
         public ControlBarViewModel ControlBarView { get; set; } = null;
 
         public HomeViewModel HomeView { get; set; } = null;
@@ -78,6 +82,7 @@ namespace MiningApp
             _cryptoHelper = new CryptoHelper();
             _serverHelper = new ServerHelper();
             _miningHelper = new MiningHelper();
+            _walletHelper = new WalletHelper();
 
             User = DataHelper.LoadUserSettings();
 
@@ -188,7 +193,7 @@ namespace MiningApp
 
         public async void TestVoid()
         {
-            
+            //var wallets = 
         }
     }
 }

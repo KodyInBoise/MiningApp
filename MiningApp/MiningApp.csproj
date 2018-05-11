@@ -91,6 +91,7 @@
     <Compile Include="Utilities\MiningHelper.cs" />
     <Compile Include="Utilities\ProcessHelper.cs" />
     <Compile Include="Utilities\ServerHelper.cs" />
+    <Compile Include="Utilities\WalletHelper.cs" />
     <Compile Include="ViewModels\BrowseMinersViewModel.cs" />
     <Compile Include="ViewModels\CryptosViewModel.cs" />
     <Compile Include="ViewModels\MiningConfigViewModel.cs" />

@@ -35,6 +35,8 @@ namespace MiningApp
                 
             }
 
+            _window.WalletComboBox.ItemsSource = WalletHelper.Instance.AllWallets;
+
             _window.MinerComboBox.DropDownClosed += (s, e) => MinerComboBox_DropDownClosed();
             _window.DeleteButton.Click += (s, e) => DeleteButton_Clicked();
             _window.FinishButton.Click += (s, e) => FinishButton_Clicked();
