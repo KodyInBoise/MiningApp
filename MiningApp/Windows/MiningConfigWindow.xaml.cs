@@ -17,15 +17,15 @@ namespace MiningApp.Windows
     /// <summary>
     /// Interaction logic for EditMinerWindow.xaml
     /// </summary>
-    public partial class EditMinerWindow : Window
+    public partial class MiningConfigWindow : Window
     {
-        private EditMinerViewModel _view;
+        private MiningConfigViewModel _view;
 
-        public EditMinerWindow(MinerConfigModel miner = null)
+        public MiningConfigWindow(MiningConfigModel miner = null)
         {
             InitializeComponent();
 
-            _view = new EditMinerViewModel(this, miner);
+            _view = new MiningConfigViewModel(this, miner);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace MiningApp
     {
         private WindowController _controller => WindowController.Instance;
 
-        private List<MinerConfigModel> _allMiners = new List<MinerConfigModel>();
+        private List<MiningConfigModel> _allMiners = new List<MiningConfigModel>();
         private List<Process> _minerProcesses = new List<Process>();
 
         public ProcessHelper()
@@ -43,7 +43,7 @@ namespace MiningApp
             _minerProcesses.ForEach(x => Console.WriteLine(x.ProcessName));
         }
 
-        public void StartMiner(MinerConfigModel miner)
+        public void StartMiner(MiningConfigModel miner)
         {
             
         }

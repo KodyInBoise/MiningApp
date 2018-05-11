@@ -8,13 +8,13 @@ using MiningApp.Windows;
 
 namespace MiningApp
 {
-    public class EditMinerViewModel
+    public class MiningConfigViewModel
     {
-        private EditMinerWindow _window;
-        private MinerConfigModel _miner;
-        private List<MinerConfigModel> _allMiners;
+        private MiningConfigWindow _window;
+        private MiningConfigModel _miner;
+        private List<MiningConfigModel> _allMiners;
 
-        public EditMinerViewModel(EditMinerWindow window, MinerConfigModel miner = null)
+        public MiningConfigViewModel(MiningConfigWindow window, MiningConfigModel miner = null)
         {
             _window = window;
             _miner = miner;
@@ -24,28 +24,18 @@ namespace MiningApp
 
         private async void ShowWindow()
         {
-            WindowController.Instance.EditMinersView = this;
+            WindowController.Instance.MiningConfigView = this;
 
             if (_miner == null)
             {
-                _window.MinerLabel.Visibility =
-                _window.MinerComboBox.Visibility = Visibility.Collapsed;
-
-                _miner = new MinerConfigModel();
+                
             }
             else
             {
-                _allMiners = await WindowController.Instance.GetMiners();
-                _allMiners.ForEach(x => _window.MinerComboBox.Items.Add(x));
-
-                _window.MinerLabel.Visibility =
-                _window.MinerComboBox.Visibility = Visibility.Visible;
-
-                DisplayMiner(_miner);
+                
             }
 
             _window.MinerComboBox.DropDownClosed += (s, e) => MinerComboBox_DropDownClosed();
-            _window.BrowseButton.Click += (s, e) => BrowseButton_Clicked();
             _window.DeleteButton.Click += (s, e) => DeleteButton_Clicked();
             _window.FinishButton.Click += (s, e) => FinishButton_Clicked();
 
@@ -57,7 +47,7 @@ namespace MiningApp
 
         public void Dispose()
         {
-            WindowController.Instance.EditMinersView = null;
+            WindowController.Instance.MiningConfigView = null;
 
             _window.Close();
         }
@@ -67,7 +57,7 @@ namespace MiningApp
         {
             _filePath = await WindowController.Instance.GetFilePath();
 
-            _window.PathTextBox.Text = ElementHelper.TrimPath(_filePath);
+            //_window.PathTextBox.Text = ElementHelper.TrimPath(_filePath);
         }
 
         private void DeleteButton_Clicked()
@@ -90,7 +80,7 @@ namespace MiningApp
 
             _miner.Name = _window.NameTextBox.Text;
             _miner.Path = _filePath;
-            _miner.Arguments = _window.ArgumentsTextBox.Text;
+            //_miner.Arguments = _window.ArgumentsTextBox.Text;
 
             if (_miner.ID > 0)
             {
@@ -106,7 +96,7 @@ namespace MiningApp
 
         private void MinerComboBox_DropDownClosed()
         {
-            var selectedMiner = (MinerConfigModel)_window.MinerComboBox.SelectedItem;
+            var selectedMiner = (MiningConfigModel)_window.MinerComboBox.SelectedItem;
 
             if (_miner != selectedMiner)
             {
@@ -114,14 +104,14 @@ namespace MiningApp
             }
         }
 
-        private void DisplayMiner(MinerConfigModel miner)
+        private void DisplayMiner(MiningConfigModel miner)
         {
             _window.MinerComboBox.Text = miner.Name;
             _window.NameTextBox.Text = miner.Name;
-            _window.ArgumentsTextBox.Text = miner.Arguments;
+            //_window.ArgumentsTextBox.Text = miner.Arguments;
 
             _filePath = miner.Path;
-            _window.PathTextBox.Text = ElementHelper.TrimPath(_filePath);
+            //_window.PathTextBox.Text = ElementHelper.TrimPath(_filePath);
 
             _miner = miner;
         }

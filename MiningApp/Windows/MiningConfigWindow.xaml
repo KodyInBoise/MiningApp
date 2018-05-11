@@ -1,0 +1,29 @@
+﻿<Window x:Class="MiningApp.Windows.MiningConfigWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MiningApp.Windows"
+        mc:Ignorable="d"
+        Title="EditMinerWindow" Height="600" Width="700" FontFamily="Verdana" FontSize="15">
+    <Grid>
+        <Label x:Name="TitleLabel" Content="New Mining Config" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Verdana" FontSize="28"/>
+        <Label x:Name="NameLabel" Content="Name" HorizontalAlignment="Left" Margin="68,117,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <TextBox x:Name="NameTextBox" HorizontalAlignment="Left" Height="24" Margin="130,120,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="450" VerticalContentAlignment="Center"/>
+        <Label x:Name="MinerLabel" Content="Miner" HorizontalAlignment="Left" Margin="68,226,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <ComboBox x:Name="MinerComboBox" HorizontalAlignment="Left" Margin="130,230,0,0" VerticalAlignment="Top" Width="370" Height="24"/>
+        <Button x:Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="71,506,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
+        <Button x:Name="FinishButton" Content="Finish" HorizontalAlignment="Left" Margin="526,506,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
+        <Button x:Name="MinerBrowseButton" Content="Browse" HorizontalAlignment="Left" Margin="509,230,0,0" VerticalAlignment="Top" Width="71" Height="24" FontSize="13"/>
+        <Label x:Name="CryptoLabel" Content="Crypto" HorizontalAlignment="Left" Margin="62,152,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <TextBox x:Name="CryptoTextBox" HorizontalAlignment="Left" Height="24" Margin="130,155,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="374" VerticalContentAlignment="Center"/>
+        <Button x:Name="CryptoSelectButton" Content="Select" HorizontalAlignment="Left" Margin="509,155,0,0" VerticalAlignment="Top" Width="71" Height="24" FontSize="13"/>
+        <Label x:Name="PoolLabel" Content="Pool" HorizontalAlignment="Left" Margin="82,262,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <ComboBox x:Name="PoolComboBox" HorizontalAlignment="Left" Margin="130,265,0,0" VerticalAlignment="Top" Width="370" Height="24"/>
+        <Button x:Name="PoolBrowseButton" Content="Browse" HorizontalAlignment="Left" Margin="509,265,0,0" VerticalAlignment="Top" Width="71" Height="24" FontSize="13"/>
+        <Label x:Name="WalletLabel" Content="Wallet" HorizontalAlignment="Left" Margin="66,296,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <ComboBox x:Name="WalletComboBox" HorizontalAlignment="Left" Margin="130,300,0,0" VerticalAlignment="Top" Width="370" Height="24"/>
+        <Button x:Name="WalletBrowseButton" Content="Browse" HorizontalAlignment="Left" Margin="509,300,0,0" VerticalAlignment="Top" Width="71" Height="24" FontSize="13"/>
+
+    </Grid>
+</Window>

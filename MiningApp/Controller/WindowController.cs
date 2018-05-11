@@ -11,11 +11,15 @@ namespace MiningApp
     class WindowController
     {
         public static WindowController Instance;
+
         public static UserModel User;
 
         private DataHelper _dataHelper { get; set; } = null;
+
         private ProcessHelper _procHelper { get; set; } = null;
+
         private CryptoHelper _cryptoHelper { get; set; } = null;
+
         private ServerHelper _serverHelper { get; set; } = null;
 
         public ControlBarViewModel ControlBarView { get; set; } = null;
@@ -24,7 +28,7 @@ namespace MiningApp
 
         public MinersViewModel MinersView { get; set; } = null;
 
-        public EditMinerViewModel EditMinersView { get; set; } = null;
+        public MiningConfigViewModel MiningConfigView { get; set; } = null;
 
         public ViewMinerViewModel ViewMinerView { get; set; } = null;
 
@@ -38,7 +42,7 @@ namespace MiningApp
 
         private MinersWindow _minersWin { get; set; }
 
-        private EditMinerWindow _editMinerWin { get; set; }
+        private MiningConfigWindow _miningConfigWindow { get; set; }
 
         private CryptosWindow _cryptosWin { get; set; }
 
@@ -88,16 +92,16 @@ namespace MiningApp
 
         public void ShowNewMiner()
         {
-            EditMinersView?.Dispose();
+            MiningConfigView?.Dispose();
 
-            _editMinerWin = new EditMinerWindow();
+            _miningConfigWindow = new MiningConfigWindow();
         }
 
-        public void ShowEditMiner(MinerConfigModel miner)
+        public void ShowEditMiner(MiningConfigModel miner)
         {
-            EditMinersView?.Dispose();
+            MiningConfigView?.Dispose();
 
-            _editMinerWin = new EditMinerWindow(miner);
+            _miningConfigWindow = new MiningConfigWindow(miner);
         }
 
         public async Task<string> GetFilePath()
@@ -115,27 +119,27 @@ namespace MiningApp
             return path;
         }
 
-        public void InsertMiner(MinerConfigModel miner)
+        public void InsertMiner(MiningConfigModel miner)
         {
             _dataHelper.InsertMiner(miner);
         }
 
-        public Task<List<MinerConfigModel>> GetMiners()
+        public Task<List<MiningConfigModel>> GetMiners()
         {
             return _dataHelper.GetMiners();
         }
 
-        public void DeleteMiner(MinerConfigModel miner)
+        public void DeleteMiner(MiningConfigModel miner)
         {
             _dataHelper.DeleteMiner(miner.ID);
         }
 
-        public void UpdateMiner(MinerConfigModel miner)
+        public void UpdateMiner(MiningConfigModel miner)
         {
             _dataHelper.UpdateMiner(miner);
         }
 
-        public void LaunchMiner(MinerConfigModel miner)
+        public void LaunchMiner(MiningConfigModel miner)
         {
             _procHelper.StartMiner(miner);
         }

@@ -7,19 +7,28 @@ using System.Threading.Tasks;
 
 namespace MiningApp
 {
-    public class MinerConfigModel
+    public class MiningConfigModel
     {
         public int ID { get; set; }
+
         public DateTime Created { get; set; }
 
+        public CryptoModel Crypto { get; set; }
+
         public string Name { get; set; }
+
         public string Path { get; set; }
+
         public string Arguments { get; set; }
+
         public string Output { get; set; } = "";
+
         public StatusEnum Status { get; set; }
+
         public bool ShowWindow { get; set; } = true;
 
         public string ProcessName => GetProcessName();
+
         private Process _process { get; set; }
 
         public enum StatusEnum
@@ -28,7 +37,7 @@ namespace MiningApp
             Running
         }
 
-        public MinerConfigModel()
+        public MiningConfigModel()
         {
 
         }
