@@ -64,7 +64,8 @@ namespace MiningApp
                     Name = _window.NameTextBox.Text,
                     Crypto = _window.CryptoComboBox.Text,
                     Address = _window.AddressTextBox.Text,
-                    ClientPath = _window.ClientTextBox.Text
+                    ClientPath = _window.ClientTextBox.Text,
+                    Status = WalletStatus.Active
                 };
             }
             catch
@@ -116,6 +117,11 @@ namespace MiningApp
                 if (_window.AddressTextBox.Text != _window.VerifyTextBox.Text)
                 {
                     message = "Please verify that the wallet addresses match!";
+                    return false;
+                }
+                if (WalletHelper.Instance.WalletNameTaken(_window.NameTextBox.Text))
+                {
+                    message = "A wallet with that name already exists!";
                     return false;
                 }
 

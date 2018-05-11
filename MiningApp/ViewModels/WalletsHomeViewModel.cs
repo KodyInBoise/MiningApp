@@ -10,13 +10,13 @@ using MiningApp.Windows;
 
 namespace MiningApp
 {
-    public class CryptosViewModel
+    public class WalletsHomeViewModel
     {
-        private CryptosWindow _window { get; set; }      
+        private WalletsHomeWindow _window { get; set; }
 
-        private List<CryptoModel> _cryptos = new List<CryptoModel>();
+        private List<WalletConfigModel> _wallets { get; set; }
 
-        private CryptoModel _selectedCrypto { get; set; }
+        private WalletConfigModel _selectedWallet { get; set; }
 
 
 
@@ -24,7 +24,7 @@ namespace MiningApp
 
 
 
-        public CryptosViewModel(CryptosWindow window)
+        public WalletsHomeViewModel(WalletsHomeWindow window)
         {
             _window = window;
 
@@ -33,12 +33,13 @@ namespace MiningApp
 
         private void ShowWindow()
         {
-            WindowController.Instance.CryptosView = this;
+            WindowController.Instance.WalletsHomeView = this;
 
             _window.Left = WindowController.Instance.WindowLeft;
             _window.Top = WindowController.Instance.WindowTop;
 
-            _window.WatchButton.Click += (s, e) => WatchButton_Clicked();
+            _window.NewButton.Click += (s, e) => NewButton_Clicked();
+            _window.EditButton.Click += (s, e) => EditButton_Clicked();
 
             DisplayGrid();
 
@@ -47,29 +48,24 @@ namespace MiningApp
 
         public void Dispose()
         {
-            WindowController.Instance.ControlBarView = null;
+            WindowController.Instance.WalletsHomeView = null;
 
             _window.Close();
         }
 
-        private async void DisplayGrid()
+        private void DisplayGrid()
         {
-            _cryptos = await CryptoHelper.Instance.GetTopCryptos();
+            _wallets = WalletHelper.Instance.AllWallets;
 
             GridItems = (CollectionViewSource)(_window.FindResource("GridItems"));
-            GridItems.Source = _cryptos;
+            GridItems.Source = _wallets;
 
-            _window.CryptosDataGrid.Items.Refresh();
+            _window.WalletsDataGrid.Items.Refresh();           
         }
 
-        private void WatchButton_Clicked()
+        private WalletConfigModel GetSelectedWallet()
         {
-            WindowController.User.AddToCryptoWatchList(GetSelectedCrypto());
-        }
-
-        private CryptoModel GetSelectedCrypto()
-        {
-            DataGridCellInfo cellInfo = _window.CryptosDataGrid.SelectedCells[0];
+            DataGridCellInfo cellInfo = _window.WalletsDataGrid.SelectedCells[0];
             if (cellInfo == null) return null;
 
             DataGridBoundColumn column = cellInfo.Column as DataGridBoundColumn;
@@ -77,17 +73,27 @@ namespace MiningApp
 
             FrameworkElement element = new FrameworkElement() { DataContext = cellInfo.Item };
             BindingOperations.SetBinding(element, FrameworkElement.TagProperty, column.Binding);
-            var symbol = element.Tag.ToString();
+            var name = element.Tag.ToString();
 
-            foreach (CryptoModel crypto in _cryptos)
+            foreach (WalletConfigModel wallet in _wallets)
             {
-                if (crypto.Symbol == symbol)
+                if (wallet.Name == name)
                 {
-                    return crypto;
+                    return wallet;
                 }
             }
 
             return null;
+        }
+
+        private void NewButton_Clicked()
+        {
+            WindowController.Instance.ShowWalletConfig();
+        }
+
+        private void EditButton_Clicked()
+        {
+
         }
     }
 }

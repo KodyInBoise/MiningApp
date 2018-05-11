@@ -16,5 +16,12 @@ namespace MiningApp
         {
             Instance = this;
         }
+
+        public bool WalletNameTaken(string name)
+        {
+            var wallet = AllWallets.Find(x => x.Name == name);
+
+            return wallet == null ? false : true;
+        }
     }
 }

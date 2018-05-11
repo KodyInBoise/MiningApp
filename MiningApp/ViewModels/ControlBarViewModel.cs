@@ -57,7 +57,7 @@ namespace MiningApp
 
         private void WalletsButton_Clicked()
         {
-            WindowController.Instance.ShowWalletConfig();
+            WindowController.Instance.ShowWalletsHome();
         }
     }
 }

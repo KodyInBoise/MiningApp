@@ -101,6 +101,7 @@
     <Compile Include="ViewModels\UploadMinerViewModel.cs" />
     <Compile Include="ViewModels\ViewMinerViewModel.cs" />
     <Compile Include="ViewModels\WalletConfigViewModel.cs" />
+    <Compile Include="ViewModels\WalletsHomeViewModel.cs" />
     <Compile Include="Windows\BrowseMinersWindow.xaml.cs">
       <DependentUpon>BrowseMinersWindow.xaml</DependentUpon>
     </Compile>
@@ -124,6 +125,9 @@
     </Compile>
     <Compile Include="Windows\WalletConfigWindow.xaml.cs">
       <DependentUpon>WalletConfigWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\WalletsHomeWindow.xaml.cs">
+      <DependentUpon>WalletsHomeWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -166,6 +170,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\WalletConfigWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\WalletsHomeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

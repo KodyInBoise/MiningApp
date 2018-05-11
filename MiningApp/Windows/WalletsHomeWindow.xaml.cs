@@ -15,19 +15,19 @@ using System.Windows.Shapes;
 namespace MiningApp.Windows
 {
     /// <summary>
-    /// Interaction logic for CryptosWindow.xaml
+    /// Interaction logic for WalletsHomeWindow.xaml
     /// </summary>
-    public partial class CryptosWindow : Window
+    public partial class WalletsHomeWindow : Window
     {
-        private CryptosViewModel _view { get; set; }
+        private WalletsHomeViewModel _view { get; set; }
 
         private CollectionViewSource GridItems => _view.GridItems;
 
-        public CryptosWindow()
+        public WalletsHomeWindow()
         {
             InitializeComponent();
 
-            _view = new CryptosViewModel(this);
+            _view = new WalletsHomeViewModel(this);
         }
     }
 }

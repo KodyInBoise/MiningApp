@@ -22,7 +22,8 @@
 
         <Button x:Name="FinishButton" Content="Finish" HorizontalAlignment="Left" Margin="479,493,0,0" VerticalAlignment="Top" Width="121" Height="39" FontSize="13"/>
         <ComboBox x:Name="CryptoComboBox" HorizontalAlignment="Left" Margin="150,190,0,0" VerticalAlignment="Top" Width="450" Height="24"/>
-        <TextBlock x:Name="MessageTextBlock" HorizontalAlignment="Left" Margin="150,70,0,0" TextWrapping="Wrap" Text="Status messages go here" VerticalAlignment="Top" FontFamily="Verdana" Height="78" Width="450" FontWeight="SemiBold" FontSize="14"/>
+        <TextBlock x:Name="MessageTextBlock" HorizontalAlignment="Left" Margin="150,75,0,0" TextWrapping="Wrap" Text="Status messages go here" VerticalAlignment="Top" FontFamily="Verdana" Height="75" Width="450" FontWeight="SemiBold" FontSize="14"/>
+        <Border x:Name="TitleBorder" BorderBrush="LightGray" BorderThickness="2" CornerRadius="3" HorizontalAlignment="Left" Height="77" Margin="-17,-12,0,0" VerticalAlignment="Top" Width="305"/>
 
     </Grid>
 </Window>

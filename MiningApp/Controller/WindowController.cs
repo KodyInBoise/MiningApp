@@ -44,6 +44,8 @@ namespace MiningApp
 
         public UploadMinerViewModel UploadMinerView { get; set; } = null;
 
+        public WalletsHomeViewModel WalletsHomeView { get; set; } = null;
+
         public WalletConfigViewModel WalletConfigView { get; set; } = null;
 
 
@@ -59,6 +61,8 @@ namespace MiningApp
         private CryptosWindow _cryptosWin { get; set; }
 
         private UploadMinerWindow _uploadMinerWin { get; set; }
+
+        private WalletsHomeWindow _walletsHomeWin { get; set; }
 
         private WalletConfigWindow _walletConfigWin { get; set; }
 
@@ -184,11 +188,18 @@ namespace MiningApp
             Environment.Exit(0);
         }
 
-        public void ShowWalletConfig()
+        public void ShowWalletsHome()
+        {
+            WalletsHomeView?.Dispose();
+
+            _walletsHomeWin = new WalletsHomeWindow();
+        }
+
+        public void ShowWalletConfig(WalletConfigModel wallet = null)
         {
             WalletConfigView?.Dispose();
 
-            _walletConfigWin = new WalletConfigWindow();
+            _walletConfigWin = new WalletConfigWindow(wallet);
         }
 
         public async void TestVoid()

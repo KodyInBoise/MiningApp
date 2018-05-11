@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace MiningApp
 {
+
+    public enum WalletStatus
+    {
+        Inactive,
+        Active
+    }
+
     public class WalletConfigModel
     {
         public int ID { get; set; }
@@ -19,6 +26,9 @@ namespace MiningApp
         public string Address { get; set; }
 
         public string ClientPath { get; set; }
+
+        public WalletStatus Status { get; set; }
+
 
         public WalletConfigModel()
         {
