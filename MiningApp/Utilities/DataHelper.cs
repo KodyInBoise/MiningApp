@@ -134,6 +134,22 @@ namespace MiningApp
             }
         }
 
+        public void UpdateWalletConfig(WalletConfigModel wallet)
+        {
+            using (_database)
+            {
+                _walletConfigCollection.Update(wallet);
+            }
+        }
+
+        public void DeleteWalletConfig(WalletConfigModel wallet)
+        {
+            using (_database)
+            {
+                _walletConfigCollection.Delete(wallet.ID);
+            }
+        }
+
         public List<WalletConfigModel> GetWalletConfigs()
         {
             using (_database)

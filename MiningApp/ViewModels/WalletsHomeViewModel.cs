@@ -93,7 +93,14 @@ namespace MiningApp
 
         private void EditButton_Clicked()
         {
+            try
+            {
+                WindowController.Instance.ShowWalletConfig(GetSelectedWallet());
+            }
+            catch
+            {
 
+            }
         }
     }
 }

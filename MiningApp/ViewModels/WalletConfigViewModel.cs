@@ -32,15 +32,20 @@ namespace MiningApp
             _window.CryptoComboBox.ItemsSource = MiningHelper.Instance.GetCryptoNames();
 
             _window.ClientBrowseButton.Click += (s, e) => ClientBrowseButton_Clicked();
+            _window.DeleteButton.Click += (s, e) => DeleteButton_Clicked();
             _window.FinishButton.Click += (s, e) => FinishButton_Clicked();
 
             if (_wallet == null)
             {
                 _window.TitleLabel.Content = "New Wallet Config";
+                _window.DeleteButton.Visibility = Visibility.Collapsed;
             }
             else
             {
                 _window.TitleLabel.Content = "Edit Wallet Config";
+                _window.DeleteButton.Visibility = Visibility.Visible;
+
+                DisplayWallet(_wallet);
             }
 
             ShowStatusMessage();
@@ -54,23 +59,37 @@ namespace MiningApp
             _window.Close();
         }
 
-        private WalletConfigModel CreateWalletConfig()
+        private WalletConfigModel SetWalletInfo()
         {
             try
             {
-                return new WalletConfigModel()
-                {
-                    CreatedTimestamp = DateTime.Now,
-                    Name = _window.NameTextBox.Text,
-                    Crypto = _window.CryptoComboBox.Text,
-                    Address = _window.AddressTextBox.Text,
-                    ClientPath = _window.ClientTextBox.Text,
-                    Status = WalletStatus.Active
-                };
+                if (_wallet == null) _wallet = new WalletConfigModel();
+
+                _wallet.CreatedTimestamp = DateTime.Now;
+                _wallet.Name = _window.NameTextBox.Text;
+                _wallet.Crypto = _window.CryptoComboBox.Text;
+                _wallet.Address = _window.AddressTextBox.Text;
+                _wallet.ClientPath = _path;
+                _wallet.Status = WalletStatus.Active;
+
+                return _wallet;
             }
             catch
             {
                 return new WalletConfigModel();
+            }
+        }
+
+        private void DeleteButton_Clicked()
+        {
+            var result = MessageBox.Show("Are you sure you want to delete this wallet config?", "Delete Wallet Config", 
+                MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                Task.Run(() => DataHelper.Instance.DeleteWalletConfig(_wallet));
+
+                Dispose();
             }
         }
 
@@ -82,9 +101,13 @@ namespace MiningApp
             {
                 _window.FinishButton.Visibility = Visibility.Collapsed;
 
-                _wallet = CreateWalletConfig();
+                _wallet = SetWalletInfo();
 
-                if (_wallet != null)
+                if (_wallet.ID > 0)
+                {
+                    DataHelper.Instance.UpdateWalletConfig(_wallet);
+                }
+                else
                 {
                     DataHelper.Instance.InsertWalletConfig(_wallet);
                 }
@@ -146,7 +169,18 @@ namespace MiningApp
         {
             _path = await WindowController.Instance.GetFilePath();
 
-            _window.ClientTextBox.Text = ElementHelper.TrimPath(_path, length: 60);
+            _window.ClientPathTextBox.Text = ElementHelper.TrimPath(_path, length: 60);
+        }
+
+        private void DisplayWallet(WalletConfigModel wallet)
+        {
+            _window.NameTextBox.Text = wallet.Name;
+            _window.CryptoComboBox.Text = wallet.Crypto;
+            _window.AddressTextBox.Text = wallet.Address;
+            _window.VerifyTextBox.Text = wallet.Address;
+
+            _path = wallet.ClientPath;
+            _window.ClientPathTextBox.Text = ElementHelper.TrimPath(_path, 60);
         }
     }
 }
