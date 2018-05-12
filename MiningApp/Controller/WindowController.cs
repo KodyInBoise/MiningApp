@@ -48,6 +48,10 @@ namespace MiningApp
 
         public WalletConfigViewModel WalletConfigView { get; set; } = null;
 
+        public PoolsHomeViewModel PoolsHomeView { get; set; } = null;
+
+        public PoolConfigViewModel PoolConfigView { get; set; } = null;
+
 
 
         public ControlBarWindow ControlBarWin { get; set; }
@@ -65,6 +69,10 @@ namespace MiningApp
         private WalletsHomeWindow _walletsHomeWin { get; set; }
 
         private WalletConfigWindow _walletConfigWin { get; set; }
+
+        private PoolsHomeWindow _poolsHome { get; set; }
+
+        private PoolConfigWindow _poolConfigWin { get; set; }
 
 
 
@@ -200,6 +208,16 @@ namespace MiningApp
             WalletConfigView?.Dispose();
 
             _walletConfigWin = new WalletConfigWindow(wallet);
+        }
+
+        public void ShowPoolsHome()
+        {
+
+        }
+
+        public void ShowPoolConfig(PoolConfigModel pool)
+        {
+
         }
 
         public async void TestVoid()

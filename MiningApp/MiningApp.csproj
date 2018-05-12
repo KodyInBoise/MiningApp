@@ -83,6 +83,7 @@
     <Compile Include="Models\CryptoModel.cs" />
     <Compile Include="Models\MiningConfigModel.cs" />
     <Compile Include="Models\MinerModel.cs" />
+    <Compile Include="Models\PoolConfigModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\WalletConfigModel.cs" />
     <Compile Include="Utilities\CryptoHelper.cs" />
@@ -98,6 +99,8 @@
     <Compile Include="ViewModels\ControlBarViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MinersViewModel.cs" />
+    <Compile Include="ViewModels\PoolConfigViewModel.cs" />
+    <Compile Include="ViewModels\PoolsHomeViewModel.cs" />
     <Compile Include="ViewModels\UploadMinerViewModel.cs" />
     <Compile Include="ViewModels\ViewMinerViewModel.cs" />
     <Compile Include="ViewModels\WalletConfigViewModel.cs" />
@@ -119,6 +122,12 @@
     </Compile>
     <Compile Include="Windows\MinersWindow.xaml.cs">
       <DependentUpon>MinersWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\PoolConfigWindow.xaml.cs">
+      <DependentUpon>PoolConfigWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\PoolsHomeWindow.xaml.cs">
+      <DependentUpon>PoolsHomeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\UploadMinerWindow.xaml.cs">
       <DependentUpon>UploadMinerWindow.xaml</DependentUpon>
@@ -162,6 +171,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\MinersWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\PoolConfigWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\PoolsHomeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
