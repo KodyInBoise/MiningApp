@@ -39,7 +39,7 @@ namespace MiningApp
             _window.Top = WindowController.Instance.WindowTop;
 
             _window.NewButton.Click += (s, e) => NewButton_Clicked();
-            _window.EditButton.Click += (s, e) => EditButton_Clicked();
+            _window.EditButton.Click += (s, e) => EditButton_Clicked();           
 
             DisplayGrid();
 
@@ -101,6 +101,33 @@ namespace MiningApp
             {
 
             }
+        }
+
+        public void AddWallet(WalletConfigModel wallet)
+        {
+            try
+            {
+                _wallets.Add(wallet);
+
+                UpdateGrid();
+            }
+            catch { }
+        }
+
+        public void RemoveWallet(WalletConfigModel wallet)
+        {
+            try
+            {
+                _wallets.Remove(wallet);
+
+                UpdateGrid();
+            }
+            catch { }
+        }
+
+        public void UpdateGrid()
+        {
+            _window.WalletsDataGrid.Items.Refresh();
         }
     }
 }

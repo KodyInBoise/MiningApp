@@ -36,6 +36,8 @@ namespace MiningApp
             _window.Left = WindowController.Instance.WindowLeft;
             _window.Top = WindowController.Instance.WindowTop;
 
+            _window.UserPoolsRadioButton.Checked += (s, e) => ViewingPools_Changed();
+            _window.AllPoolsRadioButton.Checked += (s, e) => ViewingPools_Changed();
             _window.NewButton.Click += (s, e) => NewButton_Clicked();
             _window.EditButton.Click += (s, e) => EditButton_Clicked();
 
@@ -61,9 +63,9 @@ namespace MiningApp
             WindowController.Instance.ShowPoolConfig(GetSelectedPool());
         }
 
-        private void DisplayGrid()
+        private void DisplayGrid(bool allPools = false)
         {
-            _pools = PoolHelper.Instance.LocalPools;
+            _pools = allPools ? PoolHelper.Instance.AllPools : PoolHelper.Instance.LocalPools;
 
             GridItems = (CollectionViewSource)(_window.FindResource("GridItems"));
             GridItems.Source = _pools;
@@ -92,6 +94,45 @@ namespace MiningApp
             }
 
             return null;
+        }
+
+        public void AddPool(PoolConfigModel pool)
+        {
+            try
+            {
+                _pools.Add(pool);
+
+                UpdateGrid();
+            }
+            catch { }
+        }
+
+        public void RemovePool(PoolConfigModel pool)
+        {
+            try
+            {
+                _pools.Remove(pool);
+
+                UpdateGrid();
+            }
+            catch { }
+        }
+
+        public void UpdateGrid()
+        {
+            _window.PoolsDataGrid.Items.Refresh();
+        }
+
+        private void ViewingPools_Changed()
+        {
+            if (_window.AllPoolsRadioButton.IsChecked == true)
+            {
+                DisplayGrid(true);
+            }
+            else
+            {
+                DisplayGrid();
+            }
         }
     }
 }

@@ -88,6 +88,8 @@ namespace MiningApp
             {
                 Task.Run(() => DataHelper.Instance.DeleteWalletConfig(_wallet));
 
+                WindowController.Instance.WalletsHomeView?.RemoveWallet(_wallet);
+
                 Dispose();
             }
         }
@@ -105,10 +107,14 @@ namespace MiningApp
                 if (_wallet.ID > 0)
                 {
                     DataHelper.Instance.UpdateWalletConfig(_wallet);
+
+                    WindowController.Instance.WalletsHomeView?.UpdateGrid();
                 }
                 else
                 {
                     DataHelper.Instance.InsertWalletConfig(_wallet);
+
+                    WindowController.Instance.WalletsHomeView?.AddWallet(_wallet);
                 }
             }
             else

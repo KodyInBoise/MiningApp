@@ -35,6 +35,7 @@ namespace MiningApp
 
             _window.DeleteButton.Click += (s, e) => DeleteButton_Clicked();
             _window.FinishButton.Click += (s, e) => FinishButton_Clicked();
+            _window.Closing += (s, e) => Window_Closing();
 
             if (_pool == null)
             {
@@ -73,10 +74,14 @@ namespace MiningApp
                 if (_pool.ID > 0)
                 {
                     DataHelper.Instance.UpdatePoolConfig(_pool);
+
+                    WindowController.Instance.PoolsHomeView?.UpdateGrid();
                 }
                 else
                 {
                     DataHelper.Instance.InsertPoolConfig(_pool);
+
+                    WindowController.Instance.PoolsHomeView?.AddPool(_pool);
                 }
             }
             else
@@ -93,6 +98,8 @@ namespace MiningApp
             if (result == MessageBoxResult.Yes)
             {
                 Task.Run(() => DataHelper.Instance.DeletePoolConfig(_pool));
+
+                WindowController.Instance.PoolsHomeView?.RemovePool(_pool);
 
                 Dispose();
             }
@@ -165,6 +172,11 @@ namespace MiningApp
             _window.AddressTextBox.Text = pool.Address;
             _window.FeeTextBox.Text = pool.Fee.ToString();
             _window.NoteTextBox.Text = pool.Note ?? "";
+        }
+
+        private void Window_Closing()
+        {
+            WindowController.Instance.PoolsHomeView?.UpdateGrid();
         }
     }
 }

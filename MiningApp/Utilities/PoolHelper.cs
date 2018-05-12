@@ -12,6 +12,8 @@ namespace MiningApp
 
         public List<PoolConfigModel> LocalPools => DataHelper.Instance.GetAllPools();
 
+        public List<PoolConfigModel> AllPools { get; set; } = new List<PoolConfigModel>();
+
         public PoolHelper()
         {
             Instance = this;
