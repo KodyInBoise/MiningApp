@@ -7,6 +7,21 @@
         mc:Ignorable="d"
         Title="MinerConfigWindow" Height="600" Width="700">
     <Grid>
-        
+        <Label x:Name="TitleLabel" Content="New Miner Config" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Verdana" FontSize="28"/>
+        <Border x:Name="TitleBorder" BorderBrush="LightGray" BorderThickness="2" CornerRadius="3" HorizontalAlignment="Left" Height="77" Margin="-17,-12,0,0" VerticalAlignment="Top" Width="293"/>
+        <Label x:Name="NameLabel" Content="Name" HorizontalAlignment="Left" Margin="93,155,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <TextBox x:Name="NameTextBox" HorizontalAlignment="Left" Height="24" Margin="150,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="450" VerticalContentAlignment="Center"/>
+        <TextBlock x:Name="MessageTextBlock" HorizontalAlignment="Left" Margin="150,75,0,0" TextWrapping="Wrap" Text="Status messages go here" VerticalAlignment="Top" FontFamily="Verdana" Height="75" Width="450" FontWeight="SemiBold" FontSize="14"/>
+        <Label x:Name="CryptosLabel" Content="Cryptos" HorizontalAlignment="Left" Margin="81,225,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <Button x:Name="CryptosAddButton" Content="Add" HorizontalAlignment="Left" Margin="529,230,0,0" VerticalAlignment="Top" Width="71" Height="24" FontSize="13"/>
+        <ListBox x:Name="CryptosListBox" HorizontalAlignment="Left" Height="93" Margin="150,265,0,0" VerticalAlignment="Top" Width="450"/>
+        <ComboBox x:Name="CryptosComboBox" HorizontalAlignment="Left" Margin="150,230,0,0" VerticalAlignment="Top" Width="374" Height="24"/>
+        <Button x:Name="CryptosRemoveButton" Content="Remove" HorizontalAlignment="Left" Margin="529,369,0,0" VerticalAlignment="Top" Width="71" Height="24" FontSize="13"/>
+        <Label x:Name="PathLabel" Content="Path" HorizontalAlignment="Left" Margin="104,190,0,0" VerticalAlignment="Top" FontSize="16"/>
+        <TextBox x:Name="PathTextBox" HorizontalAlignment="Left" Height="24" Margin="150,195,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="374" VerticalContentAlignment="Center"/>
+        <Button x:Name="PathBrowseButton" Content="Browse" HorizontalAlignment="Left" Margin="529,195,0,0" VerticalAlignment="Top" Width="71" Height="24" FontSize="13"/>
+        <Button x:Name="DeleteButton" Content="Delete" HorizontalAlignment="Left" Margin="71,506,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
+        <Button x:Name="FinishButton" Content="Finish" HorizontalAlignment="Left" Margin="526,506,0,0" VerticalAlignment="Top" Width="100" Height="30"/>
+
     </Grid>
 </Window>

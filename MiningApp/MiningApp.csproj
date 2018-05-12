@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Net.Http, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Net.Http.4.3.3\lib\net46\System.Net.Http.dll</HintPath>
     </Reference>
@@ -89,6 +90,7 @@
     <Compile Include="Utilities\CryptoHelper.cs" />
     <Compile Include="Utilities\DataHelper.cs" />
     <Compile Include="Utilities\ElementHelper.cs" />
+    <Compile Include="Utilities\FileHelper.cs" />
     <Compile Include="Utilities\MiningHelper.cs" />
     <Compile Include="Utilities\PoolHelper.cs" />
     <Compile Include="Utilities\ProcessHelper.cs" />
@@ -116,8 +118,8 @@
     <Compile Include="Windows\CryptosWindow.xaml.cs">
       <DependentUpon>CryptosWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\MiningConfigWindow.xaml.cs">
-      <DependentUpon>MiningConfigWindow.xaml</DependentUpon>
+    <Compile Include="Windows\MiningRuleWindow.xaml.cs">
+      <DependentUpon>MiningRuleWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ControlBarWindow.xaml.cs">
       <DependentUpon>ControlBarWindow.xaml</DependentUpon>
@@ -167,7 +169,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\MiningConfigWindow.xaml">
+    <Page Include="Windows\MiningRuleWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

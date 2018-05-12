@@ -124,11 +124,12 @@ namespace MiningApp
             {
                 return new MinerConfigModel()
                 {
+                    ServerID = ServerHelper.Instance.GetUniqueMinerID(),
                     CreatedTimestamp = DateTime.Now,
                     Name = _window.NameTextBox.Text,
                     Cryptos = _window.CryptosListBox.Items.Cast<String>().ToList(),
                     Tags = _window.TagsListBox.Items.Cast<String>().ToList(),
-                    File = new FileInfo(_window.PathTextBox.Text)
+                    FilePath = _window.PathTextBox.Text
                 };
             }
             catch
@@ -143,7 +144,7 @@ namespace MiningApp
             {
                 _miner = CreateNewMiner();
 
-                ServerHelper.Instance.AddMiner(_miner);
+                ServerHelper.Instance.UploadMiner(_miner);
             }
             catch (Exception ex)
             {

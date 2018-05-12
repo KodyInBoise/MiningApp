@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LiteDB;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +11,12 @@ namespace MiningApp
 {
     public class MinerConfigModel
     {
+
+
+        public int ID { get; set; }
+
+        public string ServerID { get; set; }
+
         public DateTime CreatedTimestamp { get; set; }
 
         public string Name { get; set; }
@@ -18,11 +25,11 @@ namespace MiningApp
 
         public List<string> Tags { get; set; } = new List<string>();
 
-        public FileInfo File { get; set; }
+        public string FilePath { get; set; }
 
         [JsonIgnore]
+        [BsonIgnore]
         public string LocalDirectory  => GetLocalDirectory();
-
 
 
         public MinerConfigModel()

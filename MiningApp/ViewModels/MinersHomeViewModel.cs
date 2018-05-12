@@ -18,7 +18,9 @@ namespace MiningApp
 
         private MinersHomeWindow _window { get; set; }
 
-        private List<MiningRuleModel> _miners { get; set; }
+        private List<MinerConfigModel> _localMiners { get; set; }
+
+        private List<MinerConfigModel> _allMiners { get; set; }
 
 
 
@@ -49,16 +51,26 @@ namespace MiningApp
         }
 
         private void DisplayGrid(bool allMiners = false)
-        {
-            _miners = allMiners ? MiningHelper.Instance.AllMiners : MiningHelper.Instance.LocalMiners;
-
+        { 
             GridItems = (CollectionViewSource)(_window.FindResource("GridItems"));
-            GridItems.Source = _miners;
+
+            if (allMiners)
+            {
+                _allMiners = ServerHelper.Instance.GetMiners();
+
+                GridItems.Source = _allMiners;
+            }
+            else
+            {
+                _localMiners = DataHelper.Instance.GetAllMinerConfigs();
+
+                GridItems.Source = _localMiners;
+            }
 
             _window.MinersDataGrid.Items.Refresh();
         }
 
-        private MiningRuleModel GetSelectedMiner()
+        private MinerConfigModel GetSelectedMiner()
         {
             DataGridCellInfo cellInfo = _window.MinersDataGrid.SelectedCells[0];
             if (cellInfo == null) return null;
@@ -70,7 +82,7 @@ namespace MiningApp
             BindingOperations.SetBinding(element, FrameworkElement.TagProperty, column.Binding);
             var name = element.Tag.ToString();
 
-            foreach (MiningRuleModel miner in _miners)
+            foreach (MinerConfigModel miner in _localMiners)
             {
                 if (miner.Name == name)
                 {
@@ -81,22 +93,22 @@ namespace MiningApp
             return null;
         }
 
-        public void AddMiner(MiningRuleModel miner)
+        public void AddMiner(MinerConfigModel miner)
         {
             try
             {
-                _miners.Add(miner);
+                _localMiners.Add(miner);
 
                 UpdateGrid();
             }
             catch { }
         }
 
-        public void RemovePool(MiningRuleModel miner)
+        public void RemovePool(MinerConfigModel miner)
         {
             try
             {
-                _miners.Remove(miner);
+                _localMiners.Remove(miner);
 
                 UpdateGrid();
             }
@@ -122,7 +134,7 @@ namespace MiningApp
 
         private void NewButton_Clicked()
         {
-            WindowController.Instance.ShowUploadMiner();
+            WindowController.Instance.ShowMinerConfig();
         }
     }
 }

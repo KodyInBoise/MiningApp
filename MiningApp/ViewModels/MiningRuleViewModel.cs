@@ -10,7 +10,7 @@ namespace MiningApp
 {
     public class MiningRuleViewModel
     {
-        private MiningConfigWindow _window;
+        private MiningRuleWindow _window;
 
         private MiningRuleModel _miner;
 
@@ -18,7 +18,7 @@ namespace MiningApp
 
 
 
-        public MiningRuleViewModel(MiningConfigWindow window, MiningRuleModel miner = null)
+        public MiningRuleViewModel(MiningRuleWindow window, MiningRuleModel miner = null)
         {
             _window = window;
             _miner = miner;

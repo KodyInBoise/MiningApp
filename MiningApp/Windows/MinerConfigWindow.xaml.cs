@@ -19,9 +19,13 @@ namespace MiningApp.Windows
     /// </summary>
     public partial class MinerConfigWindow : Window
     {
-        public MinerConfigWindow()
+        private MinerConfigViewModel _view { get; set; }
+
+        public MinerConfigWindow(MinerConfigModel miner)
         {
             InitializeComponent();
+
+            _view = new MinerConfigViewModel(this, miner);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace MiningApp
             _allMiners = GetMiners();
         }
 
-        public void AddMiner(MinerConfigModel miner)
+        public void UploadMiner(MinerConfigModel miner)
         {
             _allMiners.Add(miner);
 
@@ -51,6 +51,30 @@ namespace MiningApp
             {
                 return new List<MinerConfigModel>();
             }
+        }
+
+        public string GetUniqueMinerID()
+        {
+            var newID = GenerateUniqueID();
+
+            while (!UniqueMinerIDAvailable(newID))
+            {
+                newID = GenerateUniqueID();
+            }
+
+            return newID;
+        }
+
+        private string GenerateUniqueID()
+        {
+            return Guid.NewGuid().ToString().Substring(0, 8);
+        }
+
+        private bool UniqueMinerIDAvailable(string newID)
+        {
+            var miner = _allMiners.Find(x => x.ServerID == newID);
+
+            return miner == null ? true : false;
         }
     }
 }

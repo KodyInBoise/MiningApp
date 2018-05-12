@@ -10,7 +10,7 @@ namespace MiningApp
     {
         public static PoolHelper Instance { get; set; }
 
-        public List<PoolConfigModel> LocalPools => DataHelper.Instance.GetAllPools();
+        public List<PoolConfigModel> LocalPools => DataHelper.Instance.GetAllPoolConfigs();
 
         public List<PoolConfigModel> AllPools { get; set; } = new List<PoolConfigModel>();
 

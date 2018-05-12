@@ -10,10 +10,10 @@ namespace MiningApp
 {
     class WindowController
     {
+
         public static WindowController Instance;
 
         public static UserModel User;
-
 
 
         private DataHelper _dataHelper { get; set; } = null;
@@ -30,6 +30,7 @@ namespace MiningApp
 
         private PoolHelper _poolHelper { get; set; } = null;
 
+        private FileHelper _fileHelper { get; set; } = null;
 
 
         public ControlBarViewModel ControlBarView { get; set; } = null;
@@ -56,6 +57,7 @@ namespace MiningApp
 
         public MinersHomeViewModel MinersHomeView { get; set; } = null;
 
+        public MinerConfigViewModel MinerConfigView { get; set; } = null;
 
 
         public ControlBarWindow ControlBarWin { get; set; }
@@ -64,7 +66,7 @@ namespace MiningApp
 
         private MinersWindow _minersWin { get; set; }
 
-        private MiningConfigWindow _miningConfigWindow { get; set; }
+        private MiningRuleWindow _miningConfigWindow { get; set; }
 
         private CryptosWindow _cryptosWin { get; set; }
 
@@ -80,11 +82,13 @@ namespace MiningApp
 
         private MinersHomeWindow _minersHomeWin { get; set; }
 
+        private MinerConfigWindow _minerConfigWin { get; set; }
 
 
         public double WindowLeft => ControlBarWin.Left + ControlBarWin.Width;
 
         public double WindowTop => ControlBarWin.Top;
+
 
         public WindowController()
         {
@@ -102,6 +106,7 @@ namespace MiningApp
             _miningHelper = new MiningHelper();
             _walletHelper = new WalletHelper();
             _poolHelper = new PoolHelper();
+            _fileHelper = new FileHelper();
 
             User = DataHelper.LoadUserSettings();
 
@@ -132,14 +137,14 @@ namespace MiningApp
         {
             MiningConfigView?.Dispose();
 
-            _miningConfigWindow = new MiningConfigWindow();
+            _miningConfigWindow = new MiningRuleWindow();
         }
 
         public void ShowEditMiner(MiningRuleModel miner)
         {
             MiningConfigView?.Dispose();
 
-            _miningConfigWindow = new MiningConfigWindow(miner);
+            _miningConfigWindow = new MiningRuleWindow(miner);
         }
 
         public async Task<string> GetFilePath()
@@ -159,22 +164,22 @@ namespace MiningApp
 
         public void InsertMiner(MiningRuleModel miner)
         {
-            _dataHelper.InsertMiner(miner);
+            _dataHelper.InsertMiningRule(miner);
         }
 
         public Task<List<MiningRuleModel>> GetMiners()
         {
-            return _dataHelper.GetAllMiners();
+            return _dataHelper.GetAllMiningRules();
         }
 
         public void DeleteMiner(MiningRuleModel miner)
         {
-            _dataHelper.DeleteMiner(miner.ID);
+            _dataHelper.DeleteMiningRule(miner.ID);
         }
 
         public void UpdateMiner(MiningRuleModel miner)
         {
-            _dataHelper.UpdateMiner(miner);
+            _dataHelper.UpdateMiningRule(miner);
         }
 
         public void LaunchMiner(MiningRuleModel miner)
@@ -238,9 +243,16 @@ namespace MiningApp
             _minersHomeWin = new MinersHomeWindow();
         }
 
+        public void ShowMinerConfig(MinerConfigModel miner = null)
+        {
+            MinerConfigView?.Dispose();
+
+            _minerConfigWin = new MinerConfigWindow(miner);
+        }
+
         public async void TestVoid()
         {
-             
+            ShowUploadMiner();
         }
     }
 }

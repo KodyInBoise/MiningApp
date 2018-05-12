@@ -14,14 +14,11 @@ using System.Windows.Shapes;
 
 namespace MiningApp.Windows
 {
-    /// <summary>
-    /// Interaction logic for EditMinerWindow.xaml
-    /// </summary>
-    public partial class MiningConfigWindow : Window
+    public partial class MiningRuleWindow : Window
     {
         private MiningRuleViewModel _view;
 
-        public MiningConfigWindow(MiningRuleModel miner = null)
+        public MiningRuleWindow(MiningRuleModel miner = null)
         {
             InitializeComponent();
 
