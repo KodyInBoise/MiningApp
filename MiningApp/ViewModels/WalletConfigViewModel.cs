@@ -63,9 +63,8 @@ namespace MiningApp
         {
             try
             {
-                if (_wallet == null) _wallet = new WalletConfigModel();
+                if (_wallet == null) _wallet = new WalletConfigModel { CreatedTimestamp = DateTime.Now };
 
-                _wallet.CreatedTimestamp = DateTime.Now;
                 _wallet.Name = _window.NameTextBox.Text;
                 _wallet.Crypto = _window.CryptoComboBox.Text;
                 _wallet.Address = _window.AddressTextBox.Text;

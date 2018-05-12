@@ -19,9 +19,13 @@ namespace MiningApp.Windows
     /// </summary>
     public partial class PoolConfigWindow : Window
     {
-        public PoolConfigWindow()
+        private PoolConfigViewModel _view { get; set; }
+
+        public PoolConfigWindow(PoolConfigModel pool)
         {
             InitializeComponent();
+
+            _view = new PoolConfigViewModel(this, pool);
         }
     }
 }

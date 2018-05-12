@@ -28,6 +28,8 @@ namespace MiningApp
 
         private WalletHelper _walletHelper { get; set; } = null;
 
+        private PoolHelper _poolHelper { get; set; } = null;
+
 
 
         public ControlBarViewModel ControlBarView { get; set; } = null;
@@ -70,7 +72,7 @@ namespace MiningApp
 
         private WalletConfigWindow _walletConfigWin { get; set; }
 
-        private PoolsHomeWindow _poolsHome { get; set; }
+        private PoolsHomeWindow _poolsHomeWin { get; set; }
 
         private PoolConfigWindow _poolConfigWin { get; set; }
 
@@ -95,6 +97,7 @@ namespace MiningApp
             _serverHelper = new ServerHelper();
             _miningHelper = new MiningHelper();
             _walletHelper = new WalletHelper();
+            _poolHelper = new PoolHelper();
 
             User = DataHelper.LoadUserSettings();
 
@@ -212,17 +215,21 @@ namespace MiningApp
 
         public void ShowPoolsHome()
         {
+            PoolsHomeView?.Dispose();
 
+            _poolsHomeWin = new PoolsHomeWindow();
         }
 
-        public void ShowPoolConfig(PoolConfigModel pool)
+        public void ShowPoolConfig(PoolConfigModel pool = null)
         {
+            PoolConfigView?.Dispose();
 
+            _poolConfigWin = new PoolConfigWindow(pool);
         }
 
         public async void TestVoid()
         {
-            //var wallets = 
+             
         }
     }
 }

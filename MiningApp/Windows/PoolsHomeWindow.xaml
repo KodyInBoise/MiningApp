@@ -17,7 +17,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Width="150" Header="Name" Binding="{Binding Name}"/>
                 <DataGridTextColumn Width="200" Header="Address" Binding="{Binding Address}"/>
-                <DataGridTextColumn Width="75" Header="Fee" Binding="{Binding Fee}"/>
+                <DataGridTextColumn Width="75" Header="Fee" Binding="{Binding FeeString}"/>
                 <DataGridTextColumn Width="75" Header="Rating" Binding="{Binding Rating}"/>
             </DataGrid.Columns>
         </DataGrid>

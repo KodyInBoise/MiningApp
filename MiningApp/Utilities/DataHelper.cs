@@ -29,6 +29,8 @@ namespace MiningApp
 
         private LiteCollection<WalletConfigModel> _walletConfigCollection => GetWalletCollection();
 
+        private LiteCollection<PoolConfigModel> _poolConfigCollection => GetPoolCollection();
+
         public DataHelper()
         {
             Instance = this;
@@ -62,6 +64,14 @@ namespace MiningApp
             using (_database)
             {
                 return _database.GetCollection<WalletConfigModel>("walletconfigs");
+            }
+        }
+
+        private LiteCollection<PoolConfigModel> GetPoolCollection()
+        {
+            using (_database)
+            {
+                return _database.GetCollection<PoolConfigModel>("poolconfigs");
             }
         }
 
@@ -155,6 +165,38 @@ namespace MiningApp
             using (_database)
             {
                 return _walletConfigCollection.FindAll().ToList();
+            }
+        }
+
+        public void InsertPoolConfig(PoolConfigModel pool)
+        {
+            using (_database)
+            {
+                _poolConfigCollection.Insert(pool);
+            }
+        }
+
+        public void UpdatePoolConfig(PoolConfigModel pool)
+        {
+            using (_database)
+            {
+                _poolConfigCollection.Update(pool);
+            }
+        }
+
+        public void DeletePoolConfig(PoolConfigModel pool)
+        {
+            using (_database)
+            {
+                _poolConfigCollection.Delete(pool.ID);
+            }
+        }
+
+        public List<PoolConfigModel> GetAllPools()
+        {
+            using (_database)
+            {
+                return _poolConfigCollection.FindAll().ToList();
             }
         }
     }

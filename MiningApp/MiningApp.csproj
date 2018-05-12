@@ -90,6 +90,7 @@
     <Compile Include="Utilities\DataHelper.cs" />
     <Compile Include="Utilities\ElementHelper.cs" />
     <Compile Include="Utilities\MiningHelper.cs" />
+    <Compile Include="Utilities\PoolHelper.cs" />
     <Compile Include="Utilities\ProcessHelper.cs" />
     <Compile Include="Utilities\ServerHelper.cs" />
     <Compile Include="Utilities\WalletHelper.cs" />
