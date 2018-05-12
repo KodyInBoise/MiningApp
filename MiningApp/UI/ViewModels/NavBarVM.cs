@@ -31,7 +31,7 @@ namespace MiningApp.UI
         SplitButton LogsButton { get; set; } = ElementHelper.NavBar.NavButtonTemplate("Logs");
 
 
-        double nextLeft = 15;
+        double nextLeft = 10;
         double nextTop = 15;
         double padding = 25;
 
@@ -41,15 +41,23 @@ namespace MiningApp.UI
             Instance = this;
 
             ShowView();
+
+            WindowController.Instance.ShowHome();
         }
 
         private void ShowView()
         {
             DisplayElement(HomeButton);
+
             DisplayElement(ConfigurationsButton, topPadding: padding * 2);
+
             DisplayElement(MinersButton);
+
             DisplayElement(WalletsButton);
+            WalletsButton.Click += (s, e) => WalletsButton_Clicked();
+
             DisplayElement(PoolsButton);
+
             DisplayElement(LogsButton);
 
             /*
@@ -82,5 +90,14 @@ namespace MiningApp.UI
             nextTop = element.Margin.Top + element.Height + padding;
         }
 
+        private void HomeButton_Clicked()
+        {
+            WindowController.Instance.ShowHome();
+        }
+
+        private void WalletsButton_Clicked()
+        {
+            WindowController.Instance.ShowWalletsHome();
+        }
     }
 }

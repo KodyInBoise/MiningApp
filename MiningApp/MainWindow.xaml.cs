@@ -43,6 +43,8 @@ namespace MiningApp
             _elementHelper = new ElementHelper();
 
             Controller = new WindowController();
+
+            PrimaryTextBlock.Visibility = Visibility.Hidden;
         }
 
         public void Shutdown()
@@ -58,15 +60,6 @@ namespace MiningApp
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var margins = "";
-
-            //NavBarView.NavButtons.ForEach(x => margins += $"{x.Margin}" + Environment.NewLine);
-
-            MessageBox.Show(margins);
         }
     }
 }

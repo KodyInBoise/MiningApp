@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xceed.Wpf.Toolkit;
 using System.Windows.Controls;
+using System.Windows;
 
 namespace MiningApp.UI
 {
@@ -35,14 +36,24 @@ namespace MiningApp.UI
 
         public static TextBlock CreateTextBlock(string text, int fontSize = -1)
         {
-            if (fontSize <= 0) fontSize = _fontSize;
+            string name = "";
+            var words = text.Split(' ').ToList();
+
+            if (words.Count > 1)
+            {
+                foreach (var word in words) name += word;
+            }
+            else
+            {
+                name = text;
+            }
 
             return new TextBlock()
             {
-                Name = $"{text}TextBlock",
+                Name = $"{name}TextBlock",
                 Text = text,
                 FontFamily = _fontFamily,
-                FontSize = fontSize,
+                FontSize = fontSize > 0 ? fontSize : _fontSize,
                 Foreground = _fontColor,
                 
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
@@ -84,6 +95,28 @@ namespace MiningApp.UI
         }
     }
 
+    public enum DisplayGrid
+    {
+        Primary,
+        Secondary,
+    }
+
+    public enum GridSize
+    {
+        Small,
+        Medium,
+        Large
+    }
+
+    public enum ViewModelType
+    {
+        Empty,
+        Home,
+        Nav,
+        WalletsHome,
+        WalletSetup,
+    }
+
     public class NavHelper
     {
         public List<SplitButton> ActiveButtons { get; set; }
@@ -94,7 +127,7 @@ namespace MiningApp.UI
 
         int buttonHeight = 70;
 
-        int buttonWidth = 215;
+        int buttonWidth = 200;
 
         public NavHelper()
         {
