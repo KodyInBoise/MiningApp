@@ -31,10 +31,10 @@ namespace MiningApp
 
         private void ShowWindow()
         {
-            WindowController.Instance.PoolsHomeView = this;
+            OldWindowController.Instance.PoolsHomeView = this;
 
-            _window.Left = WindowController.Instance.WindowLeft;
-            _window.Top = WindowController.Instance.WindowTop;
+            _window.Left = OldWindowController.Instance.WindowLeft;
+            _window.Top = OldWindowController.Instance.WindowTop;
 
             _window.UserPoolsRadioButton.Checked += (s, e) => ViewingPools_Changed();
             _window.AllPoolsRadioButton.Checked += (s, e) => ViewingPools_Changed();
@@ -48,19 +48,19 @@ namespace MiningApp
 
         public void Dispose()
         {
-            WindowController.Instance.PoolsHomeView = null;
+            OldWindowController.Instance.PoolsHomeView = null;
 
             _window.Close();
         }
 
         private void NewButton_Clicked()
         {
-            WindowController.Instance.ShowPoolConfig();
+            OldWindowController.Instance.ShowPoolConfig();
         }
 
         private void EditButton_Clicked()
         {
-            WindowController.Instance.ShowPoolConfig(GetSelectedPool());
+            OldWindowController.Instance.ShowPoolConfig(GetSelectedPool());
         }
 
         private void DisplayGrid(bool allPools = false)

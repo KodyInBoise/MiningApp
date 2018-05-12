@@ -26,10 +26,10 @@ namespace MiningApp
 
         private void ShowWindow()
         {
-            WindowController.Instance.PoolConfigView = this;
+            OldWindowController.Instance.PoolConfigView = this;
 
-            _window.Left = WindowController.Instance.WindowLeft;
-            _window.Top = WindowController.Instance.WindowTop;
+            _window.Left = OldWindowController.Instance.WindowLeft;
+            _window.Top = OldWindowController.Instance.WindowTop;
 
             _window.CryptoComboBox.ItemsSource = CryptoHelper.Instance.GetCryptoNames();
 
@@ -56,7 +56,7 @@ namespace MiningApp
 
         public void Dispose()
         {
-            WindowController.Instance.PoolConfigView = null;
+            OldWindowController.Instance.PoolConfigView = null;
 
             _window.Close();
         }
@@ -75,13 +75,13 @@ namespace MiningApp
                 {
                     DataHelper.Instance.UpdatePoolConfig(_pool);
 
-                    WindowController.Instance.PoolsHomeView?.UpdateGrid();
+                    OldWindowController.Instance.PoolsHomeView?.UpdateGrid();
                 }
                 else
                 {
                     DataHelper.Instance.InsertPoolConfig(_pool);
 
-                    WindowController.Instance.PoolsHomeView?.AddPool(_pool);
+                    OldWindowController.Instance.PoolsHomeView?.AddPool(_pool);
                 }
             }
             else
@@ -99,7 +99,7 @@ namespace MiningApp
             {
                 Task.Run(() => DataHelper.Instance.DeletePoolConfig(_pool));
 
-                WindowController.Instance.PoolsHomeView?.RemovePool(_pool);
+                OldWindowController.Instance.PoolsHomeView?.RemovePool(_pool);
 
                 Dispose();
             }
@@ -176,7 +176,7 @@ namespace MiningApp
 
         private void Window_Closing()
         {
-            WindowController.Instance.PoolsHomeView?.UpdateGrid();
+            OldWindowController.Instance.PoolsHomeView?.UpdateGrid();
         }
     }
 }

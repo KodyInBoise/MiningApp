@@ -33,10 +33,10 @@ namespace MiningApp
 
         private void ShowWindow()
         {
-            WindowController.Instance.CryptosView = this;
+            OldWindowController.Instance.CryptosView = this;
 
-            _window.Left = WindowController.Instance.WindowLeft;
-            _window.Top = WindowController.Instance.WindowTop;
+            _window.Left = OldWindowController.Instance.WindowLeft;
+            _window.Top = OldWindowController.Instance.WindowTop;
 
             _window.WatchButton.Click += (s, e) => WatchButton_Clicked();
 
@@ -47,7 +47,7 @@ namespace MiningApp
 
         public void Dispose()
         {
-            WindowController.Instance.ControlBarView = null;
+            OldWindowController.Instance.ControlBarView = null;
 
             _window.Close();
         }
@@ -64,7 +64,7 @@ namespace MiningApp
 
         private void WatchButton_Clicked()
         {
-            WindowController.User.AddToCryptoWatchList(GetSelectedCrypto());
+            OldWindowController.User.AddToCryptoWatchList(GetSelectedCrypto());
         }
 
         private CryptoModel GetSelectedCrypto()

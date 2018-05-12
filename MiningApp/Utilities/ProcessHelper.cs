@@ -11,7 +11,7 @@ namespace MiningApp
 {
     public class ProcessHelper
     {
-        private WindowController _controller => WindowController.Instance;
+        private OldWindowController _controller => OldWindowController.Instance;
 
         private List<MiningRuleModel> _allMiners = new List<MiningRuleModel>();
         private List<Process> _minerProcesses = new List<Process>();

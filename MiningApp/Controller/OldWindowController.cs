@@ -9,10 +9,10 @@ using MiningApp.LoggingUtil;
 
 namespace MiningApp
 {
-    class WindowController
+    class OldWindowController
     {
 
-        public static WindowController Instance;
+        public static OldWindowController Instance;
 
         public static UserModel User;
 
@@ -93,7 +93,7 @@ namespace MiningApp
         public double WindowTop => ControlBarWin.Top;
 
 
-        public WindowController()
+        public OldWindowController()
         {
             Startup();
         }

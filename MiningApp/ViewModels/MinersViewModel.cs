@@ -22,9 +22,9 @@ namespace MiningApp
 
         private async void ShowWindow()
         {
-            WindowController.Instance.MinersView = this;
+            OldWindowController.Instance.MinersView = this;
 
-            _allMiners = await WindowController.Instance.GetMiners();
+            _allMiners = await OldWindowController.Instance.GetMiners();
 
             _window.NewButton.Click += (s, e) => NewButton_Clicked();
             _window.EditButton.Click += (s, e) => EditButton_Clicked();
@@ -33,8 +33,8 @@ namespace MiningApp
             _window.NextButton.Click += (s, e) => NextButton_Clicked();
             _window.UploadButton.Click += (s, e) => UploadButton_Clicked();
 
-            _window.Left = WindowController.Instance.WindowLeft;
-            _window.Top = WindowController.Instance.WindowTop;
+            _window.Left = OldWindowController.Instance.WindowLeft;
+            _window.Top = OldWindowController.Instance.WindowTop;
 
             DisplayMiner(_allMiners.Count > 0 ?_allMiners[_index] : new MiningRuleModel());
 
@@ -43,26 +43,26 @@ namespace MiningApp
 
         public void NewButton_Clicked()
         {
-            WindowController.Instance.ShowNewMiner();
+            OldWindowController.Instance.ShowNewMiner();
 
             Dispose();
         }
 
         public void EditButton_Clicked()
         {
-            WindowController.Instance.ShowEditMiner(_allMiners[_index]);
+            OldWindowController.Instance.ShowEditMiner(_allMiners[_index]);
 
             Dispose();
         }
 
         public void LaunchButton_Clicked()
         {
-            WindowController.Instance.LaunchMiner(_allMiners[_index]);
+            OldWindowController.Instance.LaunchMiner(_allMiners[_index]);
         }
 
         public void Dispose()
         {
-            WindowController.Instance.MinersView = null;
+            OldWindowController.Instance.MinersView = null;
 
             _window.Close();
         }
@@ -111,7 +111,7 @@ namespace MiningApp
 
         private void UploadButton_Clicked()
         {
-            WindowController.Instance.ShowUploadMiner();
+            OldWindowController.Instance.ShowUploadMiner();
 
             Dispose();
         }

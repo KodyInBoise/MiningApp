@@ -10,15 +10,22 @@
         Title="MainWindow" Height="850" Width="1250" Visibility="Visible" Background="#FF3D3D3D" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
     <Grid x:Name="MainGrid">
-        
+
         <Button x:Name="CloseButton" Content="X" HorizontalAlignment="Left" Margin="1215,10,0,0" VerticalAlignment="Top" Width="25" Height="25" FontSize="18" FontFamily="Verdana" FontWeight="Bold" Click="CloseButton_Click"/>
         <Button x:Name="MinimizeButton" Content="-" HorizontalAlignment="Left" Margin="1185,10,0,0" VerticalAlignment="Top" Width="25" Height="25" FontSize="22" FontFamily="Verdana" FontWeight="Bold" Click="MinimizeButton_Click"/>
         <Button Content="test" HorizontalAlignment="Left" Margin="1135,793,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
 
-        <Border BorderBrush="Gray" CornerRadius="3" BorderThickness="3" HorizontalAlignment="Left" Height="850" VerticalAlignment="Top" Width="245"/>
+        <Border x:Name="NavBorder" BorderBrush="Gray" CornerRadius="3" BorderThickness="3" HorizontalAlignment="Left" Height="850" VerticalAlignment="Top" Width="245"/>
         <StackPanel x:Name="NavStackPanel" HorizontalAlignment="Left" Height="850" VerticalAlignment="Top" Width="250">
             <Grid x:Name="NavGrid" Height="850">
                 <Button x:Name="HomeButton" Visibility="Collapsed" Content="Home" Height="40" Width="225" Margin="10,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" />
+            </Grid>
+        </StackPanel>
+
+        <Border x:Name="ContentBorder" BorderBrush="Gray" CornerRadius="3" BorderThickness="3" HorizontalAlignment="Left" Height="850" VerticalAlignment="Top" Width="1000" Margin="250,0,0,0"/>
+        <StackPanel HorizontalAlignment="Left" Height="850" Margin="255,0,0,0" VerticalAlignment="Top" Width="995">
+            <Grid x:Name="ContentGrid">
+                <TextBlock x:Name="TitleTextBlock" Foreground="LightGray" Text="Content Title" FontFamily="Verdana" FontSize="40" Width="800" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             </Grid>
         </StackPanel>
     </Grid>

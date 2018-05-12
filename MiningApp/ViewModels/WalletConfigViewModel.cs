@@ -25,10 +25,10 @@ namespace MiningApp
 
         private void ShowWindow()
         {
-            WindowController.Instance.WalletConfigView = this;
+            OldWindowController.Instance.WalletConfigView = this;
 
-            _window.Left = WindowController.Instance.WindowLeft;
-            _window.Top = WindowController.Instance.WindowTop;
+            _window.Left = OldWindowController.Instance.WindowLeft;
+            _window.Top = OldWindowController.Instance.WindowTop;
 
             _window.CryptoComboBox.ItemsSource = CryptoHelper.Instance.GetCryptoNames();
 
@@ -55,7 +55,7 @@ namespace MiningApp
 
         public void Dispose()
         {
-            WindowController.Instance.WalletConfigView = null;
+            OldWindowController.Instance.WalletConfigView = null;
 
             _window.Close();
         }
@@ -89,7 +89,7 @@ namespace MiningApp
             {
                 Task.Run(() => DataHelper.Instance.DeleteWalletConfig(_wallet));
 
-                WindowController.Instance.WalletsHomeView?.RemoveWallet(_wallet);
+                OldWindowController.Instance.WalletsHomeView?.RemoveWallet(_wallet);
 
                 Dispose();
             }
@@ -109,13 +109,13 @@ namespace MiningApp
                 {
                     DataHelper.Instance.UpdateWalletConfig(_wallet);
 
-                    WindowController.Instance.WalletsHomeView?.UpdateGrid();
+                    OldWindowController.Instance.WalletsHomeView?.UpdateGrid();
                 }
                 else
                 {
                     DataHelper.Instance.InsertWalletConfig(_wallet);
 
-                    WindowController.Instance.WalletsHomeView?.AddWallet(_wallet);
+                    OldWindowController.Instance.WalletsHomeView?.AddWallet(_wallet);
                 }
             }
             else
@@ -173,7 +173,7 @@ namespace MiningApp
         private string _path = "";
         private async void ClientBrowseButton_Clicked()
         {
-            _path = await WindowController.Instance.GetFilePath();
+            _path = await OldWindowController.Instance.GetFilePath();
 
             _window.ClientPathTextBox.Text = ElementHelper.TrimPath(_path, length: 60);
         }

@@ -30,10 +30,10 @@ namespace MiningApp
 
         private void ShowWindow()
         {
-            WindowController.Instance.MinerConfigView = this;
+            OldWindowController.Instance.MinerConfigView = this;
 
-            _window.Left = WindowController.Instance.WindowLeft;
-            _window.Top = WindowController.Instance.WindowTop;
+            _window.Left = OldWindowController.Instance.WindowLeft;
+            _window.Top = OldWindowController.Instance.WindowTop;
 
             _allCryptoNames = CryptoHelper.Instance.GetCryptoNames();
             _window.CryptosComboBox.ItemsSource = _allCryptoNames;
@@ -62,7 +62,7 @@ namespace MiningApp
 
         public void Dispose()
         {
-            WindowController.Instance.MinerConfigView = null;
+            OldWindowController.Instance.MinerConfigView = null;
 
             _window.Close();
         }
@@ -75,7 +75,7 @@ namespace MiningApp
         string _path = "";
         private async void PathBrowseButton_Clicked()
         {
-            _path = await WindowController.Instance.GetFilePath();
+            _path = await OldWindowController.Instance.GetFilePath();
 
             _window.PathTextBox.Text = ElementHelper.TrimPath(_path, 50);
         }
@@ -135,7 +135,7 @@ namespace MiningApp
             {
                 Task.Run(() => DataHelper.Instance.DeleteMinerConfig(_miner));
 
-                WindowController.Instance.MinersHomeView?.RemoveMinerConfig(_miner);
+                OldWindowController.Instance.MinersHomeView?.RemoveMinerConfig(_miner);
 
                 Dispose();
             }
@@ -157,13 +157,13 @@ namespace MiningApp
                 {
                     DataHelper.Instance.UpdateMinerConfig(_miner);
 
-                    WindowController.Instance.MinersHomeView?.UpdateGrid();
+                    OldWindowController.Instance.MinersHomeView?.UpdateGrid();
                 }
                 else
                 {
                     DataHelper.Instance.InsertMinerConfig(_miner);
 
-                    WindowController.Instance.MinersHomeView?.AddMiner(_miner);
+                    OldWindowController.Instance.MinersHomeView?.AddMiner(_miner);
                 }
 
                 ShowMessage();

@@ -33,10 +33,10 @@ namespace MiningApp
 
         private void ShowWindow()
         {
-            WindowController.Instance.WalletsHomeView = this;
+            OldWindowController.Instance.WalletsHomeView = this;
 
-            _window.Left = WindowController.Instance.WindowLeft;
-            _window.Top = WindowController.Instance.WindowTop;
+            _window.Left = OldWindowController.Instance.WindowLeft;
+            _window.Top = OldWindowController.Instance.WindowTop;
 
             _window.NewButton.Click += (s, e) => NewButton_Clicked();
             _window.EditButton.Click += (s, e) => EditButton_Clicked();           
@@ -48,7 +48,7 @@ namespace MiningApp
 
         public void Dispose()
         {
-            WindowController.Instance.WalletsHomeView = null;
+            OldWindowController.Instance.WalletsHomeView = null;
 
             _window.Close();
         }
@@ -88,14 +88,14 @@ namespace MiningApp
 
         private void NewButton_Clicked()
         {
-            WindowController.Instance.ShowWalletConfig();
+            OldWindowController.Instance.ShowWalletConfig();
         }
 
         private void EditButton_Clicked()
         {
             try
             {
-                WindowController.Instance.ShowWalletConfig(GetSelectedWallet());
+                OldWindowController.Instance.ShowWalletConfig(GetSelectedWallet());
             }
             catch
             {

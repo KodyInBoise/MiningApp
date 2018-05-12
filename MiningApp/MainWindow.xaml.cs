@@ -23,7 +23,7 @@ namespace MiningApp
     {
         public static MainWindow Instance { get; set; }
 
-        public NavBarVM NavBarView { get; set; }
+        public WindowController Controller { get; set; }
 
         
         private ElementHelper _elementHelper { get; set; }
@@ -42,7 +42,7 @@ namespace MiningApp
 
             _elementHelper = new ElementHelper();
 
-            NavBarView = new NavBarVM();
+            Controller = new WindowController();
         }
 
         public void Shutdown()
@@ -64,7 +64,7 @@ namespace MiningApp
         {
             var margins = "";
 
-            NavBarView.NavButtons.ForEach(x => margins += $"{x.Margin}" + Environment.NewLine);
+            //NavBarView.NavButtons.ForEach(x => margins += $"{x.Margin}" + Environment.NewLine);
 
             MessageBox.Show(margins);
         }

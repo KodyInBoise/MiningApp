@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xceed.Wpf.Toolkit;
+using System.Windows.Controls;
 
 namespace MiningApp.UI
 {
@@ -13,6 +14,13 @@ namespace MiningApp.UI
         public static ElementHelper Instance { get; set; }
 
         public static NavHelper NavBar => Instance._navBar;
+
+
+        static Brush _fontColor { get; set; } = Brushes.LightGray;
+
+        static FontFamily _fontFamily { get; set; } = new FontFamily("Verdana");
+
+        static int _fontSize { get; set; } = 16;
 
        
         private NavHelper _navBar { get; set; }
@@ -23,6 +31,23 @@ namespace MiningApp.UI
             Instance = this;
 
             _navBar = new NavHelper();
+        }
+
+        public static TextBlock CreateTextBlock(string text, int fontSize = -1)
+        {
+            if (fontSize <= 0) fontSize = _fontSize;
+
+            return new TextBlock()
+            {
+                Name = $"{text}TextBlock",
+                Text = text,
+                FontFamily = _fontFamily,
+                FontSize = fontSize,
+                Foreground = _fontColor,
+                
+                VerticalAlignment = System.Windows.VerticalAlignment.Top,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+            };
         }
 
         public static string TrimPath(string path, int length = -1)
@@ -86,7 +111,7 @@ namespace MiningApp.UI
             "Logs"
         };
 
-        private SplitButton NavButtonTemplate(string content, int height = -1, int width = -1)
+        public SplitButton NavButtonTemplate(string content, int height = -1, int width = -1)
         {
             if (height <= 0) height = buttonHeight;
             if (width <= 0) width = buttonWidth;

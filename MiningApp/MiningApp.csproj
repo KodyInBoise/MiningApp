@@ -98,7 +98,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controller\WindowController.cs" />
+    <Compile Include="Controller\OldWindowController.cs" />
     <Compile Include="LoggingUtil\LogHelper.cs" />
     <Compile Include="LoggingUtil\ViewLogsWindow.xaml.cs">
       <DependentUpon>ViewLogsWindow.xaml</DependentUpon>
@@ -110,8 +110,9 @@
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\WalletConfigModel.cs" />
     <Compile Include="UI\ElementHelper.cs" />
-    <Compile Include="UI\MainWindowController.cs" />
+    <Compile Include="UI\WindowController.cs" />
     <Compile Include="UI\ViewModels\NavBarVM.cs" />
+    <Compile Include="UI\ViewModels\WalletsVM.cs" />
     <Compile Include="Utilities\CryptoHelper.cs" />
     <Compile Include="Utilities\DataHelper.cs" />
     <Compile Include="Utilities\FileHelper.cs" />

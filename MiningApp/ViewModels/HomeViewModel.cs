@@ -20,21 +20,21 @@ namespace MiningApp
         public HomeViewModel(HomeWindow window)
         {
             _window = window;
-            _user = WindowController.User;
+            _user = OldWindowController.User;
 
             ShowWindow();
         }
 
         private void ShowWindow()
         {
-            WindowController.Instance.HomeView = this;
+            OldWindowController.Instance.HomeView = this;
 
-            _window.Left = WindowController.Instance.WindowLeft;
-            _window.Top = WindowController.Instance.WindowTop;
+            _window.Left = OldWindowController.Instance.WindowLeft;
+            _window.Top = OldWindowController.Instance.WindowTop;
 
             _window.WatchingSymbolsListBox.SelectionChanged += (s, e) => CryptoListBox_SelectionChanged();
 
-            WindowController.Instance.ControlBarWin.LocationChanged += (s, e) => UpdateLocation();
+            OldWindowController.Instance.ControlBarWin.LocationChanged += (s, e) => UpdateLocation();
 
             LoadUserInfo();
 
@@ -43,7 +43,7 @@ namespace MiningApp
 
         public void Dispose()
         {
-            WindowController.Instance.HomeView = null;
+            OldWindowController.Instance.HomeView = null;
 
             _window.Close();
         }
@@ -93,8 +93,8 @@ namespace MiningApp
 
         private void UpdateLocation()
         {
-            _window.Left = WindowController.Instance.WindowLeft;
-            _window.Top = WindowController.Instance.WindowTop;
+            _window.Left = OldWindowController.Instance.WindowLeft;
+            _window.Top = OldWindowController.Instance.WindowTop;
         }
     }
 }

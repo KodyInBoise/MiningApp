@@ -13,10 +13,27 @@ namespace MiningApp.UI
     {
         public static NavBarVM Instance { get; set; }
 
-        public List<SplitButton> NavButtons { get; set; }
+
+        Grid ViewGrid => MainWindow.Instance.NavGrid;
+
+        List<FrameworkElement> ActiveElements { get; set; } = new List<FrameworkElement>();
+
+        SplitButton HomeButton { get; set; } = ElementHelper.NavBar.NavButtonTemplate("Home");
+
+        SplitButton ConfigurationsButton { get; set; } = ElementHelper.NavBar.NavButtonTemplate("Configurations");
+
+        SplitButton MinersButton { get; set; } = ElementHelper.NavBar.NavButtonTemplate("Miners");
+
+        SplitButton WalletsButton { get; set; } = ElementHelper.NavBar.NavButtonTemplate("Wallets");
+
+        SplitButton PoolsButton { get; set; } = ElementHelper.NavBar.NavButtonTemplate("Pools");
+
+        SplitButton LogsButton { get; set; } = ElementHelper.NavBar.NavButtonTemplate("Logs");
 
 
-        private Grid _grid => MainWindow.Instance.NavGrid;
+        double nextLeft = 15;
+        double nextTop = 15;
+        double padding = 25;
 
 
         public NavBarVM()
@@ -28,6 +45,14 @@ namespace MiningApp.UI
 
         private void ShowView()
         {
+            DisplayElement(HomeButton);
+            DisplayElement(ConfigurationsButton, topPadding: padding * 2);
+            DisplayElement(MinersButton);
+            DisplayElement(WalletsButton);
+            DisplayElement(PoolsButton);
+            DisplayElement(LogsButton);
+
+            /*
             NavButtons = ElementHelper.NavBar.ActiveButtons;
 
             double left = 15;
@@ -40,15 +65,21 @@ namespace MiningApp.UI
                 if (x == 1) top += padding * 2;
                 button.Margin = new Thickness(left, top, 0, 0);
 
-                _grid.Children.Add(button);
+                ViewGrid.Children.Add(button);
 
                 top = button.Margin.Top + button.Height + padding;
             }
+            */
         }
 
-        private void NavHomeButton_Clicked()
+        private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
         {
-            Xceed.Wpf.Toolkit.MessageBox.Show(NavButtons[0].Margin.ToString());
+            element.Margin = new Thickness((nextLeft + leftPadding), nextTop + topPadding, 0, 0);
+
+            ViewGrid.Children.Add(element);
+            ActiveElements.Add(element);
+
+            nextTop = element.Margin.Top + element.Height + padding;
         }
 
     }

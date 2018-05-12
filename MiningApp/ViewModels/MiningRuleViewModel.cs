@@ -28,7 +28,7 @@ namespace MiningApp
 
         private async void ShowWindow()
         {
-            WindowController.Instance.MiningConfigView = this;
+            OldWindowController.Instance.MiningConfigView = this;
 
             if (_miner == null)
             {
@@ -46,15 +46,15 @@ namespace MiningApp
             _window.DeleteButton.Click += (s, e) => DeleteButton_Clicked();
             _window.FinishButton.Click += (s, e) => FinishButton_Clicked();
 
-            _window.Left = WindowController.Instance.WindowLeft;
-            _window.Top = WindowController.Instance.WindowTop;
+            _window.Left = OldWindowController.Instance.WindowLeft;
+            _window.Top = OldWindowController.Instance.WindowTop;
 
             _window.Show();
         }
 
         public void Dispose()
         {
-            WindowController.Instance.MiningConfigView = null;
+            OldWindowController.Instance.MiningConfigView = null;
 
             _window.Close();
         }
@@ -62,7 +62,7 @@ namespace MiningApp
         string _filePath = "";
         private async void BrowseButton_Clicked()
         {
-            _filePath = await WindowController.Instance.GetFilePath();
+            _filePath = await OldWindowController.Instance.GetFilePath();
 
             //_window.PathTextBox.Text = ElementHelper.TrimPath(_filePath);
         }
@@ -73,9 +73,9 @@ namespace MiningApp
             
             if (result == MessageBoxResult.Yes)
             {
-                WindowController.Instance.DeleteMiner(_miner);
+                OldWindowController.Instance.DeleteMiner(_miner);
 
-                WindowController.Instance.ShowMiners();
+                OldWindowController.Instance.ShowMiners();
                 _window.Close();
                 Dispose();
             }
@@ -91,13 +91,13 @@ namespace MiningApp
 
             if (_miner.ID > 0)
             {
-                Task.Run(() => WindowController.Instance.UpdateMiner(_miner));
+                Task.Run(() => OldWindowController.Instance.UpdateMiner(_miner));
             }
             else
             {
                 _miner.CreatedTimestamp = DateTime.Now;
 
-                Task.Run(() => WindowController.Instance.InsertMiner(_miner));
+                Task.Run(() => OldWindowController.Instance.InsertMiner(_miner));
             }
         }
 

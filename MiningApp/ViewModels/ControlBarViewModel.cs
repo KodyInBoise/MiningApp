@@ -21,10 +21,10 @@ namespace MiningApp
 
         private void ShowWindow()
         {
-            WindowController.Instance.ControlBarView = this;
+            OldWindowController.Instance.ControlBarView = this;
 
-            _window.Left = WindowController.User.ControlBarLeft ?? 25.0;
-            _window.Top = WindowController.User.ControlBarTop ?? 25.0;
+            _window.Left = OldWindowController.User.ControlBarLeft ?? 25.0;
+            _window.Top = OldWindowController.User.ControlBarTop ?? 25.0;
 
             _window.MinersButton.Click += (s, e) => MinersButton_Clicked();
             _window.CryptosButton.Click += (s, e) => CryptosButton_Clicked();
@@ -38,7 +38,7 @@ namespace MiningApp
 
         public void Dispose()
         {
-            WindowController.Instance.ControlBarView = null;
+            OldWindowController.Instance.ControlBarView = null;
 
             _window.Close();
         }
@@ -47,27 +47,27 @@ namespace MiningApp
         {
             //WindowController.Instance.ShowMiners();
 
-            WindowController.Instance.ShowMinersHome();
+            OldWindowController.Instance.ShowMinersHome();
         }
 
         private void CryptosButton_Clicked()
         {
-            WindowController.Instance.ShowCryptos();
+            OldWindowController.Instance.ShowCryptos();
         }
 
         private void HomeButton_Clicked()
         {
-            WindowController.Instance.ShowHome();
+            OldWindowController.Instance.ShowHome();
         }
 
         private void WalletsButton_Clicked()
         {
-            WindowController.Instance.ShowWalletsHome();
+            OldWindowController.Instance.ShowWalletsHome();
         }
 
         private void PoolsButton_Clicked()
         {
-            WindowController.Instance.ShowPoolsHome();
+            OldWindowController.Instance.ShowPoolsHome();
         }
 
         private void LogsButton_Clicked()

@@ -25,10 +25,10 @@ namespace MiningApp
 
         private void ShowWindow()
         {
-            WindowController.Instance.UploadMinerView = this;
+            OldWindowController.Instance.UploadMinerView = this;
 
-            _window.Left = WindowController.Instance.WindowLeft;
-            _window.Top = WindowController.Instance.WindowTop;
+            _window.Left = OldWindowController.Instance.WindowLeft;
+            _window.Top = OldWindowController.Instance.WindowTop;
 
             _window.BrowseButton.Click += (s, e) => BrowseButton_Clicked();
             _window.CryptosAddButton.Click += (s, e) => CryptoAddButton_Clicked();
@@ -43,14 +43,14 @@ namespace MiningApp
 
         public void Dispose()
         {
-            WindowController.Instance.UploadMinerView = null;
+            OldWindowController.Instance.UploadMinerView = null;
 
             _window.Close();
         }
 
         private async void BrowseButton_Clicked()
         {
-            var path = await WindowController.Instance.GetFilePath();
+            var path = await OldWindowController.Instance.GetFilePath();
 
             _window.PathTextBox.Text = path;
             _window.PathTextBox.ScrollToEnd();
