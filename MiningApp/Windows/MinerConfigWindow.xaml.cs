@@ -15,17 +15,13 @@ using System.Windows.Shapes;
 namespace MiningApp.Windows
 {
     /// <summary>
-    /// Interaction logic for EditMinerWindow.xaml
+    /// Interaction logic for MinerConfigWindow.xaml
     /// </summary>
-    public partial class MiningConfigWindow : Window
+    public partial class MinerConfigWindow : Window
     {
-        private MiningRuleViewModel _view;
-
-        public MiningConfigWindow(MiningRuleModel miner = null)
+        public MinerConfigWindow()
         {
             InitializeComponent();
-
-            _view = new MiningRuleViewModel(this, miner);
         }
     }
 }

@@ -12,18 +12,22 @@ namespace MiningApp
     {
         public static ServerHelper Instance { get; set; }
 
-        List<MinerModel> _allMiners { get; set; } = new List<MinerModel>();
+
+
+        List<MinerConfigModel> _allMiners { get; set; } = new List<MinerConfigModel>();
 
         string _minersJsonPath { get; set; } = Path.Combine(DataHelper.RootPath(), "Miners", "allminers.json");
+
+
 
         public ServerHelper()
         {
             Instance = this;
 
-            _allMiners = GetAllMinersLocal();
+            _allMiners = GetMiners();
         }
 
-        public void AddMiner(MinerModel miner)
+        public void AddMiner(MinerConfigModel miner)
         {
             _allMiners.Add(miner);
 
@@ -37,15 +41,15 @@ namespace MiningApp
             File.WriteAllText(_minersJsonPath, content);
         }
 
-        private List<MinerModel> GetAllMinersLocal()
+        public List<MinerConfigModel> GetMiners()
         {
             try
             {
-                return JsonConvert.DeserializeObject<List<MinerModel>>(File.ReadAllText(_minersJsonPath));
+                return JsonConvert.DeserializeObject<List<MinerConfigModel>>(File.ReadAllText(_minersJsonPath));
             }
             catch
             {
-                return new List<MinerModel>();
+                return new List<MinerConfigModel>();
             }
         }
     }

@@ -13,12 +13,12 @@ namespace MiningApp
     {
         private UploadMinerWindow _window { get; set; }
 
-        private MinerModel _miner { get; set; }
+        private MinerConfigModel _miner { get; set; }
 
         public UploadMinerViewModel(UploadMinerWindow window)
         {
             _window = window;
-            _miner = new MinerModel();
+            _miner = new MinerConfigModel();
 
             ShowWindow();
         }
@@ -118,11 +118,11 @@ namespace MiningApp
             }
         }
 
-        private MinerModel CreateNewMiner()
+        private MinerConfigModel CreateNewMiner()
         {
             try
             {
-                return new MinerModel()
+                return new MinerConfigModel()
                 {
                     CreatedTimestamp = DateTime.Now,
                     Name = _window.NameTextBox.Text,
@@ -133,7 +133,7 @@ namespace MiningApp
             }
             catch
             {
-                return new MinerModel();
+                return new MinerConfigModel();
             }
         }
 

@@ -38,7 +38,7 @@ namespace MiningApp
 
         public MinersViewModel MinersView { get; set; } = null;
 
-        public MiningConfigViewModel MiningConfigView { get; set; } = null;
+        public MiningRuleViewModel MiningConfigView { get; set; } = null;
 
         public ViewMinerViewModel ViewMinerView { get; set; } = null;
 
@@ -53,6 +53,8 @@ namespace MiningApp
         public PoolsHomeViewModel PoolsHomeView { get; set; } = null;
 
         public PoolConfigViewModel PoolConfigView { get; set; } = null;
+
+        public MinersHomeViewModel MinersHomeView { get; set; } = null;
 
 
 
@@ -75,6 +77,8 @@ namespace MiningApp
         private PoolsHomeWindow _poolsHomeWin { get; set; }
 
         private PoolConfigWindow _poolConfigWin { get; set; }
+
+        private MinersHomeWindow _minersHomeWin { get; set; }
 
 
 
@@ -131,7 +135,7 @@ namespace MiningApp
             _miningConfigWindow = new MiningConfigWindow();
         }
 
-        public void ShowEditMiner(MiningConfigModel miner)
+        public void ShowEditMiner(MiningRuleModel miner)
         {
             MiningConfigView?.Dispose();
 
@@ -153,27 +157,27 @@ namespace MiningApp
             return path;
         }
 
-        public void InsertMiner(MiningConfigModel miner)
+        public void InsertMiner(MiningRuleModel miner)
         {
             _dataHelper.InsertMiner(miner);
         }
 
-        public Task<List<MiningConfigModel>> GetMiners()
+        public Task<List<MiningRuleModel>> GetMiners()
         {
-            return _dataHelper.GetMiners();
+            return _dataHelper.GetAllMiners();
         }
 
-        public void DeleteMiner(MiningConfigModel miner)
+        public void DeleteMiner(MiningRuleModel miner)
         {
             _dataHelper.DeleteMiner(miner.ID);
         }
 
-        public void UpdateMiner(MiningConfigModel miner)
+        public void UpdateMiner(MiningRuleModel miner)
         {
             _dataHelper.UpdateMiner(miner);
         }
 
-        public void LaunchMiner(MiningConfigModel miner)
+        public void LaunchMiner(MiningRuleModel miner)
         {
             _procHelper.StartMiner(miner);
         }
@@ -225,6 +229,13 @@ namespace MiningApp
             PoolConfigView?.Dispose();
 
             _poolConfigWin = new PoolConfigWindow(pool);
+        }
+
+        public void ShowMinersHome()
+        {
+            MinersHomeView?.Dispose();
+
+            _minersHomeWin = new MinersHomeWindow();
         }
 
         public async void TestVoid()

@@ -19,9 +19,13 @@ namespace MiningApp.Windows
     /// </summary>
     public partial class PoolsHomeWindow : Window
     {
+        public CollectionViewSource GridItems => _view.GridItems;
+
+
+
         private PoolsHomeViewModel _view { get; set; }
 
-        private CollectionViewSource GridItems => _view.GridItems;
+
 
         public PoolsHomeWindow()
         {

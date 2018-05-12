@@ -81,7 +81,7 @@
     </ApplicationDefinition>
     <Compile Include="Controller\WindowController.cs" />
     <Compile Include="Models\CryptoModel.cs" />
-    <Compile Include="Models\MiningConfigModel.cs" />
+    <Compile Include="Models\MiningRuleModel.cs" />
     <Compile Include="Models\MinerModel.cs" />
     <Compile Include="Models\PoolConfigModel.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -94,9 +94,10 @@
     <Compile Include="Utilities\ProcessHelper.cs" />
     <Compile Include="Utilities\ServerHelper.cs" />
     <Compile Include="Utilities\WalletHelper.cs" />
-    <Compile Include="ViewModels\BrowseMinersViewModel.cs" />
+    <Compile Include="ViewModels\MinerConfigViewModel.cs" />
+    <Compile Include="ViewModels\MinersHomeViewModel.cs" />
     <Compile Include="ViewModels\CryptosViewModel.cs" />
-    <Compile Include="ViewModels\MiningConfigViewModel.cs" />
+    <Compile Include="ViewModels\MiningRuleViewModel.cs" />
     <Compile Include="ViewModels\ControlBarViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MinersViewModel.cs" />
@@ -106,8 +107,11 @@
     <Compile Include="ViewModels\ViewMinerViewModel.cs" />
     <Compile Include="ViewModels\WalletConfigViewModel.cs" />
     <Compile Include="ViewModels\WalletsHomeViewModel.cs" />
-    <Compile Include="Windows\BrowseMinersWindow.xaml.cs">
-      <DependentUpon>BrowseMinersWindow.xaml</DependentUpon>
+    <Compile Include="Windows\MinerConfigWindow.xaml.cs">
+      <DependentUpon>MinerConfigWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MinersHomeWindow.xaml.cs">
+      <DependentUpon>MinersHomeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\CryptosWindow.xaml.cs">
       <DependentUpon>CryptosWindow.xaml</DependentUpon>
@@ -151,7 +155,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Windows\BrowseMinersWindow.xaml">
+    <Page Include="Windows\MinerConfigWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MinersHomeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -27,5 +27,17 @@ namespace MiningApp
 
         [BsonIgnore]
         public string FeeString => $"{Fee}%";
+
+        
+
+        public PoolConfigModel()
+        {
+
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

@@ -25,7 +25,7 @@ namespace MiningApp
 
         private LiteDatabase _database => GetDatabase();
 
-        private LiteCollection<MiningConfigModel> _minerConfigCollection => GetMinerCollection();
+        private LiteCollection<MiningRuleModel> _minerConfigCollection => GetMinerCollection();
 
         private LiteCollection<WalletConfigModel> _walletConfigCollection => GetWalletCollection();
 
@@ -51,11 +51,11 @@ namespace MiningApp
             return new LiteDatabase(DataFilePath);
         }
 
-        private LiteCollection<MiningConfigModel> GetMinerCollection()
+        private LiteCollection<MiningRuleModel> GetMinerCollection()
         {
             using (_database)
             {
-                return _database.GetCollection<MiningConfigModel>("minerconfigs");
+                return _database.GetCollection<MiningRuleModel>("minerconfigs");
             }
         }
 
@@ -75,7 +75,7 @@ namespace MiningApp
             }
         }
 
-        public void InsertMiner(MiningConfigModel miner)
+        public void InsertMiner(MiningRuleModel miner)
         {
             using (_database)
             {
@@ -83,7 +83,7 @@ namespace MiningApp
             }
         }
 
-        public async Task<List<MiningConfigModel>> GetMiners()
+        public async Task<List<MiningRuleModel>> GetAllMiners()
         {
             using (_database)
             {
@@ -91,7 +91,7 @@ namespace MiningApp
             }
         }
 
-        public void UpdateMiner(MiningConfigModel miner)
+        public void UpdateMiner(MiningRuleModel miner)
         {
             using (_database)
             {
@@ -99,7 +99,7 @@ namespace MiningApp
             }
         }
 
-        public async Task<MiningConfigModel> GetMinerByID(int minerID)
+        public async Task<MiningRuleModel> GetMinerByID(int minerID)
         {
             using (_database)
             {

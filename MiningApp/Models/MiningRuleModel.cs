@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LiteDB;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,13 +8,18 @@ using System.Threading.Tasks;
 
 namespace MiningApp
 {
-    public class MiningConfigModel
+    public enum MinerStatus
+    {
+        Inactive,
+        Stopped,
+        Running
+    }
+
+    public class MiningRuleModel
     {
         public int ID { get; set; }
 
         public DateTime CreatedTimestamp { get; set; }
-
-        public CryptoModel Crypto { get; set; }
 
         public string Name { get; set; }
 
@@ -23,21 +29,24 @@ namespace MiningApp
 
         public string Output { get; set; } = "";
 
-        public StatusEnum Status { get; set; }
+        public MinerStatus Status { get; set; }
 
         public bool ShowWindow { get; set; } = true;
+        
+        [BsonIgnore]
+        public CryptoModel Crypto { get; set; }
 
+        [BsonIgnore]
         public string ProcessName => GetProcessName();
+
+        [BsonIgnore]
+        public string CryptoName => Crypto?.Name;
+
+
 
         private Process _process { get; set; }
 
-        public enum StatusEnum
-        {
-            Stopped,
-            Running
-        }
-
-        public MiningConfigModel()
+        public MiningRuleModel()
         {
 
         }
@@ -54,7 +63,7 @@ namespace MiningApp
             return pathParts[pathParts.Count - 1];
         }
 
-        public void SetStatus(StatusEnum status)
+        public void SetStatus(MinerStatus status)
         {
             Status = status;
         }
@@ -66,12 +75,12 @@ namespace MiningApp
             if (procs.Any())
             {
                 _process = procs[0];
-                SetStatus(StatusEnum.Running);
+                SetStatus(MinerStatus.Running);
             }
             else
             {
                 _process = null;
-                SetStatus(StatusEnum.Stopped);
+                SetStatus(MinerStatus.Stopped);
             }
 
             return _process;

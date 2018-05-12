@@ -8,13 +8,17 @@ using MiningApp.Windows;
 
 namespace MiningApp
 {
-    public class MiningConfigViewModel
+    public class MiningRuleViewModel
     {
         private MiningConfigWindow _window;
-        private MiningConfigModel _miner;
-        private List<MiningConfigModel> _allMiners;
 
-        public MiningConfigViewModel(MiningConfigWindow window, MiningConfigModel miner = null)
+        private MiningRuleModel _miner;
+
+        private List<MiningRuleModel> _allMiners;
+
+
+
+        public MiningRuleViewModel(MiningConfigWindow window, MiningRuleModel miner = null)
         {
             _window = window;
             _miner = miner;
@@ -36,6 +40,7 @@ namespace MiningApp
             }
 
             _window.WalletComboBox.ItemsSource = WalletHelper.Instance.AllWallets;
+            _window.PoolComboBox.ItemsSource = PoolHelper.Instance.LocalPools;
 
             _window.MinerComboBox.DropDownClosed += (s, e) => MinerComboBox_DropDownClosed();
             _window.DeleteButton.Click += (s, e) => DeleteButton_Clicked();
@@ -98,7 +103,7 @@ namespace MiningApp
 
         private void MinerComboBox_DropDownClosed()
         {
-            var selectedMiner = (MiningConfigModel)_window.MinerComboBox.SelectedItem;
+            var selectedMiner = (MiningRuleModel)_window.MinerComboBox.SelectedItem;
 
             if (_miner != selectedMiner)
             {
@@ -106,7 +111,7 @@ namespace MiningApp
             }
         }
 
-        private void DisplayMiner(MiningConfigModel miner)
+        private void DisplayMiner(MiningRuleModel miner)
         {
             _window.MinerComboBox.Text = miner.Name;
             _window.NameTextBox.Text = miner.Name;

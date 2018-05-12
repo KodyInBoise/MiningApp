@@ -10,17 +10,19 @@ namespace MiningApp
 {
     public class CryptoHelper
     {
-        public static CryptoHelper Instance;
-
-        private CoinMarketCapClient _client;
-        private List<CryptoModel> _cryptos;
+        public static CryptoHelper Instance { get; set; }
 
         public Task<List<TickerEntity>> GetTickers() => GetTickerList();
 
-        public List<string> SupportedList = new List<string>()
-        {
-            "BTC", "ETH", "RDD"
-        };
+        public Dictionary<string, string> CryptosDictionary => GetSupportedCryptosDictionary();
+
+
+
+        private CoinMarketCapClient _client { get; set; }
+
+        private List<CryptoModel> _cryptos { get; set; }
+
+
 
         public CryptoHelper()
         {
@@ -74,6 +76,38 @@ namespace MiningApp
             var crypto = CryptoModel.CreateFromTicker(ticker);
 
             return crypto;
+        }
+
+
+        private Dictionary<string, string> GetSupportedCryptosDictionary()
+        {
+            var _dictionary = new Dictionary<string, string>();
+            _dictionary.Add("BTC", "Bitcoin");
+            _dictionary.Add("ETH", "Ethereum");
+            _dictionary.Add("LTC", "Litecoin");
+            _dictionary.Add("VTC", "Vertcoin");
+
+            return _dictionary;
+        }
+
+        public List<string> GetCryptoSymbols()
+        {
+            return CryptosDictionary.Keys.ToList();
+        }
+
+        public List<string> GetCryptoNames()
+        {
+            return CryptosDictionary.Values.ToList();
+        }
+
+        public string GetCryptoSymbolFromName(string name)
+        {
+            return CryptosDictionary[name];
+        }
+
+        public string GetCryptoNameFromSymbol(string symbol)
+        {
+            return CryptosDictionary[symbol];
         }
     }
 }

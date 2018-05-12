@@ -8,35 +8,27 @@ using System.Threading.Tasks;
 
 namespace MiningApp
 {
-    public class MinerModel
+    public class MinerConfigModel
     {
         public DateTime CreatedTimestamp { get; set; }
 
         public string Name { get; set; }
 
-        public List<string> Cryptos { get; set; }
+        public List<string> Cryptos { get; set; } = new List<string>();
 
-        public List<string> Tags { get; set; }
+        public List<string> Tags { get; set; } = new List<string>();
 
         public FileInfo File { get; set; }
 
         [JsonIgnore]
         public string LocalDirectory  => GetLocalDirectory();
 
-        public MinerModel()
-        {
-            Cryptos = new List<string>();
-            Tags = new List<string>();
-        }
 
-        public List<string> SupportedCoins()
+
+        public MinerConfigModel()
         {
-            return new List<string>()
-            {
-                "PIRL",
-                "VTC",
-            };
-        }
+
+        }   
 
         private string GetLocalDirectory()
         {

@@ -29,7 +29,7 @@ namespace MiningApp
             _window.Left = WindowController.Instance.WindowLeft;
             _window.Top = WindowController.Instance.WindowTop;
 
-            _window.CryptoComboBox.ItemsSource = MiningHelper.Instance.GetCryptoNames();
+            _window.CryptoComboBox.ItemsSource = CryptoHelper.Instance.GetCryptoNames();
 
             _window.ClientBrowseButton.Click += (s, e) => ClientBrowseButton_Clicked();
             _window.DeleteButton.Click += (s, e) => DeleteButton_Clicked();

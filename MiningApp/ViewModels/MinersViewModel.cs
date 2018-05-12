@@ -10,7 +10,7 @@ namespace MiningApp
     public class MinersViewModel
     {
         private MinersWindow _window;
-        private List<MiningConfigModel> _allMiners;
+        private List<MiningRuleModel> _allMiners;
 
         public MinersViewModel(MinersWindow window)
         {
@@ -35,7 +35,7 @@ namespace MiningApp
             _window.Left = WindowController.Instance.WindowLeft;
             _window.Top = WindowController.Instance.WindowTop;
 
-            DisplayMiner(_allMiners.Count > 0 ?_allMiners[_index] : new MiningConfigModel());
+            DisplayMiner(_allMiners.Count > 0 ?_allMiners[_index] : new MiningRuleModel());
 
             _window.Show();
         }
@@ -66,7 +66,7 @@ namespace MiningApp
             _window.Close();
         }
 
-        private void DisplayMiner(MiningConfigModel miner)
+        private void DisplayMiner(MiningRuleModel miner)
         {
             _window.NameLabel.Content = $"Name: {miner.Name}";
             _window.PathLabel.Content = $"Path: {ElementHelper.TrimPath(miner.Path)}";

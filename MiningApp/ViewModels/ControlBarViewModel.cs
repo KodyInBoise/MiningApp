@@ -43,7 +43,9 @@ namespace MiningApp
 
         private void MinersButton_Clicked()
         {
-            WindowController.Instance.ShowMiners();
+            //WindowController.Instance.ShowMiners();
+
+            WindowController.Instance.ShowMinersHome();
         }
 
         private void CryptosButton_Clicked()

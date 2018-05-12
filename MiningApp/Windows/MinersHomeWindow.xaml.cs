@@ -17,11 +17,21 @@ namespace MiningApp.Windows
     /// <summary>
     /// Interaction logic for BrowseMinersWindow.xaml
     /// </summary>
-    public partial class BrowseMinersWindow : Window
+    public partial class MinersHomeWindow : Window
     {
-        public BrowseMinersWindow()
+        public CollectionViewSource GridItems => _view.GridItems;
+
+
+
+        private MinersHomeViewModel _view { get; set; }
+
+
+
+        public MinersHomeWindow()
         {
             InitializeComponent();
+
+            _view = new MinersHomeViewModel(this);
         }
     }
 }
