@@ -129,7 +129,7 @@ namespace MiningApp
                     Name = _window.NameTextBox.Text,
                     Cryptos = _window.CryptosListBox.Items.Cast<String>().ToList(),
                     Tags = _window.TagsListBox.Items.Cast<String>().ToList(),
-                    FilePath = _window.PathTextBox.Text
+                    Path = _window.PathTextBox.Text
                 };
             }
             catch

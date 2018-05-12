@@ -15,9 +15,9 @@
 
         <DataGrid x:Name="MinersDataGrid"  HorizontalAlignment="Left" Height="450" Width="525" DataContext="{StaticResource GridItems}" ItemsSource="{Binding}" AutoGenerateColumns="False" Margin="10,85.5,0,33.5" FontFamily="Verdana" FontSize="14">
             <DataGrid.Columns>
-                <DataGridTextColumn Width="225" Header="Name" Binding="{Binding Name}"/>
-                <DataGridTextColumn Width="200" Header="Crypto" Binding="{Binding CryptoName}"/>
-                <DataGridTextColumn Width="100" Header="Status" Binding="{Binding Status}"/>
+                <DataGridTextColumn Width="175" Header="Name" Binding="{Binding Name}"/>
+                <DataGridTextColumn Width="225" Header="Path" Binding="{Binding TrimmedPath}"/>
+                <DataGridTextColumn Width="100" Header="Cryptos" Binding="{Binding CryptosString}"/>
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="NewButton" Content="New" HorizontalAlignment="Left" Margin="560,85,0,0" VerticalAlignment="Top" Width="110" Height="40" FontFamily="Verdana" FontSize="14"/>

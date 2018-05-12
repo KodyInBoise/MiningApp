@@ -39,6 +39,9 @@ namespace MiningApp
             _window.Top = WindowController.Instance.WindowTop;
 
             _window.NewButton.Click += (s, e) => NewButton_Clicked();
+            _window.EditButton.Click += (s, e) => EditButton_Clicked();
+
+            DisplayGrid();
 
             _window.Show();
         }
@@ -104,7 +107,7 @@ namespace MiningApp
             catch { }
         }
 
-        public void RemovePool(MinerConfigModel miner)
+        public void RemoveMinerConfig(MinerConfigModel miner)
         {
             try
             {
@@ -135,6 +138,11 @@ namespace MiningApp
         private void NewButton_Clicked()
         {
             WindowController.Instance.ShowMinerConfig();
+        }
+
+        private void EditButton_Clicked()
+        {
+            WindowController.Instance.ShowMinerConfig(GetSelectedMiner());
         }
     }
 }

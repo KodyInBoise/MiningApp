@@ -11,8 +11,6 @@ namespace MiningApp
 {
     public class MinerConfigModel
     {
-
-
         public int ID { get; set; }
 
         public string ServerID { get; set; }
@@ -25,11 +23,16 @@ namespace MiningApp
 
         public List<string> Tags { get; set; } = new List<string>();
 
-        public string FilePath { get; set; }
+        public string Path { get; set; }
 
-        [JsonIgnore]
         [BsonIgnore]
-        public string LocalDirectory  => GetLocalDirectory();
+        public string LocalDirectory => GetLocalDirectory();
+
+        [BsonIgnore]
+        public string TrimmedPath => ElementHelper.TrimPath(Path, 30);
+
+        [BsonIgnore]
+        public string CryptosString => GetCryptosString();
 
 
         public MinerConfigModel()
@@ -39,7 +42,7 @@ namespace MiningApp
 
         private string GetLocalDirectory()
         {
-            return Path.Combine(DataHelper.MinerDirectory, Name);
+            return System.IO.Path.Combine(DataHelper.MinerDirectory, Name);
         }
 
         public async Task<bool> AddCoin(string name)
@@ -56,6 +59,16 @@ namespace MiningApp
             {
                 return false;
             }
+        }
+
+        private string GetCryptosString()
+        {
+            var cryptosString = "";
+
+            Cryptos.ForEach(x => cryptosString += $"{CryptoHelper.Instance.GetCryptoSymbolFromName(x)}, ");
+            cryptosString.TrimEnd(' ', ',');
+
+            return cryptosString;
         }
     }
 }

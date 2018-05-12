@@ -22,6 +22,7 @@ namespace MiningApp
         public MinerConfigViewModel(MinerConfigWindow window, MinerConfigModel miner = null)
         {
             _window = window;
+            _miner = miner;
 
             ShowWindow();
         }
@@ -41,6 +42,19 @@ namespace MiningApp
             _window.CryptosRemoveButton.Click += (s, e) => CryptosRemoveButton_Clicked();
             _window.DeleteButton.Click += (s, e) => DeleteButton_Clicked();
             _window.FinishButton.Click += (s, e) => FinishButton_Clicked();
+
+            if (_miner == null)
+            {
+                _window.TitleLabel.Content = "New Miner Config";
+                _window.DeleteButton.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                _window.TitleLabel.Content = "Edit Miner Config";
+                _window.DeleteButton.Visibility = Visibility.Visible;
+
+                DisplayMiner(_miner);
+            }
 
             _window.Show();
         }
@@ -113,7 +127,17 @@ namespace MiningApp
 
         private void DeleteButton_Clicked()
         {
+            var result = MessageBox.Show($"Are you sure you want to delete miner config \"{_miner.Name}\"?", "Delete Miner Config",
+                MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
+            if (result == MessageBoxResult.Yes)
+            {
+                Task.Run(() => DataHelper.Instance.DeleteMinerConfig(_miner));
+
+                WindowController.Instance.MinersHomeView?.RemoveMinerConfig(_miner);
+
+                Dispose();
+            }
         }
 
         private void FinishButton_Clicked()
@@ -131,10 +155,14 @@ namespace MiningApp
                 if (_miner.ID > 0)
                 {
                     DataHelper.Instance.UpdateMinerConfig(_miner);
+
+                    WindowController.Instance.MinersHomeView?.UpdateGrid();
                 }
                 else
                 {
                     DataHelper.Instance.InsertMinerConfig(_miner);
+
+                    WindowController.Instance.MinersHomeView?.AddMiner(_miner);
                 }
 
                 ShowMessage();
@@ -174,10 +202,10 @@ namespace MiningApp
         {
             try
             {
-                if (_miner == null) _miner = new MinerConfigModel();
+                if (_miner == null) _miner = new MinerConfigModel { CreatedTimestamp = DateTime.Now };
 
                 _miner.Name = _window.NameTextBox.Text;
-                _miner.FilePath = _window.PathTextBox.Text;
+                _miner.Path = _path;
                 _miner.Cryptos = _window.CryptosListBox.Items.Cast<string>().ToList();
 
                 return _miner;
@@ -187,6 +215,21 @@ namespace MiningApp
                 ShowMessage($"Failed to create miner config: {ex.Message}");
 
                 return null;
+            }
+        }
+
+        private void DisplayMiner(MinerConfigModel miner)
+        {
+            _window.NameTextBox.Text = miner.Name;
+            _path = miner.Path;
+            _window.PathTextBox.Text = ElementHelper.TrimPath(_path, 50);
+            
+            foreach (var crypto in miner.Cryptos)
+            {
+                _window.CryptosListBox.Items.Add(crypto);
+
+                _allCryptoNames.Remove(crypto);
+                _window.CryptosComboBox.Items.Refresh();
             }
         }
     }

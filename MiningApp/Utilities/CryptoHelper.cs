@@ -102,7 +102,7 @@ namespace MiningApp
 
         public string GetCryptoSymbolFromName(string name)
         {
-            return CryptosDictionary[name];
+            return CryptosDictionary.FirstOrDefault(x => x.Value == name).Key;
         }
 
         public string GetCryptoNameFromSymbol(string symbol)
