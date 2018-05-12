@@ -81,6 +81,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controller\WindowController.cs" />
+    <Compile Include="LoggingUtil\LogHelper.cs" />
+    <Compile Include="LoggingUtil\ViewLogsWindow.xaml.cs">
+      <DependentUpon>ViewLogsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\CryptoModel.cs" />
     <Compile Include="Models\MiningRuleModel.cs" />
     <Compile Include="Models\MinerModel.cs" />
@@ -145,6 +149,10 @@
     <Compile Include="Windows\WalletsHomeWindow.xaml.cs">
       <DependentUpon>WalletsHomeWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="LoggingUtil\ViewLogsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

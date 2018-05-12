@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MiningApp.LoggingUtil;
 using MiningApp.Windows;
 
 namespace MiningApp
@@ -30,6 +31,7 @@ namespace MiningApp
             _window.HomeButton.Click += (s, e) => HomeButton_Clicked();
             _window.WalletsButton.Click += (s, e) => WalletsButton_Clicked();
             _window.PoolsButton.Click += (s, e) => PoolsButton_Clicked();
+            _window.LogsButton.Click += (s, e) => LogsButton_Clicked();
 
             _window.Show();
         }
@@ -66,6 +68,11 @@ namespace MiningApp
         private void PoolsButton_Clicked()
         {
             WindowController.Instance.ShowPoolsHome();
+        }
+
+        private void LogsButton_Clicked()
+        {
+            LogHelper.Instance.ShowWindow();
         }
     }
 }
