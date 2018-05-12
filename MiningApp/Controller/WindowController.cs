@@ -32,6 +32,8 @@ namespace MiningApp
 
         private FileHelper _fileHelper { get; set; } = null;
 
+        private LogHelper _logHelper { get; set; } = null;
+
 
         public ControlBarViewModel ControlBarView { get; set; } = null;
 
@@ -107,6 +109,7 @@ namespace MiningApp
             _walletHelper = new WalletHelper();
             _poolHelper = new PoolHelper();
             _fileHelper = new FileHelper();
+            _logHelper = new LogHelper();
 
             User = DataHelper.LoadUserSettings();
 
@@ -252,7 +255,10 @@ namespace MiningApp
 
         public async void TestVoid()
         {
-            ShowUploadMiner();
+            //ShowUploadMiner();
+            var ex = new Exception("Error message :(");
+
+            LogHelper.AddEntry(ex);
         }
     }
 }

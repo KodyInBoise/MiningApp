@@ -33,6 +33,10 @@ namespace MiningApp
 
         private LiteCollection<MinerConfigModel> _minerConfigCollection => GetMinerConfigCollection();
 
+        private LiteCollection<LogEntry> _generalLogCollection => GetGeneralLogCollection();
+
+        private LiteCollection<LogEntry> _errorLogCollection => GetErrorLogCollection();
+
         public DataHelper()
         {
             Instance = this;
@@ -82,6 +86,22 @@ namespace MiningApp
             using (_database)
             {
                 return _database.GetCollection<MinerConfigModel>("minerconfigs");
+            }
+        }
+
+        private LiteCollection<LogEntry> GetGeneralLogCollection()
+        {
+            using (_database)
+            {
+                return _database.GetCollection<LogEntry>("logs-general");
+            }
+        }
+
+        private LiteCollection<LogEntry> GetErrorLogCollection()
+        {
+            using (_database)
+            {
+                return _database.GetCollection<LogEntry>("logs-error");
             }
         }
 
@@ -239,6 +259,58 @@ namespace MiningApp
             using (_database)
             {
                 return _minerConfigCollection.FindAll().ToList();
+            }
+        }
+
+        public void InsertLogEntry(LogEntry entry)
+        {
+            using (_database)
+            {
+                switch (entry.Type)
+                {
+                    case LogType.General:
+                        _generalLogCollection.Insert(entry);
+                        break;
+                    case LogType.Error:
+                        _errorLogCollection.Insert(entry);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        public void DeleteLogEntry(LogEntry entry)
+        {
+            using (_database)
+            {
+                switch (entry.Type)
+                {
+                    case LogType.General:
+                        _generalLogCollection.Update(entry);
+                        break;
+                    case LogType.Error:
+                        _errorLogCollection.Update(entry);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        public List<LogEntry> GetLogEntries(LogType type)
+        {
+            using (_database)
+            {
+                switch (type)
+                {
+                    case LogType.General:
+                        return _generalLogCollection.FindAll().ToList();
+                    case LogType.Error:
+                        return _errorLogCollection.FindAll().ToList();
+                    default:
+                        return new List<LogEntry>();
+                }
             }
         }
     }
