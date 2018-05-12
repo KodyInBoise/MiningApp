@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MiningApp.Windows;
+using MiningApp.LoggingUtil;
 
 namespace MiningApp
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiningApp
+namespace MiningApp.LoggingUtil
 {
     public enum LogType
     {
@@ -24,7 +24,7 @@ namespace MiningApp
     {
         public int ID { get; set; }
 
-        public DateTime TimeStamp { get; set; }
+        public DateTime Timestamp { get; set; }
 
         public LogType Type { get; set; }
 
@@ -32,7 +32,7 @@ namespace MiningApp
 
         public LogEntry()
         {
-            TimeStamp = DateTime.Now;
+            Timestamp = DateTime.Now;
         }
     }
 
@@ -41,6 +41,14 @@ namespace MiningApp
         public static LogHelper Instance { get; set; }
 
         public static DataHelper AppData { get; set; }
+
+        public List<LogEntry> GeneralLogEntries => AppData.GetLogEntries(LogType.General);
+
+        public List<LogEntry> ErrorLogEntries => AppData.GetLogEntries(LogType.Error);
+
+
+        private ViewLogsWindow _logWindow { get; set; }
+
 
         public LogHelper()
         {
@@ -70,6 +78,13 @@ namespace MiningApp
         public static void AddEntry(Exception ex)
         {
             AddEntry(LogType.Error, ex.Message);
+        }
+
+        public void ShowWindow()
+        {
+            _logWindow?.Close();
+
+            _logWindow = new ViewLogsWindow();
         }
     }
 }

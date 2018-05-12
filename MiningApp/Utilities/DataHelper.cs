@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LiteDB;
 using Newtonsoft.Json;
+using MiningApp.LoggingUtil;
 
 namespace MiningApp
 {
