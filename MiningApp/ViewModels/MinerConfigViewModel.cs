@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using MiningApp.Windows;
+using MiningApp.UI;
 
 namespace MiningApp
 {
