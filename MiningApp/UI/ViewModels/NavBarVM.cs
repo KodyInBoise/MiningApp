@@ -48,6 +48,7 @@ namespace MiningApp.UI
         private void ShowView()
         {
             DisplayElement(HomeButton);
+            HomeButton.Click += (s, e) => HomeButton_Clicked();
 
             DisplayElement(ConfigurationsButton, topPadding: padding * 2);
 

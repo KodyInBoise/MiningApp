@@ -33,15 +33,19 @@ namespace MiningApp.UI
             MainWindow.Instance.TestButton.Click += (s, e) => TestButton_Clicked();
         }
 
-        private void DisplayViewModel(ViewModelType type, object view, DisplayGrid display = DisplayGrid.Primary)
+        private void DisplayViewModel(ViewModelType viewType, DisplayGrid display = DisplayGrid.Primary)
         {
+            Grid displayGrid = null;
+
             if (display == DisplayGrid.Primary)
             {
                 MainWindow.Instance.SecondaryBorder.Visibility = System.Windows.Visibility.Collapsed;
                 MainWindow.Instance.SecondaryGrid.Visibility = System.Windows.Visibility.Collapsed;
 
-                MainWindow.Instance.PrimaryBorder.Width = 1020;
-                MainWindow.Instance.PrimaryGrid.Width = 1020;
+                MainWindow.Instance.PrimaryBorder.Width = 1025;
+                MainWindow.Instance.PrimaryGrid.Width = 1025;
+
+                displayGrid = Window.PrimaryGrid;
             }
             else if (display == DisplayGrid.Secondary)
             {
@@ -52,28 +56,37 @@ namespace MiningApp.UI
 
                 MainWindow.Instance.PrimaryBorder.Width = 225;
                 MainWindow.Instance.PrimaryGrid.Width = 225;
+
+                displayGrid = Window.SecondaryGrid;
+            }
+
+            displayGrid?.Children.Clear();
+
+            
+            switch (viewType)
+            {
+                case ViewModelType.Home:
+                    HomeView?.Dispose();
+                    HomeView = new HomeVM();
+                    break;
+                default:
+                    break;
             }
         }
 
         public void ShowHome()
         {
-            HomeView?.Dispose();
-
-            DisplayViewModel(ViewModelType.Home, HomeView = new HomeVM(), DisplayGrid.Primary);
+            DisplayViewModel(ViewModelType.Home, DisplayGrid.Primary);
         }
 
         public void ShowWalletsHome()
         {
-            WalletsView?.Dispose();
-
-            WalletsView = new WalletsVM();
+            DisplayViewModel(ViewModelType.WalletsHome, DisplayGrid.Primary);           
         }
 
         public void ShowWalletSetup()
         {
-            WalletSetupView?.Dispose();
-
-            DisplayViewModel(ViewModelType.WalletSetup, WalletSetupView = new WalletSetupVM(), DisplayGrid.Secondary);
+            DisplayViewModel(ViewModelType.WalletSetup, DisplayGrid.Secondary);
         }
 
         //TESTING METHOD FOR TEST BUTTON

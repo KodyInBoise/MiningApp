@@ -11,6 +11,8 @@
 
     <Grid x:Name="MainGrid">
 
+        <Border x:Name="WindowBorder" BorderBrush="Gray" CornerRadius="3" BorderThickness="3" HorizontalAlignment="Left" Height="850" VerticalAlignment="Top" Width="1250"/>
+
         <Button x:Name="CloseButton" Content="X" HorizontalAlignment="Left" Margin="1215,10,0,0" VerticalAlignment="Top" Width="25" Height="25" FontSize="18" FontFamily="Verdana" FontWeight="Bold" Click="CloseButton_Click"/>
         <Button x:Name="MinimizeButton" Content="-" HorizontalAlignment="Left" Margin="1185,10,0,0" VerticalAlignment="Top" Width="25" Height="25" FontSize="22" FontFamily="Verdana" FontWeight="Bold" Click="MinimizeButton_Click"/>
         <Button x:Name="TestButton" Content="test" HorizontalAlignment="Left" Margin="1135,793,0,0" VerticalAlignment="Top" Width="75"/>
@@ -22,7 +24,7 @@
             </Grid>
         </StackPanel>
 
-        <Border x:Name="PrimaryBorder" BorderBrush="Gray" CornerRadius="3" BorderThickness="3" HorizontalAlignment="Left" Height="850" VerticalAlignment="Top" Width="225" Margin="230,0,0,0"/>
+        <Border x:Name="PrimaryBorder" BorderBrush="Gray" CornerRadius="3" BorderThickness="3" HorizontalAlignment="Left" Height="850" VerticalAlignment="Top" Width="225" Margin="225,0,0,0"/>
         <StackPanel x:Name="PrimaryStackPanel" HorizontalAlignment="Left" Height="850" Margin="230,0,0,0" VerticalAlignment="Top" Width="225">
             <Grid x:Name="PrimaryGrid" Height="850">
                 <TextBlock x:Name="PrimaryTextBlock" Foreground="LightGray" Text="Primary" FontFamily="Verdana" FontSize="40" Width="800" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -30,12 +32,12 @@
             </Grid>
         </StackPanel>
 
-        <Border x:Name="SecondaryBorder" BorderBrush="Gray" CornerRadius="3" BorderThickness="3" HorizontalAlignment="Left" Height="850" VerticalAlignment="Top" Width="790" Margin="460,0,0,0"/>
+        <Border x:Name="SecondaryBorder" BorderBrush="Gray" CornerRadius="3" BorderThickness="3" HorizontalAlignment="Left" Height="850" VerticalAlignment="Top" Width="800" Margin="450,0,0,0"/>
         <StackPanel x:Name="SecondaryStackPanel" HorizontalAlignment="Left" Height="850" Margin="460,0,0,0" VerticalAlignment="Top" Width="790">
             <Grid x:Name="SecondaryGrid" Height="850">
                 <TextBlock x:Name="SecondaryTextBlock" Foreground="LightGray" Text="Secondary" FontFamily="Verdana" FontSize="40" Width="800" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             </Grid>
         </StackPanel>
-        
+
     </Grid>
 </Window>
