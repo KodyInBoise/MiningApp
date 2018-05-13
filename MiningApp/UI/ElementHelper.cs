@@ -14,44 +14,14 @@ namespace MiningApp.UI
     {
         public static ElementHelper Instance { get; set; }
 
-        public static NavHelper NavBar => Instance._navBar;
-
-
-        public static int NavViewWith { get; set; } = 225;
-
-        public static int PrimaryGridWidth { get; set; } = 1025;
-
-        public static int SecondaryGridWidth { get; set; } = 775;
-
-        public static int PrimaryGridSmallWidth => PrimaryGridWidth - SecondaryGridWidth;
-
-
-        static Brush DefaultFontColor { get; set; } = Brushes.LightGray;
-
-        static FontFamily DefaultFontFamily { get; set; } = new FontFamily("Verdana");
-
-        static int DefaultFontSize { get; set; } = 16;
-
-        static Style ButtonStyle { get; set; } = (Style)MainWindow.Instance.FindResource("RoundButtonTemplate");
-
-        static Brush ButtonBackgroundColor { get; set; } = ConvertColorCode("#1c1818");
-
-        static int ButtonWidth { get; set; } = 200;
-
-        static int ButtonHeight { get; set; } = 75;
-
-
-        private NavHelper _navBar { get; set; }
-
 
         public ElementHelper()
         {
             Instance = this;
-
-            _navBar = new NavHelper();
         }
 
-        public static Button CreateButton(string content, int fontSize = -1)
+        public static Button CreateButton(string content, ButtonStyle style = ButtonStyle.Normal, int fontSize = -1,
+            int height = -1, int width = -1)
         {
             string name = "";
             var words = content.Split(' ').ToList();
@@ -65,17 +35,34 @@ namespace MiningApp.UI
                 name = content;
             }
 
+            var backgroundColor = ElementValues.Buttons.Colors.Normal;
+            switch(style)
+            {
+                case ButtonStyle.New:
+                    backgroundColor = ElementValues.Buttons.Colors.New;
+                    break;
+                case ButtonStyle.Delete:
+                    backgroundColor = ElementValues.Buttons.Colors.Delete;
+                    break;
+                case ButtonStyle.Finish:
+                    backgroundColor = ElementValues.Buttons.Colors.New;
+                    break;
+                default:
+                    break;
+            }
+
             return new Button()
             {
                 Name = $"{name}Button",
                 Content = content,
-                FontFamily = DefaultFontFamily,
-                FontSize = fontSize > 0 ? fontSize : DefaultFontSize,
-                Foreground = DefaultFontColor,
-                Width = ButtonWidth,
-                Height = ButtonHeight,
-                Style = ButtonStyle,
-
+                FontFamily = ElementValues.Fonts.Family,
+                FontSize = fontSize > 0 ? fontSize : ElementValues.Buttons.FontSize,
+                Background = backgroundColor,
+                Foreground = ElementValues.Fonts.Color,
+                Width = width > 0 ? width : ElementValues.Buttons.Width,
+                Height = height > 0 ? height : ElementValues.Buttons.Height,              
+                Style = ElementValues.Buttons.Style,
+                
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
             };
@@ -99,12 +86,61 @@ namespace MiningApp.UI
             {
                 Name = $"{name}TextBlock",
                 Text = text,
-                FontFamily = DefaultFontFamily,
-                FontSize = fontSize > 0 ? fontSize : DefaultFontSize,
-                Foreground = DefaultFontColor,
+                FontFamily = ElementValues.Fonts.Family,
+                FontSize = fontSize > 0 ? fontSize : ElementValues.Fonts.Size,
+                Foreground = ElementValues.Fonts.Color,
                 
-                VerticalAlignment = System.Windows.VerticalAlignment.Top,
-                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left,
+            };
+        }
+
+        public static TextBox CreateTextBox(string name, string text = "", int fontSize = -1, int height = -1, int width = -1)
+        {
+            return new TextBox()
+            {
+                Name = $"{name}TextBlock",
+                Text = text,
+                FontFamily = ElementValues.Fonts.Family,
+                FontSize = fontSize > 0 ? fontSize : ElementValues.Fonts.Size,
+                Height = height > 0 ? height : ElementValues.TextBoxs.Height,
+                Width = width > 0 ? width : ElementValues.TextBoxs.Width,
+
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalContentAlignment = HorizontalAlignment.Left
+            };
+        }
+
+        public static Label CreateLabel(string content, FrameworkElement element, double topPadding = 0, int fontSize = -1)
+        {
+            return new Label()
+            {
+                Name = $"{element.Name}Label",
+                Content = content,
+                FontFamily = ElementValues.Fonts.Family,
+                FontSize = fontSize > 0 ? fontSize : ElementValues.Labels.FontSize,
+                Foreground = ElementValues.Fonts.Color,
+
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Right,
+            };
+        }
+
+        public static ComboBox CreateComboBox(string name, string text = "", double topPadding = 0, int fontSize = -1)
+        {
+            return new ComboBox()
+            {
+                Name = $"{name}ComboBox",
+                Text = text,
+                FontFamily = ElementValues.Fonts.Family,
+                FontSize = fontSize > 0 ? fontSize : ElementValues.ComboBoxs.FontSize,
+                Height = ElementValues.TextBoxs.Height,
+                Width = ElementValues.TextBoxs.Width,
+
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left,
             };
         }
 
@@ -184,61 +220,67 @@ namespace MiningApp.UI
         WalletSetup,
     }
 
-    public class NavHelper
+    public class ElementValues
     {
-        public List<SplitButton> ActiveButtons { get; set; }
-
-        FontFamily _defaultFont = new FontFamily("Verdana");
-
-        int _defaultFontSize = 16;
-
-        int buttonHeight = 70;
-
-        int buttonWidth = 200;
-
-        public NavHelper()
+        public static class Windows
         {
-            ActiveButtons = CreateButtons();
-        }
-
-        public List<string> NavPageNames = new List<string>()
-        {
-            "Home",
-            "Configurations",
-            "Miners",
-            "Wallets",
-            "Pools",
-            "Logs"
-        };
-
-        public SplitButton NavButtonTemplate(string content, int height = -1, int width = -1)
-        {
-            if (height <= 0) height = buttonHeight;
-            if (width <= 0) width = buttonWidth;
-
-            var button = new SplitButton
+            public class Main
             {
-                Name = $"Nav{content}Button",
-                Content = content,
-                Height = height,
-                Width = width,
-                FontFamily = _defaultFont,
-                FontSize = _defaultFontSize,
-                VerticalAlignment = System.Windows.VerticalAlignment.Top,
-                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
-                HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center
-            };
-
-            return button;
+                public static int Height { get; set; } = 850;
+                public static int Width { get; set; } = 1250;
+            }
         }
 
-        private List<SplitButton> CreateButtons()
+        public static class Grids
         {
-            var buttons = new List<SplitButton>();
+            public static int NavWidth { get; set; } = 225;
+            public static int PrimaryNormal { get; set; } = 1025;
+            public static int PrimarySmall => PrimaryNormal - SecondaryNormal;
+            public static int SecondaryNormal { get; set; } = 775;
+        }
 
-            NavPageNames.ForEach(x => buttons.Add(NavButtonTemplate(x)));
+        public static class Fonts
+        {
+            public static Brush Color { get; set; } = Brushes.LightGray;
+            public static FontFamily Family { get; set; } = new FontFamily("Verdana");
+            public static int Size { get; set; } = 16;
+        }
 
-            return buttons;
+        public static class Buttons
+        {
+            public static Style Style = (Style)MainWindow.Instance.FindResource("RoundButtonTemplate");
+
+            public static int Width { get; set; } = 200;
+            public static int Height { get; set; } = 75;
+            public static int FontSize { get; set; } = 20;
+            
+            public static class Colors
+            {
+                public static Brush Normal = ElementHelper.ConvertColorCode("#444447");
+                public static Brush New = ElementHelper.ConvertColorCode("#2b6d17");
+                public static Brush Delete = ElementHelper.ConvertColorCode("#b20303");
+            }
+        }
+
+        public class TextBlocks
+        {
+        }
+
+        public class TextBoxs
+        {
+            public static int Width { get; set; } = 450;
+            public static int Height { get; set; } = 25;
+            public static int FontSize { get; set; } = 18;
+        }
+
+        public static class Labels
+        {
+            public static int FontSize { get; set; } = 20;
+        }
+
+        public static class ComboBoxs
+        {
+            public static int FontSize { get; set; } = 20;
         }
     }
 }

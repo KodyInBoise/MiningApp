@@ -122,6 +122,7 @@
     <Compile Include="UI\ViewModels\WalletsHomeVM.cs" />
     <Compile Include="Utilities\CryptoHelper.cs" />
     <Compile Include="Utilities\DataHelper.cs" />
+    <Compile Include="Utilities\Enums.cs" />
     <Compile Include="Utilities\FileHelper.cs" />
     <Compile Include="Utilities\MiningHelper.cs" />
     <Compile Include="Utilities\PoolHelper.cs" />

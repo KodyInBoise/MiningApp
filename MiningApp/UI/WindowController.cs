@@ -53,8 +53,8 @@ namespace MiningApp.UI
                 MainWindow.Instance.SecondaryBorder.Visibility = System.Windows.Visibility.Collapsed;
                 MainWindow.Instance.SecondaryGrid.Visibility = System.Windows.Visibility.Collapsed;
 
-                MainWindow.Instance.PrimaryBorder.Width = ElementHelper.PrimaryGridWidth;
-                MainWindow.Instance.PrimaryStackPanel.Width = ElementHelper.PrimaryGridWidth;
+                MainWindow.Instance.PrimaryBorder.Width = ElementValues.Grids.PrimaryNormal;
+                MainWindow.Instance.PrimaryStackPanel.Width = ElementValues.Grids.PrimaryNormal;
 
                 displayGrid = Window.PrimaryGrid;
             }
@@ -65,13 +65,14 @@ namespace MiningApp.UI
 
                 MainWindow.Instance.SecondaryGrid.Children.Clear();
 
-                MainWindow.Instance.PrimaryBorder.Width = ElementHelper.PrimaryGridSmallWidth;
-                MainWindow.Instance.PrimaryStackPanel.Width = ElementHelper.PrimaryGridSmallWidth;
+                MainWindow.Instance.PrimaryBorder.Width = ElementValues.Grids.PrimarySmall;
+                MainWindow.Instance.PrimaryStackPanel.Width = ElementValues.Grids.PrimarySmall;
 
                 displayGrid = Window.SecondaryGrid;
             }
 
-            displayGrid?.Children.Clear();
+            MainWindow.Instance.PrimaryGrid.Children.Clear();
+            MainWindow.Instance.SecondaryGrid.Children.Clear();
 
             
             switch (viewType)
@@ -91,6 +92,10 @@ namespace MiningApp.UI
                 case ViewModelType.WalletsHome:
                     WalletsHomeView?.Dispose();
                     WalletsHomeView = new WalletsHomeVM();
+                    break;
+                case ViewModelType.WalletSetup:
+                    WalletSetupView?.Dispose();
+                    WalletSetupView = new WalletSetupVM();
                     break;
                 case ViewModelType.PoolsHome:
                     PoolsHomeView?.Dispose();

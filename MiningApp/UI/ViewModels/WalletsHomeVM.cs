@@ -19,6 +19,8 @@ namespace MiningApp.UI
 
         TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Wallets Home", fontSize: 40);
 
+        Button SetupButton { get; set; } = ElementHelper.CreateButton("Setup");
+
 
         double nextLeft = 10;
 
@@ -37,6 +39,11 @@ namespace MiningApp.UI
         private void Show()
         {
             DisplayElement(TitleTextBlock);
+            nextTop = 200;
+            nextLeft = 25;
+
+            DisplayElement(SetupButton);
+            SetupButton.Click += (s, e) => SetupButton_Clicked();
         }
 
         public void Dispose()
@@ -54,6 +61,11 @@ namespace MiningApp.UI
             ActiveElements.Add(element);
 
             nextTop = element.Margin.Top + element.Height + padding;
+        }
+
+        private void SetupButton_Clicked()
+        {
+            WindowController.Instance.ShowWalletSetup();
         }
     }
 }

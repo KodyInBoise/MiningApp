@@ -7,11 +7,9 @@
 
         <SolidColorBrush x:Key="WindowColor" Color="#1c1818"/>
         <SolidColorBrush x:Key="ButtonBackgroundColor" Color="#444447"/>
-        
+
 
         <Style x:Key="RoundButtonTemplate" TargetType="Button">
-            <Setter Property="Background" Value="{StaticResource ButtonBackgroundColor}"/>
-            <Setter Property="Foreground" Value="LightGray" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">

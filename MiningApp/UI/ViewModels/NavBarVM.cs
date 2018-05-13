@@ -18,19 +18,19 @@ namespace MiningApp.UI
 
         List<FrameworkElement> ActiveElements { get; set; } = new List<FrameworkElement>();
 
-        Button HomeButton { get; set; } = ElementHelper.CreateButton("Home", 20);
+        Button HomeButton { get; set; } = ElementHelper.CreateButton("Home");
 
-        Button ConfigurationsButton { get; set; } = ElementHelper.CreateButton("Configurations", 20);
+        Button ConfigurationsButton { get; set; } = ElementHelper.CreateButton("Configurations");
 
-        Button MinersButton { get; set; } = ElementHelper.CreateButton("Miners", 20);
+        Button MinersButton { get; set; } = ElementHelper.CreateButton("Miners");
 
-        Button WalletsButton { get; set; } = ElementHelper.CreateButton("Wallets", 20);
+        Button WalletsButton { get; set; } = ElementHelper.CreateButton("Wallets");
 
-        Button PoolsButton { get; set; } = ElementHelper.CreateButton("Pools", 20);
+        Button PoolsButton { get; set; } = ElementHelper.CreateButton("Pools");
 
-        Button LogsButton { get; set; } = ElementHelper.CreateButton("Logs", 20);
+        Button LogsButton { get; set; } = ElementHelper.CreateButton("Logs");
 
-        Button SettingsButton { get; set; } = ElementHelper.CreateButton("Settings", 20);
+        Button SettingsButton { get; set; } = ElementHelper.CreateButton("Settings");
 
 
         double nextLeft = 12;
