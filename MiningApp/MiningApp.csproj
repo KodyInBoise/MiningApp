@@ -109,9 +109,12 @@
     <Compile Include="Models\PoolConfigModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\WalletConfigModel.cs" />
+    <Compile Include="UI\ViewModels\ConfigsHomeVM.cs" />
     <Compile Include="UI\ElementHelper.cs" />
     <Compile Include="UI\ViewModels\HomeVM.cs" />
+    <Compile Include="UI\ViewModels\LogsHomeVM.cs" />
     <Compile Include="UI\ViewModels\MinersHomeVM.cs" />
+    <Compile Include="UI\ViewModels\PoolsHomeVM.cs" />
     <Compile Include="UI\ViewModels\WalletSetupVM.cs" />
     <Compile Include="UI\WindowController.cs" />
     <Compile Include="UI\ViewModels\NavBarVM.cs" />

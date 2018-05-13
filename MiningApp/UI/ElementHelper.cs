@@ -113,8 +113,11 @@ namespace MiningApp.UI
         Empty,
         Nav,
         Home,
+        ConfigsHome,
         MinersHome,
         WalletsHome,
+        PoolsHome,
+        LogsHome,
         WalletSetup,
     }
 
