@@ -115,6 +115,7 @@
     <Compile Include="UI\ViewModels\LogsHomeVM.cs" />
     <Compile Include="UI\ViewModels\MinersHomeVM.cs" />
     <Compile Include="UI\ViewModels\PoolsHomeVM.cs" />
+    <Compile Include="UI\ViewModels\SettingsHomeVM.cs" />
     <Compile Include="UI\ViewModels\WalletSetupVM.cs" />
     <Compile Include="UI\WindowController.cs" />
     <Compile Include="UI\ViewModels\NavBarVM.cs" />

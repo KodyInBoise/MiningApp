@@ -17,13 +17,21 @@ namespace MiningApp.UI
         public static NavHelper NavBar => Instance._navBar;
 
 
-        static Brush _fontColor { get; set; } = Brushes.LightGray;
+        static Brush DefaultFontColor { get; set; } = Brushes.LightGray;
 
-        static FontFamily _fontFamily { get; set; } = new FontFamily("Verdana");
+        static FontFamily DefaultFontFamily { get; set; } = new FontFamily("Verdana");
 
-        static int _fontSize { get; set; } = 16;
+        static int DefaultFontSize { get; set; } = 16;
 
-       
+        static Style ButtonStyle { get; set; } = (Style)MainWindow.Instance.FindResource("RoundButtonTemplate");
+
+        static Brush ButtonBackgroundColor { get; set; } = ConvertColorCode("#1c1818");
+
+        static int ButtonWidth { get; set; } = 200;
+
+        static int ButtonHeight { get; set; } = 75;
+
+
         private NavHelper _navBar { get; set; }
 
 
@@ -32,6 +40,36 @@ namespace MiningApp.UI
             Instance = this;
 
             _navBar = new NavHelper();
+        }
+
+        public static Button CreateButton(string content, int fontSize = -1)
+        {
+            string name = "";
+            var words = content.Split(' ').ToList();
+
+            if (words.Count > 1)
+            {
+                foreach (var word in words) name += word;
+            }
+            else
+            {
+                name = content;
+            }
+
+            return new Button()
+            {
+                Name = $"{name}Button",
+                Content = content,
+                FontFamily = DefaultFontFamily,
+                FontSize = fontSize > 0 ? fontSize : DefaultFontSize,
+                Foreground = DefaultFontColor,
+                Width = ButtonWidth,
+                Height = ButtonHeight,
+                Style = ButtonStyle,
+
+                VerticalAlignment = System.Windows.VerticalAlignment.Top,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+            };
         }
 
         public static TextBlock CreateTextBlock(string text, int fontSize = -1)
@@ -52,9 +90,9 @@ namespace MiningApp.UI
             {
                 Name = $"{name}TextBlock",
                 Text = text,
-                FontFamily = _fontFamily,
-                FontSize = fontSize > 0 ? fontSize : _fontSize,
-                Foreground = _fontColor,
+                FontFamily = DefaultFontFamily,
+                FontSize = fontSize > 0 ? fontSize : DefaultFontSize,
+                Foreground = DefaultFontColor,
                 
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
@@ -93,6 +131,21 @@ namespace MiningApp.UI
                 return path;
             }
         }
+
+        public static Brush ConvertColorCode(string code)
+        {
+            try
+            {
+                var converter = new BrushConverter();
+                var brush = (Brush)converter.ConvertFromString(code);
+
+                return brush;
+            }
+            catch
+            {
+                return Brushes.White;
+            }
+        }
     }
 
     public enum DisplayGrid
@@ -118,6 +171,7 @@ namespace MiningApp.UI
         WalletsHome,
         PoolsHome,
         LogsHome,
+        SettingsHome,
         WalletSetup,
     }
 

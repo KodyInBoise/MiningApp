@@ -5,8 +5,27 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
-        <SolidColorBrush x:Key="WindowColor" Color="#FF3D3D3D"/>
+        <SolidColorBrush x:Key="WindowColor" Color="#1c1818"/>
+        <SolidColorBrush x:Key="ButtonBackgroundColor" Color="#444447"/>
+        
 
+        <Style x:Key="RoundButtonTemplate" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource ButtonBackgroundColor}"/>
+            <Setter Property="Foreground" Value="LightGray" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="10" Background="{TemplateBinding Background}"
+                                BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                            </ContentPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
         <Style x:Key="CustomWindow" TargetType="{x:Type Window}">
             <Setter Property="WindowStyle" Value="None"/>
             <Setter Property="AllowsTransparency" Value="True"/>
@@ -19,6 +38,8 @@
             <Setter Property="Foreground" Value="DarkRed"/>
             <Setter Property="Template" Value="{StaticResource WindowTemplate}"/>
         </Style>
+        
+        
 
     </Application.Resources>
 </Application>

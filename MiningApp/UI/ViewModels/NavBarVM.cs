@@ -18,21 +18,25 @@ namespace MiningApp.UI
 
         List<FrameworkElement> ActiveElements { get; set; } = new List<FrameworkElement>();
 
-        SplitButton HomeButton { get; set; } = ElementHelper.NavBar.NavButtonTemplate("Home");
+        Button HomeButton { get; set; } = ElementHelper.CreateButton("Home", 20);
 
-        SplitButton ConfigurationsButton { get; set; } = ElementHelper.NavBar.NavButtonTemplate("Configurations");
+        Button ConfigurationsButton { get; set; } = ElementHelper.CreateButton("Configurations", 20);
 
-        SplitButton MinersButton { get; set; } = ElementHelper.NavBar.NavButtonTemplate("Miners");
+        Button MinersButton { get; set; } = ElementHelper.CreateButton("Miners", 20);
 
-        SplitButton WalletsButton { get; set; } = ElementHelper.NavBar.NavButtonTemplate("Wallets");
+        Button WalletsButton { get; set; } = ElementHelper.CreateButton("Wallets", 20);
 
-        SplitButton PoolsButton { get; set; } = ElementHelper.NavBar.NavButtonTemplate("Pools");
+        Button PoolsButton { get; set; } = ElementHelper.CreateButton("Pools", 20);
 
-        SplitButton LogsButton { get; set; } = ElementHelper.NavBar.NavButtonTemplate("Logs");
+        Button LogsButton { get; set; } = ElementHelper.CreateButton("Logs", 20);
+
+        Button SettingsButton { get; set; } = ElementHelper.CreateButton("Settings", 20);
 
 
-        double nextLeft = 10;
-        double nextTop = 15;
+        double nextLeft = 12;
+
+        double nextTop = 13;
+
         double padding = 25;
 
 
@@ -64,6 +68,9 @@ namespace MiningApp.UI
 
             DisplayElement(LogsButton);
             LogsButton.Click += (s, e) => LogsButton_Clicked();
+
+            DisplayElement(SettingsButton, topPadding: padding * 2);
+            SettingsButton.Click += (s, e) => SettingsButton_Clicked();
         }
 
         private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
@@ -104,6 +111,11 @@ namespace MiningApp.UI
         private void LogsButton_Clicked()
         {
             WindowController.Instance.ShowLogsHome();
+        }
+
+        private void SettingsButton_Clicked()
+        {
+            WindowController.Instance.ShowSettingsHome();
         }
     }
 }

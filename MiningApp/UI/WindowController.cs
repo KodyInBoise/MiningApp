@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Media;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,8 @@ namespace MiningApp.UI
         public PoolsHomeVM PoolsHomeView { get; set; } = null;
 
         public LogsHomeVM LogsHomeView { get; set; } = null;
+
+        public SettingsHomeVM SettingsHomeView { get; set; } = null;
 
         public WalletSetupVM WalletSetupView { get; set; } = null;
 
@@ -98,6 +101,10 @@ namespace MiningApp.UI
                     LogsHomeView?.Dispose();
                     LogsHomeView = new LogsHomeVM();
                     break;
+                case ViewModelType.SettingsHome:
+                    SettingsHomeView?.Dispose();
+                    SettingsHomeView = new SettingsHomeVM();
+                    break;
                 default:
                     HomeView?.Dispose();
                     HomeView = new HomeVM();
@@ -135,6 +142,11 @@ namespace MiningApp.UI
             DisplayViewModel(ViewModelType.LogsHome, DisplayGrid.Primary);
         }
 
+        public void ShowSettingsHome()
+        {
+            DisplayViewModel(ViewModelType.SettingsHome, DisplayGrid.Primary);
+        }
+
         public void ShowWalletSetup()
         {
             DisplayViewModel(ViewModelType.WalletSetup, DisplayGrid.Secondary);
@@ -144,6 +156,9 @@ namespace MiningApp.UI
         int testCounter = 0;
         private void TestButton_Clicked()
         {
+            //MainWindow.Instance.Background = Brushes.White;
+
+            
             if (testCounter % 2 == 0)
             {
                 ShowHome();
@@ -154,6 +169,7 @@ namespace MiningApp.UI
             }
 
             testCounter++;
+            
         }
     }
 }
