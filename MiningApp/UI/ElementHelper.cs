@@ -141,6 +141,24 @@ namespace MiningApp.UI
 
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalContentAlignment = VerticalAlignment.Center
+            };
+        }
+
+        public static RadioButton CreateRadioButton(string name, string content = "", double topPadding = 0, int fontSize = -1)
+        {
+            return new RadioButton()
+            {
+                Name = $"{name}RadioButton",
+                Content = content,
+                FontFamily = ElementValues.Fonts.Family,
+                FontSize = fontSize > 0 ? fontSize : ElementValues.Fonts.Size,
+                Foreground = ElementValues.Fonts.Color,
+                Height = ElementValues.RadioButtons.Height,
+
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalContentAlignment = VerticalAlignment.Center
             };
         }
 
@@ -280,7 +298,12 @@ namespace MiningApp.UI
 
         public static class ComboBoxs
         {
-            public static int FontSize { get; set; } = 20;
+            public static int FontSize { get; set; } = 18;
+        }
+
+        public static class RadioButtons
+        {
+            public static int Height { get; set; } = 20;
         }
     }
 }

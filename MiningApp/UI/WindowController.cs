@@ -13,6 +13,8 @@ namespace MiningApp.UI
     {
         public static WindowController Instance { get; set; }
 
+        public static UserModel User { get; set; }
+
         public NavBarVM NavView { get; set; } = null;
 
         public HomeVM HomeView { get; set; } = null;
@@ -34,11 +36,17 @@ namespace MiningApp.UI
         public MainWindow Window => MainWindow.Instance;
 
 
+        private CryptoHelper _cryptoHelper { get; set; } = null;
+
+
         public WindowController()
         {
             Instance = this;
+            User = new UserModel();
 
             NavView = new NavBarVM();
+
+            _cryptoHelper = new CryptoHelper();
 
             //TESTING
             MainWindow.Instance.TestButton.Click += (s, e) => TestButton_Clicked();

@@ -127,6 +127,11 @@ namespace MiningApp.UI
 
             TextBox VerifyTextBox { get; set; } = ElementHelper.CreateTextBox("Verify");
 
+            RadioButton UserCryptosRadioButton { get; set; } = ElementHelper.CreateRadioButton("UserCryptos", content: "Watchlist");
+
+            RadioButton AllCryptosRadioButton { get; set; } = ElementHelper.CreateRadioButton("AllCryptos", content: "All Cryptos");
+
+
             Button DeleteButton { get; set; } = ElementHelper.CreateButton("Delete", height: buttonHeight,
                 width: buttonWidth, style: ButtonStyle.Delete);
 
@@ -157,6 +162,8 @@ namespace MiningApp.UI
 
             private double labelOffset = -5;
 
+            private List<string> ViewingCryptos { get; set; } = WindowController.User.WatchingCryptos;
+
 
             public SecondaryVM()
             {
@@ -172,10 +179,18 @@ namespace MiningApp.UI
                 DisplayElement(NameTextBox);
 
                 DisplayElement(CryptoComboBox);
+                CryptoComboBox.ItemsSource = ViewingCryptos;
+
+                DisplayElement(UserCryptosRadioButton, leftPadding: padding * 4);
+                UserCryptosRadioButton.IsChecked = true;
+
+                nextTop = CryptoComboBox.Margin.Top + CryptoComboBox.Height + padding;
+                DisplayElement(AllCryptosRadioButton, leftPadding: padding * 14);
 
                 DisplayElement(AddressTextBox, topPadding: padding * 2);
 
                 DisplayElement(VerifyTextBox);
+
 
                 nextTop = NameTextBox.Margin.Top;
                 NameLabel = ElementHelper.CreateLabel("Name", NameTextBox);
@@ -204,6 +219,9 @@ namespace MiningApp.UI
                 nextLeft = ElementValues.Grids.SecondaryNormal - FinishButton.Width - padding;
                 nextTop = DeleteButton.Margin.Top;
                 DisplayElement(FinishButton);
+
+                UserCryptosRadioButton.Checked += (s, e) => RadioButton_Toggled();
+                AllCryptosRadioButton.Checked += (s, e) => RadioButton_Toggled();
             }
 
             private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0, bool ignoreMargin = false)
@@ -217,6 +235,20 @@ namespace MiningApp.UI
                 ActiveElements.Add(element);
 
                 nextTop = element.Margin.Top + element.Height + padding;
+            }
+
+            private void RadioButton_Toggled()
+            {
+                if (UserCryptosRadioButton.IsChecked == true)
+                {
+                    ViewingCryptos = WindowController.User.WatchingCryptos;
+                }
+                else
+                {
+                    ViewingCryptos = CryptoHelper.Instance.GetCryptoNames();
+                }
+
+                CryptoComboBox.ItemsSource = ViewingCryptos;
             }
         }
     }
