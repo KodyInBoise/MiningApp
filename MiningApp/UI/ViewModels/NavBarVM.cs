@@ -40,45 +40,30 @@ namespace MiningApp.UI
         {
             Instance = this;
 
-            ShowView();
+            Show();
 
             WindowController.Instance.ShowHome();
         }
 
-        private void ShowView()
+        private void Show()
         {
             DisplayElement(HomeButton);
             HomeButton.Click += (s, e) => HomeButton_Clicked();
 
             DisplayElement(ConfigurationsButton, topPadding: padding * 2);
+            ConfigurationsButton.Click += (s, e) => ConfigurationsButton_Clicked();
 
             DisplayElement(MinersButton);
+            MinersButton.Click += (s, e) => MinersButton_Clicked();
 
             DisplayElement(WalletsButton);
             WalletsButton.Click += (s, e) => WalletsButton_Clicked();
 
             DisplayElement(PoolsButton);
+            PoolsButton.Click += (s, e) => PoolsButton_Clicked();
 
             DisplayElement(LogsButton);
-
-            /*
-            NavButtons = ElementHelper.NavBar.ActiveButtons;
-
-            double left = 15;
-            double top = 15;
-            double padding = 15;
-
-            for (var x = 0; x < NavButtons.Count - 1; x++)
-            {
-                var button = NavButtons[x];
-                if (x == 1) top += padding * 2;
-                button.Margin = new Thickness(left, top, 0, 0);
-
-                ViewGrid.Children.Add(button);
-
-                top = button.Margin.Top + button.Height + padding;
-            }
-            */
+            LogsButton.Click += (s, e) => LogsButton_Clicked();
         }
 
         private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
@@ -96,9 +81,29 @@ namespace MiningApp.UI
             WindowController.Instance.ShowHome();
         }
 
+        private void ConfigurationsButton_Clicked()
+        {
+            WindowController.Instance.ShowConfigurationsHome();
+        }
+
+        private void MinersButton_Clicked()
+        {
+            WindowController.Instance.ShowMinersHome();
+        }
+
         private void WalletsButton_Clicked()
         {
             WindowController.Instance.ShowWalletsHome();
+        }
+
+        private void PoolsButton_Clicked()
+        {
+            WindowController.Instance.ShowPoolsHome();
+        }
+
+        private void LogsButton_Clicked()
+        {
+            WindowController.Instance.ShowLogsHome();
         }
     }
 }

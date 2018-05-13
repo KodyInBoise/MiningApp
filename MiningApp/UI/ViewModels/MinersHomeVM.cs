@@ -8,29 +8,24 @@ using System.Windows.Controls;
 
 namespace MiningApp.UI
 {
-    public class WalletsVM
+    public class MinersHomeVM
     {
-        public static WalletsVM Instance { get; set; }
+        TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Miners Home", 40);
 
-        public Grid ViewGrid => MainWindow.Instance.PrimaryGrid;
-
+        Grid ViewGrid { get; set; } = MainWindow.Instance.PrimaryGrid;
 
         List<FrameworkElement> ActiveElements { get; set; } = new List<FrameworkElement>();
 
-        TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Wallets Home", fontSize: 40);
+
+        double nextLeft = 10;
+
+        double nextTop = 10;
+
+        double padding = 15;
 
 
-        double nextLeft = 15;
-
-        double nextTop = 15;
-
-        double padding = 25;
-
-
-        public WalletsVM()
+        public MinersHomeVM()
         {
-            Instance = this;
-
             Show();
         }
 
@@ -41,9 +36,7 @@ namespace MiningApp.UI
 
         public void Dispose()
         {
-            Instance = null;
-
-            WindowController.Instance.WalletsView = null;
+            WindowController.Instance.MinersHomeView = null;
         }
 
         private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)

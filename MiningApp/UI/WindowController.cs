@@ -16,7 +16,9 @@ namespace MiningApp.UI
 
         public HomeVM HomeView { get; set; } = null;
 
-        public WalletsVM WalletsView { get; set; } = null;
+        public MinersHomeVM MinersHomeView { get; set; } = null;
+
+        public WalletsHomeVM WalletsView { get; set; } = null;
 
         public WalletSetupVM WalletSetupView { get; set; } = null;
 
@@ -43,7 +45,8 @@ namespace MiningApp.UI
                 MainWindow.Instance.SecondaryGrid.Visibility = System.Windows.Visibility.Collapsed;
 
                 MainWindow.Instance.PrimaryBorder.Width = 1025;
-                MainWindow.Instance.PrimaryGrid.Width = 1025;
+                MainWindow.Instance.PrimaryStackPanel.Width = 1025;
+                //MainWindow.Instance.PrimaryGrid.Width = 1025;
 
                 displayGrid = Window.PrimaryGrid;
             }
@@ -55,7 +58,7 @@ namespace MiningApp.UI
                 MainWindow.Instance.SecondaryGrid.Children.Clear();
 
                 MainWindow.Instance.PrimaryBorder.Width = 225;
-                MainWindow.Instance.PrimaryGrid.Width = 225;
+                MainWindow.Instance.PrimaryStackPanel.Width = 225;
 
                 displayGrid = Window.SecondaryGrid;
             }
@@ -69,6 +72,10 @@ namespace MiningApp.UI
                     HomeView?.Dispose();
                     HomeView = new HomeVM();
                     break;
+                case ViewModelType.MinersHome:
+                    MinersHomeView?.Dispose();
+                    MinersHomeView = new MinersHomeVM();
+                    break;
                 default:
                     break;
             }
@@ -79,6 +86,16 @@ namespace MiningApp.UI
             DisplayViewModel(ViewModelType.Home, DisplayGrid.Primary);
         }
 
+        public void ShowConfigurationsHome()
+        {
+            //DisplayViewModel(ViewModelType.WalletSetup, DisplayGrid.Secondary);
+        }
+
+        public void ShowMinersHome()
+        {
+            DisplayViewModel(ViewModelType.MinersHome, DisplayGrid.Primary);
+        }
+
         public void ShowWalletsHome()
         {
             DisplayViewModel(ViewModelType.WalletsHome, DisplayGrid.Primary);           
@@ -87,6 +104,16 @@ namespace MiningApp.UI
         public void ShowWalletSetup()
         {
             DisplayViewModel(ViewModelType.WalletSetup, DisplayGrid.Secondary);
+        }
+
+        public void ShowPoolsHome()
+        {
+            //DisplayViewModel(ViewModelType.WalletSetup, DisplayGrid.Secondary);
+        }
+
+        public void ShowLogsHome()
+        {
+            //DisplayViewModel(ViewModelType.WalletSetup, DisplayGrid.Secondary);
         }
 
         //TESTING METHOD FOR TEST BUTTON

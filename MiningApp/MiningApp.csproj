@@ -111,10 +111,11 @@
     <Compile Include="Models\WalletConfigModel.cs" />
     <Compile Include="UI\ElementHelper.cs" />
     <Compile Include="UI\ViewModels\HomeVM.cs" />
+    <Compile Include="UI\ViewModels\MinersHomeVM.cs" />
     <Compile Include="UI\ViewModels\WalletSetupVM.cs" />
     <Compile Include="UI\WindowController.cs" />
     <Compile Include="UI\ViewModels\NavBarVM.cs" />
-    <Compile Include="UI\ViewModels\WalletsVM.cs" />
+    <Compile Include="UI\ViewModels\WalletsHomeVM.cs" />
     <Compile Include="Utilities\CryptoHelper.cs" />
     <Compile Include="Utilities\DataHelper.cs" />
     <Compile Include="Utilities\FileHelper.cs" />

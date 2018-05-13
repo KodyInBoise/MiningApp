@@ -111,8 +111,9 @@ namespace MiningApp.UI
     public enum ViewModelType
     {
         Empty,
-        Home,
         Nav,
+        Home,
+        MinersHome,
         WalletsHome,
         WalletSetup,
     }
