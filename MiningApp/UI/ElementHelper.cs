@@ -17,6 +17,15 @@ namespace MiningApp.UI
         public static NavHelper NavBar => Instance._navBar;
 
 
+        public static int NavViewWith { get; set; } = 225;
+
+        public static int PrimaryGridWidth { get; set; } = 1025;
+
+        public static int SecondaryGridWidth { get; set; } = 775;
+
+        public static int PrimaryGridSmallWidth => PrimaryGridWidth - SecondaryGridWidth;
+
+
         static Brush DefaultFontColor { get; set; } = Brushes.LightGray;
 
         static FontFamily DefaultFontFamily { get; set; } = new FontFamily("Verdana");

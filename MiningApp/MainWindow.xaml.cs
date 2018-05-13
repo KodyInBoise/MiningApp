@@ -29,6 +29,7 @@ namespace MiningApp
         private ElementHelper _elementHelper { get; set; }
 
 
+        
         public MainWindow()
         {
             InitializeComponent();

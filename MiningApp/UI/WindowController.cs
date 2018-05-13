@@ -53,9 +53,8 @@ namespace MiningApp.UI
                 MainWindow.Instance.SecondaryBorder.Visibility = System.Windows.Visibility.Collapsed;
                 MainWindow.Instance.SecondaryGrid.Visibility = System.Windows.Visibility.Collapsed;
 
-                MainWindow.Instance.PrimaryBorder.Width = 1025;
-                MainWindow.Instance.PrimaryStackPanel.Width = 1025;
-                //MainWindow.Instance.PrimaryGrid.Width = 1025;
+                MainWindow.Instance.PrimaryBorder.Width = ElementHelper.PrimaryGridWidth;
+                MainWindow.Instance.PrimaryStackPanel.Width = ElementHelper.PrimaryGridWidth;
 
                 displayGrid = Window.PrimaryGrid;
             }
@@ -66,8 +65,8 @@ namespace MiningApp.UI
 
                 MainWindow.Instance.SecondaryGrid.Children.Clear();
 
-                MainWindow.Instance.PrimaryBorder.Width = 225;
-                MainWindow.Instance.PrimaryStackPanel.Width = 225;
+                MainWindow.Instance.PrimaryBorder.Width = ElementHelper.PrimaryGridSmallWidth;
+                MainWindow.Instance.PrimaryStackPanel.Width = ElementHelper.PrimaryGridSmallWidth;
 
                 displayGrid = Window.SecondaryGrid;
             }

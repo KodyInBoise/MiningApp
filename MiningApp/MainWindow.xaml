@@ -16,28 +16,27 @@
         <Border x:Name="NavBorder" BorderBrush="Gray" CornerRadius="3" BorderThickness="3" HorizontalAlignment="Left" Height="850" VerticalAlignment="Top" Width="225"/>
         <StackPanel x:Name="NavStackPanel" HorizontalAlignment="Left" Height="850" VerticalAlignment="Top" Width="225">
             <Grid x:Name="NavGrid" Height="850">
-                <Button x:Name="HomeButton" Visibility="Collapsed" Content="Home" Height="40" Width="225" Margin="10,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                <TextBlock x:Name="NavTextBlock" Foreground="LightGray" Text="Nav" FontFamily="Verdana" FontSize="40" Width="800" Margin="10,10,-0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             </Grid>
         </StackPanel>
 
-        <Border x:Name="PrimaryBorder" BorderBrush="Gray" CornerRadius="3" BorderThickness="3" HorizontalAlignment="Left" Height="850" VerticalAlignment="Top" Width="225" Margin="225,0,0,0"/>
-        <StackPanel x:Name="PrimaryStackPanel" HorizontalAlignment="Left" Height="850" Margin="230,0,0,0" VerticalAlignment="Top" Width="225">
+        <Border x:Name="PrimaryBorder" BorderBrush="Gray" CornerRadius="3" BorderThickness="3" HorizontalAlignment="Left" Height="850" VerticalAlignment="Top" Width="1025" Margin="225,0,0,0"/>
+        <StackPanel x:Name="PrimaryStackPanel" HorizontalAlignment="Left" Height="850" Margin="230,0,0,0" VerticalAlignment="Top" Width="1025">
             <Grid x:Name="PrimaryGrid" Height="850">
                 <TextBlock x:Name="PrimaryTextBlock" Foreground="LightGray" Text="Primary" FontFamily="Verdana" FontSize="40" Width="800" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <Button x:Name="UserWalletsButton" Height="50" Width="150" Margin="375,200,0,-0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
             </Grid>
         </StackPanel>
 
-        <Border x:Name="SecondaryBorder" BorderBrush="Gray" CornerRadius="3" BorderThickness="3" HorizontalAlignment="Left" Height="850" VerticalAlignment="Top" Width="800" Margin="450,0,0,0"/>
-        <StackPanel x:Name="SecondaryStackPanel" HorizontalAlignment="Left" Height="850" Margin="450,0,0,0" VerticalAlignment="Top" Width="800">
+        <Border x:Name="SecondaryBorder" BorderBrush="Gray" CornerRadius="3" BorderThickness="3" HorizontalAlignment="Left" Height="850" VerticalAlignment="Top" Width="775" Margin="475,0,0,0"/>
+        <StackPanel x:Name="SecondaryStackPanel" HorizontalAlignment="Left" Height="850" Margin="475,0,0,0" VerticalAlignment="Top" Width="775">
             <Grid x:Name="SecondaryGrid" Height="850">
                 <TextBlock x:Name="SecondaryTextBlock" Foreground="LightGray" Text="Secondary" FontFamily="Verdana" FontSize="40" Width="800" Margin="10,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             </Grid>
         </StackPanel>
 
 
-        <Button x:Name="CloseButton" Content="X" HorizontalAlignment="Left" Margin="1215,10,0,0" VerticalAlignment="Top" Width="25" Height="25" FontSize="18" FontFamily="Verdana" FontWeight="Bold" Click="CloseButton_Click"/>
-        <Button x:Name="MinimizeButton" Content="-" HorizontalAlignment="Left" Margin="1185,10,0,0" VerticalAlignment="Top" Width="25" Height="25" FontSize="22" FontFamily="Verdana" FontWeight="Bold" Click="MinimizeButton_Click"/>
+        <Button x:Name="CloseButton" Content="X" HorizontalAlignment="Left" Margin="1210,10,0,0" VerticalAlignment="Top" Width="25" Height="25" FontSize="18" FontFamily="Verdana" FontWeight="Bold" Click="CloseButton_Click"/>
+        <Button x:Name="MinimizeButton" Content="-" HorizontalAlignment="Left" Margin="1175,10,0,0" VerticalAlignment="Top" Width="25" Height="25" FontSize="22" FontFamily="Verdana" FontWeight="Bold" Click="MinimizeButton_Click"/>
         <Button x:Name="TestButton" Content="Test" Style="{StaticResource RoundButtonTemplate}" HorizontalAlignment="Left" Margin="1077,760,0,0" VerticalAlignment="Top" Width="133" Height="53" FontFamily="Verdana" FontSize="20"/>
 
     </Grid>
