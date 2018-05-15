@@ -244,10 +244,18 @@ namespace MiningApp.UI
     {
         public static class Windows
         {
+            public static Brush BackgroundColor = ElementHelper.ConvertColorCode("#1c1818");
+
             public class Main
             {
-                public static int Height { get; set; } = 850;
                 public static int Width { get; set; } = 1250;
+                public static int Height { get; set; } = 850;
+            }
+
+            public class Message
+            {
+                public static int Width { get; set; } = 600;
+                public static int Height { get; set; } = 300;
             }
         }
 
