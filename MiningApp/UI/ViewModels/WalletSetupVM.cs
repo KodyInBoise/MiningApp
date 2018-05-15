@@ -165,8 +165,16 @@ namespace MiningApp.UI
             private List<string> ViewingCryptos { get; set; } = WindowController.User.WatchingCryptos;
 
 
-            public SecondaryVM()
+            private WalletConfigModel _wallet { get; set; }
+
+
+            public SecondaryVM(WalletConfigModel wallet = null)
             {
+                if (wallet == null)
+                {
+                    _wallet = new WalletConfigModel();
+                }
+
                 Show();
             }
 
@@ -198,19 +206,19 @@ namespace MiningApp.UI
                 DisplayElement(NameLabel, ignoreMargin: true);
 
                 nextTop = CryptoComboBox.Margin.Top;
-                NameLabel = ElementHelper.CreateLabel("Crypto", CryptoComboBox);
-                NameLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
-                DisplayElement(NameLabel, ignoreMargin: true);
+                CryptoLabel = ElementHelper.CreateLabel("Crypto", CryptoComboBox);
+                CryptoLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
+                DisplayElement(CryptoLabel, ignoreMargin: true);
 
                 nextTop = AddressTextBox.Margin.Top;
-                NameLabel = ElementHelper.CreateLabel("Address", AddressTextBox);
-                NameLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
-                DisplayElement(NameLabel, ignoreMargin: true);
+                AddressLabel = ElementHelper.CreateLabel("Address", AddressTextBox);
+                AddressLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
+                DisplayElement(AddressLabel, ignoreMargin: true);
 
                 nextTop = VerifyTextBox.Margin.Top;
-                NameLabel = ElementHelper.CreateLabel("Verify", VerifyTextBox);
-                NameLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
-                DisplayElement(NameLabel, ignoreMargin: true);
+                VerifyLabel = ElementHelper.CreateLabel("Verify", VerifyTextBox);
+                VerifyLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
+                DisplayElement(VerifyLabel, ignoreMargin: true);
 
                 nextLeft = 15;
                 nextTop = ViewGrid.Height - DeleteButton.Height - padding;
@@ -222,6 +230,8 @@ namespace MiningApp.UI
 
                 UserCryptosRadioButton.Checked += (s, e) => RadioButton_Toggled();
                 AllCryptosRadioButton.Checked += (s, e) => RadioButton_Toggled();
+
+                FinishButton.Click += (s, e) => FinishButton_Clicked();
             }
 
             private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0, bool ignoreMargin = false)
@@ -249,6 +259,37 @@ namespace MiningApp.UI
                 }
 
                 CryptoComboBox.ItemsSource = ViewingCryptos;
+            }
+
+            private void DeleteButton_Clicked()
+            {
+
+            }
+
+            private void FinishButton_Clicked()
+            {
+                SetWalletInfo();
+
+                Save();
+            }
+
+            private void Delete()
+            {
+
+            }
+
+            private void Save()
+            {
+                DataHelper.Instance.SaveWallet(_wallet);
+            }
+
+            public void SetWalletInfo()
+            {
+                _wallet.CreatedTimestamp = _wallet.ID > 0 ? _wallet.CreatedTimestamp : DateTime.Now;
+                _wallet.Name = NameTextBox.Text;
+                _wallet.Crypto = CryptoComboBox.Text;
+                _wallet.Address = AddressTextBox.Text;
+                _wallet.Status = WalletStatus.Active;
             }
         }
     }

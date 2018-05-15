@@ -113,7 +113,7 @@ namespace MiningApp
                 }
                 else
                 {
-                    DataHelper.Instance.InsertWalletConfig(_wallet);
+                    DataHelper.Instance.SaveWallet(_wallet);
 
                     OldWindowController.Instance.WalletsHomeView?.AddWallet(_wallet);
                 }

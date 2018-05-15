@@ -112,9 +112,12 @@
     <Compile Include="UI\ViewModels\ConfigsHomeVM.cs" />
     <Compile Include="UI\ElementHelper.cs" />
     <Compile Include="UI\ViewModels\HomeVM.cs" />
+    <Compile Include="UI\ViewModels\IViewModel.cs" />
     <Compile Include="UI\ViewModels\LogsHomeVM.cs" />
     <Compile Include="UI\ViewModels\MinersHomeVM.cs" />
     <Compile Include="UI\ViewModels\PoolsHomeVM.cs" />
+    <Compile Include="UI\ViewModels\PrimaryViewModel.cs" />
+    <Compile Include="UI\ViewModels\SecondaryViewModel.cs" />
     <Compile Include="UI\ViewModels\SettingsHomeVM.cs" />
     <Compile Include="UI\ViewModels\WalletSetupVM.cs" />
     <Compile Include="UI\WindowController.cs" />

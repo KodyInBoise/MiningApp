@@ -38,6 +38,8 @@ namespace MiningApp.UI
 
         private CryptoHelper _cryptoHelper { get; set; } = null;
 
+        private DataHelper _dataHelper { get; set; } = null;
+
 
         public WindowController()
         {
@@ -47,6 +49,7 @@ namespace MiningApp.UI
             NavView = new NavBarVM();
 
             _cryptoHelper = new CryptoHelper();
+            _dataHelper = new DataHelper();
 
             //TESTING
             MainWindow.Instance.TestButton.Click += (s, e) => TestButton_Clicked();

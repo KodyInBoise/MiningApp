@@ -14,14 +14,14 @@ namespace MiningApp
     {
         public static DataHelper Instance { get; set; }
 
-
-
         public static string DataFilePath => Path.Combine(RootPath(), "simplemining.data");
 
         public static string MinerDirectory => Path.Combine(RootPath(), "Miners");
 
         public static string UserSettingsPath => Path.Combine(RootPath(), "usersettings.json");
 
+
+        private static LiteDatabase localDB { get; set; }
 
 
         private LiteDatabase _database => GetDatabase();
@@ -46,6 +46,8 @@ namespace MiningApp
              
             if (!Directory.Exists(root)) Directory.CreateDirectory(root);
             if (!Directory.Exists(MinerDirectory)) Directory.CreateDirectory(MinerDirectory);
+
+            localDB = GetDatabase();
         }
 
         public static string RootPath()
@@ -167,14 +169,22 @@ namespace MiningApp
             }
         }
 
-        public void InsertWalletConfig(WalletConfigModel wallet)
+        public void SaveWallet(WalletConfigModel wallet)
         {
             using (_database)
             {
-                _walletConfigCollection.Insert(wallet);
+                if (wallet.ID > 0)
+                {
+                    _walletConfigCollection.Update(wallet);
+                }
+                else
+                {
+                    _walletConfigCollection.Insert(wallet);
+                }
             }
         }
 
+        
         public void UpdateWalletConfig(WalletConfigModel wallet)
         {
             using (_database)
