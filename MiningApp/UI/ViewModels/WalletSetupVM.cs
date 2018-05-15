@@ -53,6 +53,13 @@ namespace MiningApp.UI
 
         }
 
+        public void DisplaySecondary(WalletConfigModel wallet = null)
+        {
+            SecondaryGrid.Children.Clear();
+
+            _secondaryVM = new SecondaryVM(wallet);
+        }
+
         public class PrimaryVM
         {
             WalletSetupVM View { get; set; } = Instance;
@@ -76,6 +83,13 @@ namespace MiningApp.UI
             private double padding = 15;
 
 
+            private List<WalletConfigModel> _wallets { get; set; } = new List<WalletConfigModel>();
+
+            private List<Button> _walletButtons { get; set; } = new List<Button>();
+
+            private Dictionary<Button, int> _buttonDictionary { get; set; } = new Dictionary<Button, int>();
+
+
             public PrimaryVM()
             {
                 Show();
@@ -94,7 +108,20 @@ namespace MiningApp.UI
 
             private void DisplayExisting()
             {
+                _wallets = DataHelper.Instance.GetWalletConfigs();
 
+                nextTop = NewButton.Margin.Top + NewButton.Height + padding * 2;
+
+                foreach (var wallet in _wallets)
+                {
+                    var button = ElementHelper.CreateButton(wallet.Name);
+                    _walletButtons.Add(button);
+                    _buttonDictionary.Add(button, wallet.ID);
+
+                    DisplayElement(button);
+
+                    button.Click += ExistingWalletClicked;
+                }
             }
 
             private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
@@ -105,6 +132,15 @@ namespace MiningApp.UI
                 ActiveElements.Add(element);
 
                 nextTop = element.Margin.Top + element.Height + padding;
+            }
+
+            private void ExistingWalletClicked(object sender, EventArgs e)
+            {
+                var button = (Button)sender;
+
+                var wallet = _wallets.Find(x => x.ID == _buttonDictionary[button]);
+
+                Instance.DisplaySecondary(wallet);
             }
         }
 
@@ -117,13 +153,13 @@ namespace MiningApp.UI
             List<FrameworkElement> ActiveElements { get; set; } = new List<FrameworkElement>();
 
 
-            TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Setup Wallet",fontSize: 40, width: 400);
+            TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("New Wallet",fontSize: 40, width: 400);
 
             TextBlock StatusTextBlock { get; set; } = ElementHelper.CreateTextBlock("Status", fontSize: 22, width: 725, height: 400);
 
             TextBox NameTextBox { get; set; } = ElementHelper.CreateTextBox("Name");
 
-            ComboBox CryptoComboBox { get; set; } = ElementHelper.CreateComboBox("Crypto", text: "Select a crypto...");
+            ComboBox CryptoComboBox { get; set; } = ElementHelper.CreateComboBox("Crypto", text: "Select a crypto...", fontSize: 16);
 
             TextBox AddressTextBox { get; set; } = ElementHelper.CreateTextBox("Address");
 
@@ -172,10 +208,7 @@ namespace MiningApp.UI
 
             public SecondaryVM(WalletConfigModel wallet = null)
             {
-                if (wallet == null)
-                {
-                    _wallet = new WalletConfigModel();
-                }
+                _wallet = wallet;
 
                 Show();
             }
@@ -238,6 +271,21 @@ namespace MiningApp.UI
                 AllCryptosRadioButton.Checked += (s, e) => RadioButton_Toggled();
 
                 FinishButton.Click += (s, e) => FinishButton_Clicked();
+
+                if (_wallet == null)
+                {
+                    _wallet = new WalletConfigModel();
+                }
+                else
+                {
+                    TitleTextBlock.Text = "Edit Wallet";
+
+                    NameTextBox.Text = _wallet.Name;
+                    AddressTextBox.Text = _wallet.Address;
+
+                    ViewingCryptos.Insert(0, _wallet.Crypto);
+                    CryptoComboBox.SelectedIndex = 0;
+                }
             }
 
             private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0, bool ignoreMargin = false)
@@ -269,7 +317,7 @@ namespace MiningApp.UI
 
             private void DeleteButton_Clicked()
             {
-
+                Delete();
             }
 
             private void FinishButton_Clicked()
@@ -281,7 +329,7 @@ namespace MiningApp.UI
 
             private void Delete()
             {
-
+                CryptoComboBox.Text = _wallet.Crypto;
             }
 
             private void Save()
@@ -299,6 +347,7 @@ namespace MiningApp.UI
                 _wallet.Address = AddressTextBox.Text;
                 _wallet.Status = WalletStatus.Active;
             }
+
         }
     }
 }
