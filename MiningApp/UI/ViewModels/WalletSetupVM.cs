@@ -117,7 +117,9 @@ namespace MiningApp.UI
             List<FrameworkElement> ActiveElements { get; set; } = new List<FrameworkElement>();
 
 
-            TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Setup Wallet", 40);
+            TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Setup Wallet",fontSize: 40, width: 400);
+
+            TextBlock StatusTextBlock { get; set; } = ElementHelper.CreateTextBlock("Status", fontSize: 22, width: 725, height: 400);
 
             TextBox NameTextBox { get; set; } = ElementHelper.CreateTextBox("Name");
 
@@ -181,6 +183,10 @@ namespace MiningApp.UI
             private void Show()
             {
                 DisplayElement(TitleTextBlock);
+
+                nextTop = 75;
+                DisplayElement(StatusTextBlock, leftPadding: 10);
+                StatusTextBlock.Visibility = Visibility.Collapsed;
 
                 nextLeft = 200;
                 nextTop = 250;
@@ -281,6 +287,8 @@ namespace MiningApp.UI
             private void Save()
             {
                 DataHelper.Instance.SaveWallet(_wallet);
+
+                StatusTextBlock.Text = "Wallet config saved successfully!";
             }
 
             public void SetWalletInfo()

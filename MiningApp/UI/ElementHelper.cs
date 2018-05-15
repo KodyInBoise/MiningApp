@@ -68,7 +68,7 @@ namespace MiningApp.UI
             };
         }
 
-        public static TextBlock CreateTextBlock(string text, int fontSize = -1)
+        public static TextBlock CreateTextBlock(string text, int fontSize = -1, int width = -1, int height = -1)
         {
             string name = "";
             var words = text.Split(' ').ToList();
@@ -89,6 +89,8 @@ namespace MiningApp.UI
                 FontFamily = ElementValues.Fonts.Family,
                 FontSize = fontSize > 0 ? fontSize : ElementValues.Fonts.Size,
                 Foreground = ElementValues.Fonts.Color,
+                MaxWidth = width > 0 ? width : 150,
+                MaxHeight = height > 0 ? height : 50,
                 
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Left,
