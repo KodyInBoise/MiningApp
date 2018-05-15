@@ -10,11 +10,16 @@ namespace MiningApp.UI
 {
     public class MinersHomeVM
     {
-        TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Miners Home", 40);
+        public static MinersHomeVM Instance { get; set; }
 
-        Grid ViewGrid { get; set; } = MainWindow.Instance.PrimaryGrid;
+        public Grid ViewGrid => MainWindow.Instance.PrimaryGrid;
+
 
         List<FrameworkElement> ActiveElements { get; set; } = new List<FrameworkElement>();
+
+        TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Miners Home", fontSize: 40, width: 600);
+
+        Button SetupButton { get; set; } = ElementHelper.CreateButton("Setup");
 
 
         double nextLeft = 10;
@@ -26,16 +31,25 @@ namespace MiningApp.UI
 
         public MinersHomeVM()
         {
+            Instance = this;
+
             Show();
         }
 
         private void Show()
         {
             DisplayElement(TitleTextBlock);
+
+            nextTop = 200;
+            nextLeft = 25;
+            DisplayElement(SetupButton);
+            SetupButton.Click += (s, e) => SetupButton_Clicked();
         }
 
         public void Dispose()
         {
+            Instance = null;
+
             WindowController.Instance.MinersHomeView = null;
         }
 
@@ -47,6 +61,11 @@ namespace MiningApp.UI
             ActiveElements.Add(element);
 
             nextTop = element.Margin.Top + element.Height + padding;
+        }
+
+        private void SetupButton_Clicked()
+        {
+            WindowController.Instance.ShowMinerSetup();
         }
     }
 }

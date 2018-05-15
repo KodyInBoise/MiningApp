@@ -39,9 +39,9 @@ namespace MiningApp.UI
         private void Show()
         {
             DisplayElement(TitleTextBlock);
+
             nextTop = 200;
             nextLeft = 25;
-
             DisplayElement(SetupButton);
             SetupButton.Click += (s, e) => SetupButton_Clicked();
         }

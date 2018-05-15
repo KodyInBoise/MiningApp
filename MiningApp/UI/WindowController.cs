@@ -33,6 +33,8 @@ namespace MiningApp.UI
 
         public WalletSetupVM WalletSetupView { get; set; } = null;
 
+        public MinerSetupVM MinerSetupView { get; set; } = null;
+
         public MainWindow Window => MainWindow.Instance;
 
 
@@ -100,6 +102,10 @@ namespace MiningApp.UI
                     MinersHomeView?.Dispose();
                     MinersHomeView = new MinersHomeVM();
                     break;
+                case ViewModelType.MinerSetup:
+                    MinerSetupView?.Dispose();
+                    MinerSetupView = new MinerSetupVM();
+                    break;
                 case ViewModelType.WalletsHome:
                     WalletsHomeView?.Dispose();
                     WalletsHomeView = new WalletsHomeVM();
@@ -165,6 +171,11 @@ namespace MiningApp.UI
         public void ShowWalletSetup()
         {
             DisplayViewModel(ViewModelType.WalletSetup, DisplayGrid.Secondary);
+        }
+
+        public void ShowMinerSetup()
+        {
+            DisplayViewModel(ViewModelType.MinerSetup, DisplayGrid.Secondary);
         }
 
         //TESTING METHOD FOR TEST BUTTON

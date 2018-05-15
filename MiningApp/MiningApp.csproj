@@ -117,6 +117,7 @@
     <Compile Include="UI\ViewModels\HomeVM.cs" />
     <Compile Include="UI\ViewModels\IViewModel.cs" />
     <Compile Include="UI\ViewModels\LogsHomeVM.cs" />
+    <Compile Include="UI\ViewModels\MinerSetupVM.cs" />
     <Compile Include="UI\ViewModels\MinersHomeVM.cs" />
     <Compile Include="UI\ViewModels\PoolsHomeVM.cs" />
     <Compile Include="UI\ViewModels\PrimaryViewModel.cs" />

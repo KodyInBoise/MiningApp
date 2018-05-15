@@ -20,19 +20,21 @@ namespace MiningApp.UI
             Instance = this;
         }
 
-        public static Button CreateButton(string content, ButtonStyle style = ButtonStyle.Normal, int fontSize = -1,
+        public static Button CreateButton(string content, string name = "", ButtonStyle style = ButtonStyle.Normal, int fontSize = -1,
             int height = -1, int width = -1)
         {
-            string name = "";
-            var words = content.Split(' ').ToList();
+            if (String.IsNullOrEmpty(name))
+            {
+                var words = content.Split(' ').ToList();
 
-            if (words.Count > 1)
-            {
-                foreach (var word in words) name += word;
-            }
-            else
-            {
-                name = content;
+                if (words.Count > 1)
+                {
+                    foreach (var word in words) name += word;
+                }
+                else
+                {
+                    name = content;
+                }
             }
 
             var backgroundColor = ElementValues.Buttons.Colors.Normal;
@@ -65,6 +67,8 @@ namespace MiningApp.UI
                 
                 VerticalAlignment = System.Windows.VerticalAlignment.Top,
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
             };
         }
 
@@ -130,7 +134,7 @@ namespace MiningApp.UI
             };
         }
 
-        public static ComboBox CreateComboBox(string name, string text = "", double topPadding = 0, int fontSize = -1)
+        public static ComboBox CreateComboBox(string name, string text = "", int width = 0, int fontSize = -1, bool isEditable = false)
         {
             return new ComboBox()
             {
@@ -139,11 +143,12 @@ namespace MiningApp.UI
                 FontFamily = ElementValues.Fonts.Family,
                 FontSize = fontSize > 0 ? fontSize : ElementValues.ComboBoxs.FontSize,
                 Height = ElementValues.TextBoxs.Height,
-                Width = ElementValues.TextBoxs.Width,
+                Width = width > 0 ? width : ElementValues.TextBoxs.Width,
+                IsEditable = isEditable,
 
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalContentAlignment = VerticalAlignment.Center
+                VerticalContentAlignment = VerticalAlignment.Center,               
             };
         }
 
@@ -157,6 +162,22 @@ namespace MiningApp.UI
                 FontSize = fontSize > 0 ? fontSize : ElementValues.Fonts.Size,
                 Foreground = ElementValues.Fonts.Color,
                 Height = ElementValues.RadioButtons.Height,
+
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalContentAlignment = VerticalAlignment.Center
+            };
+        }
+
+        public static ListBox CreateListBox(string name, int fontSize = -1, int width = -1, int height = -1)
+        {
+            return new ListBox()
+            {
+                Name = $"{name}ListBox",
+                FontFamily = ElementValues.Fonts.Family,
+                FontSize = fontSize > 0 ? fontSize : ElementValues.Fonts.Size,
+                Width = width > 0 ? width : ElementValues.ListBoxs.Width,
+                Height = height > 0 ? height : ElementValues.ListBoxs.Height,
 
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Left,
@@ -238,6 +259,7 @@ namespace MiningApp.UI
         LogsHome,
         SettingsHome,
         WalletSetup,
+        MinerSetup
     }
 
     public class ElementValues
@@ -308,12 +330,18 @@ namespace MiningApp.UI
 
         public static class ComboBoxs
         {
-            public static int FontSize { get; set; } = 18;
+            public static int FontSize { get; set; } = 16;
         }
 
         public static class RadioButtons
         {
             public static int Height { get; set; } = 20;
+        }
+
+        public static class ListBoxs
+        {
+            public static int Width { get; set; } = 450;
+            public static int Height { get; set; } = 100;
         }
     }
 }
