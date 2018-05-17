@@ -161,7 +161,7 @@ namespace MiningApp
                 }
                 else
                 {
-                    DataHelper.Instance.InsertMinerConfig(_miner);
+                    DataHelper.Instance.SaveMiner(_miner);
 
                     OldWindowController.Instance.MinersHomeView?.AddMiner(_miner);
                 }

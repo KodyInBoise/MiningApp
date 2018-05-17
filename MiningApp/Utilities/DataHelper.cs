@@ -241,11 +241,18 @@ namespace MiningApp
             }
         }
 
-        public void InsertMinerConfig(MinerConfigModel miner)
+        public void SaveMiner(MinerConfigModel miner)
         {
             using (_database)
             {
-                _minerConfigCollection.Insert(miner);
+                if (miner.ID > 0)
+                {
+                    _minerConfigCollection.Update(miner);
+                }
+                else
+                {
+                    _minerConfigCollection.Insert(miner);
+                }
             }
         }
 
@@ -265,7 +272,7 @@ namespace MiningApp
             }
         }
 
-        public List<MinerConfigModel> GetAllMinerConfigs()
+        public async Task<List<MinerConfigModel>> GetAllMinerConfigs()
         {
             using (_database)
             {

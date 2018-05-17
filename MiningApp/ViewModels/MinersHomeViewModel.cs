@@ -53,7 +53,7 @@ namespace MiningApp
             _window.Close();
         }
 
-        private void DisplayGrid(bool allMiners = false)
+        private async void DisplayGrid(bool allMiners = false)
         { 
             GridItems = (CollectionViewSource)(_window.FindResource("GridItems"));
 
@@ -65,7 +65,7 @@ namespace MiningApp
             }
             else
             {
-                _localMiners = DataHelper.Instance.GetAllMinerConfigs();
+                _localMiners = await DataHelper.Instance.GetAllMinerConfigs();
 
                 GridItems.Source = _localMiners;
             }

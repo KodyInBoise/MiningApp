@@ -43,16 +43,6 @@ namespace MiningApp.UI
             WindowController.Instance.WalletSetupView = null;
         }
 
-        public void NewSetup_Clicked()
-        {
-
-        }
-
-        public void ExistingSetup_Clicked(object sender, EventArgs e)
-        {
-
-        }
-
         public void DisplaySecondary(WalletConfigModel wallet = null)
         {
             SecondaryGrid.Children.Clear();
@@ -101,7 +91,7 @@ namespace MiningApp.UI
                 nextTop = 75;
 
                 DisplayElement(NewButton);
-                NewButton.Click += (s, e) => Instance.NewSetup_Clicked();
+                NewButton.Click += (s, e) => NewButton_Clicked();
 
                 DisplayExisting();
             }
@@ -141,6 +131,24 @@ namespace MiningApp.UI
                 var wallet = _wallets.Find(x => x.ID == _buttonDictionary[button]);
 
                 Instance.DisplaySecondary(wallet);
+            }
+
+            public void ShowNewWallet(WalletConfigModel wallet)
+            {
+                var button = ElementHelper.CreateButton(wallet.Name);
+                _walletButtons.Add(button);
+                _buttonDictionary.Add(button, wallet.ID);
+
+                DisplayElement(button);
+
+                button.Click += ExistingWalletClicked;
+
+                _wallets.Add(wallet);
+            }
+
+            private void NewButton_Clicked()
+            {
+                Instance.DisplaySecondary();
             }
         }
 
@@ -337,6 +345,8 @@ namespace MiningApp.UI
                 DataHelper.Instance.SaveWallet(_wallet);
 
                 StatusTextBlock.Text = "Wallet config saved successfully!";
+
+                View._primaryVM.ShowNewWallet(_wallet);
             }
 
             public void SetWalletInfo()

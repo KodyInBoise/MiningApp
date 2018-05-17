@@ -43,16 +43,6 @@ namespace MiningApp.UI
             WindowController.Instance.MinerSetupView = null;
         }
 
-        public void NewSetup_Clicked()
-        {
-
-        }
-
-        public void ExistingSetup_Clicked(object sender, EventArgs e)
-        {
-
-        }
-
         public void DisplaySecondary(MinerConfigModel miner = null)
         {
             SecondaryGrid.Children.Clear();
@@ -101,14 +91,14 @@ namespace MiningApp.UI
                 nextTop = 75;
 
                 DisplayElement(NewButton);
-                NewButton.Click += (s, e) => Instance.NewSetup_Clicked();
+                NewButton.Click += (s, e) => NewButton_Clicked();
 
                 DisplayExisting();
             }
 
-            private void DisplayExisting()
+            private async void DisplayExisting()
             {
-                _miners = DataHelper.Instance.GetAllMinerConfigs();
+                _miners = await DataHelper.Instance.GetAllMinerConfigs();
 
                 nextTop = NewButton.Margin.Top + NewButton.Height + padding * 2;
 
@@ -142,6 +132,24 @@ namespace MiningApp.UI
 
                 Instance.DisplaySecondary(miner);
             }
+
+            public void ShowNewMiner(MinerConfigModel miner)
+            {
+                var button = ElementHelper.CreateButton(miner.Name);
+                _minerButtons.Add(button);
+                _buttonDictionary.Add(button, miner.ID);
+
+                DisplayElement(button);
+
+                button.Click += ExistingMinerClicked;
+
+                _miners.Add(miner);
+            }
+
+            private void NewButton_Clicked()
+            {
+                Instance.DisplaySecondary();
+            }
         }
 
         public class SecondaryVM
@@ -167,9 +175,9 @@ namespace MiningApp.UI
             ComboBox CryptosComboBox { get; set; } = ElementHelper.CreateComboBox("Cryptos", width: 350);
 
 
-            ListBox PoolsListBox { get; set; } = ElementHelper.CreateListBox("Pools");
+            ListBox PoolsListBox { get; set; } = ElementHelper.CreateListBox("Pools", fontSize: 14);
 
-            ListBox CryptosListBox { get; set; } = ElementHelper.CreateListBox("Cryptos");
+            ListBox CryptosListBox { get; set; } = ElementHelper.CreateListBox("Cryptos", fontSize: 14);
 
 
             Button PoolsAddButton { get; set; } = ElementHelper.CreateButton("+", name: "PoolsAdd", fontSize: 14, style: ButtonStyle.New, 
@@ -312,10 +320,10 @@ namespace MiningApp.UI
                     TitleTextBlock.Text = "Edit Miner";
 
                     NameTextBox.Text = _miner.Name;
-                    //AddressTextBox.Text = _miner.Address;
+                    PathTextBox.Text = _miner.Path;
 
-                    //ViewingCryptos.Insert(0, _miner.Crypto);
-                    //CryptoComboBox.SelectedIndex = 0;
+                    PoolsListBox.ItemsSource = _miner.Pools;
+                    CryptosListBox.ItemsSource = _miner.Cryptos;
                 }
             }
 
@@ -356,20 +364,24 @@ namespace MiningApp.UI
 
             private void Save()
             {
-                //DataHelper.Instance.SaveWallet(_wallet);
+                DataHelper.Instance.SaveMiner(_miner);
 
-                //StatusTextBlock.Text = "Wallet config saved successfully!";
+                StatusTextBlock.Text = "Miner config saved successfully!";
+
+                View._primaryVM.ShowNewMiner(_miner);
+
             }
 
             public void SetMinerInfo()
             {
-                /*
-                _wallet.CreatedTimestamp = _wallet.ID > 0 ? _wallet.CreatedTimestamp : DateTime.Now;
-                _wallet.Name = NameTextBox.Text;
-                _wallet.Crypto = CryptoComboBox.Text;
-                _wallet.Address = AddressTextBox.Text;
-                _wallet.Status = WalletStatus.Active;
-                */
+                
+                _miner.CreatedTimestamp = _miner.ID > 0 ? _miner.CreatedTimestamp : DateTime.Now;
+                _miner.Name = NameTextBox.Text;
+                _miner.Path = PathTextBox.Text;
+                _miner.Pools = PoolsListBox.Items.Cast<string>().ToList();
+                _miner.Cryptos = CryptosListBox.Items.Cast<string>().ToList();
+                _miner.Status = MinerStatus.Inactive;
+                
             }
 
         }
