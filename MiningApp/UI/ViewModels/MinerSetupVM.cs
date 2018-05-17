@@ -43,6 +43,13 @@ namespace MiningApp.UI
             WindowController.Instance.MinerSetupView = null;
         }
 
+        public void DisplayPrimary()
+        {
+            PrimaryGrid.Children.Clear();
+
+            _primaryVM = new PrimaryVM();
+        }
+
         public void DisplaySecondary(MinerConfigModel miner = null)
         {
             SecondaryGrid.Children.Clear();
@@ -309,6 +316,7 @@ namespace MiningApp.UI
                 nextTop = DeleteButton.Margin.Top;
                 DisplayElement(FinishButton);
 
+                DeleteButton.Click += (s, e) => DeleteButton_Clicked();
                 FinishButton.Click += (s, e) => FinishButton_Clicked();
 
                 if (_miner == null)
@@ -359,7 +367,10 @@ namespace MiningApp.UI
 
             private void Delete()
             {
-                //CryptoComboBox.Text = _miner.Crypto;
+                DataHelper.Instance.DeleteMinerConfig(_miner);
+
+                View.DisplayPrimary();
+                View.DisplaySecondary();
             }
 
             private void Save()
@@ -367,23 +378,20 @@ namespace MiningApp.UI
                 DataHelper.Instance.SaveMiner(_miner);
 
                 StatusTextBlock.Text = "Miner config saved successfully!";
+                TitleTextBlock.Text = "Edit Miner";
 
-                View._primaryVM.ShowNewMiner(_miner);
-
+                View.DisplayPrimary();
             }
 
             public void SetMinerInfo()
-            {
-                
+            {               
                 _miner.CreatedTimestamp = _miner.ID > 0 ? _miner.CreatedTimestamp : DateTime.Now;
                 _miner.Name = NameTextBox.Text;
                 _miner.Path = PathTextBox.Text;
                 _miner.Pools = PoolsListBox.Items.Cast<string>().ToList();
                 _miner.Cryptos = CryptosListBox.Items.Cast<string>().ToList();
-                _miner.Status = MinerStatus.Inactive;
-                
+                _miner.Status = MinerStatus.Inactive;                
             }
-
         }
     }
 }

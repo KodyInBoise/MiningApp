@@ -43,6 +43,13 @@ namespace MiningApp.UI
             WindowController.Instance.WalletSetupView = null;
         }
 
+        public void DisplayPrimary()
+        {
+            PrimaryGrid.Children.Clear();
+
+            _primaryVM = new PrimaryVM();
+        }
+
         public void DisplaySecondary(WalletConfigModel wallet = null)
         {
             SecondaryGrid.Children.Clear();
@@ -133,22 +140,9 @@ namespace MiningApp.UI
                 Instance.DisplaySecondary(wallet);
             }
 
-            public void ShowNewWallet(WalletConfigModel wallet)
-            {
-                var button = ElementHelper.CreateButton(wallet.Name);
-                _walletButtons.Add(button);
-                _buttonDictionary.Add(button, wallet.ID);
-
-                DisplayElement(button);
-
-                button.Click += ExistingWalletClicked;
-
-                _wallets.Add(wallet);
-            }
-
             private void NewButton_Clicked()
             {
-                Instance.DisplaySecondary();
+                View.DisplaySecondary();
             }
         }
 
@@ -278,6 +272,7 @@ namespace MiningApp.UI
                 UserCryptosRadioButton.Checked += (s, e) => RadioButton_Toggled();
                 AllCryptosRadioButton.Checked += (s, e) => RadioButton_Toggled();
 
+                DeleteButton.Click += (s, e) => DeleteButton_Clicked();
                 FinishButton.Click += (s, e) => FinishButton_Clicked();
 
                 if (_wallet == null)
@@ -337,7 +332,10 @@ namespace MiningApp.UI
 
             private void Delete()
             {
-                CryptoComboBox.Text = _wallet.Crypto;
+                DataHelper.Instance.DeleteWalletConfig(_wallet);
+
+                View.DisplayPrimary();
+                View.DisplaySecondary();
             }
 
             private void Save()
@@ -345,8 +343,9 @@ namespace MiningApp.UI
                 DataHelper.Instance.SaveWallet(_wallet);
 
                 StatusTextBlock.Text = "Wallet config saved successfully!";
+                TitleTextBlock.Text = "Edit Wallet";
 
-                View._primaryVM.ShowNewWallet(_wallet);
+                View.DisplayPrimary();
             }
 
             public void SetWalletInfo()
