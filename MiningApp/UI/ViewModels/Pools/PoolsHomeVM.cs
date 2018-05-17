@@ -10,11 +10,14 @@ namespace MiningApp.UI
 {
     public class PoolsHomeVM
     {
-        TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Mining Pools Home", 40);
+        public static PoolsHomeVM Instance { get; set; }
 
-        Grid ViewGrid { get; set; } = MainWindow.Instance.PrimaryGrid;
+        public Grid ViewGrid => MainWindow.Instance.PrimaryGrid;
 
-        List<FrameworkElement> ActiveElements { get; set; } = new List<FrameworkElement>();
+
+        TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Pools Home", fontSize: 40, width: 600);
+
+        Button SetupButton { get; set; } = ElementHelper.CreateButton("Setup");
 
 
         double nextLeft = 10;
@@ -26,16 +29,25 @@ namespace MiningApp.UI
 
         public PoolsHomeVM()
         {
+            Instance = this;
+
             Show();
         }
 
         private void Show()
         {
             DisplayElement(TitleTextBlock);
+
+            nextTop = 200;
+            nextLeft = 25;
+            DisplayElement(SetupButton);
+            SetupButton.Click += (s, e) => SetupButton_Clicked();
         }
 
         public void Dispose()
         {
+            Instance = null;
+
             WindowController.Instance.PoolsHomeView = null;
         }
 
@@ -44,9 +56,13 @@ namespace MiningApp.UI
             element.Margin = new Thickness((nextLeft + leftPadding), nextTop + topPadding, 0, 0);
 
             ViewGrid.Children.Add(element);
-            ActiveElements.Add(element);
 
             nextTop = element.Margin.Top + element.Height + padding;
+        }
+
+        private void SetupButton_Clicked()
+        {
+            WindowController.Instance.ShowPoolSetup();
         }
     }
 }

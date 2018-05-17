@@ -119,7 +119,8 @@
     <Compile Include="UI\ViewModels\LogsHomeVM.cs" />
     <Compile Include="UI\ViewModels\MinerSetupVM.cs" />
     <Compile Include="UI\ViewModels\MinersHomeVM.cs" />
-    <Compile Include="UI\ViewModels\PoolsHomeVM.cs" />
+    <Compile Include="UI\ViewModels\Pools\PoolSetupVM.cs" />
+    <Compile Include="UI\ViewModels\Pools\PoolsHomeVM.cs" />
     <Compile Include="UI\ViewModels\PrimaryViewModel.cs" />
     <Compile Include="UI\ViewModels\SecondaryViewModel.cs" />
     <Compile Include="UI\ViewModels\SettingsHomeVM.cs" />

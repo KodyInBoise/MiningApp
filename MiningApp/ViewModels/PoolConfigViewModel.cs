@@ -79,7 +79,7 @@ namespace MiningApp
                 }
                 else
                 {
-                    DataHelper.Instance.InsertPoolConfig(_pool);
+                    DataHelper.Instance.SavePoolConfig(_pool);
 
                     OldWindowController.Instance.PoolsHomeView?.AddPool(_pool);
                 }

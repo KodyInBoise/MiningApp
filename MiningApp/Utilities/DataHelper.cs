@@ -209,11 +209,18 @@ namespace MiningApp
             }
         }
 
-        public void InsertPoolConfig(PoolConfigModel pool)
+        public void SavePoolConfig(PoolConfigModel pool)
         {
             using (_database)
             {
-                _poolConfigCollection.Insert(pool);
+                if (pool.ID > 0)
+                {
+                    _poolConfigCollection.Update(pool);
+                }
+                else
+                {
+                    _poolConfigCollection.Insert(pool);
+                }
             }
         }
 

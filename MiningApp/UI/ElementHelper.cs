@@ -256,6 +256,7 @@ namespace MiningApp.UI
         MinersHome,
         WalletsHome,
         PoolsHome,
+        PoolSetup,
         LogsHome,
         SettingsHome,
         WalletSetup,
