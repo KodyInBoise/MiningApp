@@ -74,81 +74,71 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controller\WindowController.cs" />
+    <Compile Include="Controller\OldWindowController.cs" />
     <Compile Include="LoggingUtil\LogHelper.cs" />
     <Compile Include="LoggingUtil\ViewLogsWindow.xaml.cs">
       <DependentUpon>ViewLogsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\CryptoModel.cs" />
-    <Compile Include="Models\MiningRuleModel.cs" />
+    <Compile Include="Models\ConfigModel.cs" />
     <Compile Include="Models\MinerModel.cs" />
     <Compile Include="Models\PoolConfigModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\WalletConfigModel.cs" />
+    <Compile Include="UI\MessageWindow.xaml.cs">
+      <DependentUpon>MessageWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ViewModels\Configs\ConfigSetupVM.cs" />
+    <Compile Include="UI\ViewModels\Configs\ConfigsHomeVM.cs" />
+    <Compile Include="UI\ElementHelper.cs" />
+    <Compile Include="UI\ViewModels\HomeVM.cs" />
+    <Compile Include="UI\ViewModels\IViewModel.cs" />
+    <Compile Include="UI\ViewModels\LogsHomeVM.cs" />
+    <Compile Include="UI\ViewModels\MinerSetupVM.cs" />
+    <Compile Include="UI\ViewModels\MinersHomeVM.cs" />
+    <Compile Include="UI\ViewModels\Pools\PoolSetupVM.cs" />
+    <Compile Include="UI\ViewModels\Pools\PoolsHomeVM.cs" />
+    <Compile Include="UI\ViewModels\PrimaryViewModel.cs" />
+    <Compile Include="UI\ViewModels\SecondaryViewModel.cs" />
+    <Compile Include="UI\ViewModels\SettingsHomeVM.cs" />
+    <Compile Include="UI\ViewModels\WalletSetupVM.cs" />
+    <Compile Include="UI\WindowController.cs" />
+    <Compile Include="UI\ViewModels\NavBarVM.cs" />
+    <Compile Include="UI\ViewModels\WalletsHomeVM.cs" />
+    <Compile Include="Utilities\Bootstrapper.cs" />
     <Compile Include="Utilities\CryptoHelper.cs" />
     <Compile Include="Utilities\DataHelper.cs" />
-    <Compile Include="Utilities\ElementHelper.cs" />
+    <Compile Include="Utilities\Enums.cs" />
     <Compile Include="Utilities\FileHelper.cs" />
     <Compile Include="Utilities\MiningHelper.cs" />
     <Compile Include="Utilities\PoolHelper.cs" />
     <Compile Include="Utilities\ProcessHelper.cs" />
     <Compile Include="Utilities\ServerHelper.cs" />
     <Compile Include="Utilities\WalletHelper.cs" />
-    <Compile Include="ViewModels\MinerConfigViewModel.cs" />
-    <Compile Include="ViewModels\MinersHomeViewModel.cs" />
-    <Compile Include="ViewModels\CryptosViewModel.cs" />
-    <Compile Include="ViewModels\MiningRuleViewModel.cs" />
-    <Compile Include="ViewModels\ControlBarViewModel.cs" />
-    <Compile Include="ViewModels\HomeViewModel.cs" />
-    <Compile Include="ViewModels\MinersViewModel.cs" />
-    <Compile Include="ViewModels\PoolConfigViewModel.cs" />
-    <Compile Include="ViewModels\PoolsHomeViewModel.cs" />
-    <Compile Include="ViewModels\UploadMinerViewModel.cs" />
-    <Compile Include="ViewModels\ViewMinerViewModel.cs" />
-    <Compile Include="ViewModels\WalletConfigViewModel.cs" />
-    <Compile Include="ViewModels\WalletsHomeViewModel.cs" />
-    <Compile Include="Windows\MinerConfigWindow.xaml.cs">
-      <DependentUpon>MinerConfigWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\MinersHomeWindow.xaml.cs">
-      <DependentUpon>MinersHomeWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\CryptosWindow.xaml.cs">
-      <DependentUpon>CryptosWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\MiningRuleWindow.xaml.cs">
-      <DependentUpon>MiningRuleWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\ControlBarWindow.xaml.cs">
-      <DependentUpon>ControlBarWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\HomeWindow.xaml.cs">
-      <DependentUpon>HomeWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\MinersWindow.xaml.cs">
-      <DependentUpon>MinersWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\PoolConfigWindow.xaml.cs">
-      <DependentUpon>PoolConfigWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\PoolsHomeWindow.xaml.cs">
-      <DependentUpon>PoolsHomeWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\UploadMinerWindow.xaml.cs">
-      <DependentUpon>UploadMinerWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\WalletConfigWindow.xaml.cs">
-      <DependentUpon>WalletConfigWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\WalletsHomeWindow.xaml.cs">
-      <DependentUpon>WalletsHomeWindow.xaml</DependentUpon>
-    </Compile>
     <Page Include="LoggingUtil\ViewLogsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -165,51 +155,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Windows\MinerConfigWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\MinersHomeWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\CryptosWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\MiningRuleWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\ControlBarWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\HomeWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\MinersWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\PoolConfigWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\PoolsHomeWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\UploadMinerWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\WalletConfigWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\WalletsHomeWindow.xaml">
+    <Page Include="UI\MessageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

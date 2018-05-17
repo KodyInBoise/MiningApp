@@ -14,8 +14,6 @@ namespace MiningApp
     {
         public static DataHelper Instance { get; set; }
 
-
-
         public static string DataFilePath => Path.Combine(RootPath(), "simplemining.data");
 
         public static string MinerDirectory => Path.Combine(RootPath(), "Miners");
@@ -23,10 +21,12 @@ namespace MiningApp
         public static string UserSettingsPath => Path.Combine(RootPath(), "usersettings.json");
 
 
+        private static LiteDatabase localDB { get; set; }
+
 
         private LiteDatabase _database => GetDatabase();
 
-        private LiteCollection<MiningRuleModel> _miningRuleConfigCollection => GetMiningRuleCollection();
+        private LiteCollection<ConfigModel> _configCollection => GetMiningRuleCollection();
 
         private LiteCollection<WalletConfigModel> _walletConfigCollection => GetWalletCollection();
 
@@ -46,6 +46,8 @@ namespace MiningApp
              
             if (!Directory.Exists(root)) Directory.CreateDirectory(root);
             if (!Directory.Exists(MinerDirectory)) Directory.CreateDirectory(MinerDirectory);
+
+            localDB = GetDatabase();
         }
 
         public static string RootPath()
@@ -58,11 +60,11 @@ namespace MiningApp
             return new LiteDatabase(DataFilePath);
         }
 
-        private LiteCollection<MiningRuleModel> GetMiningRuleCollection()
+        private LiteCollection<ConfigModel> GetMiningRuleCollection()
         {
             using (_database)
             {
-                return _database.GetCollection<MiningRuleModel>("miningruleconfigs");
+                return _database.GetCollection<ConfigModel>("miningruleconfigs");
             }
         }
 
@@ -106,43 +108,34 @@ namespace MiningApp
             }
         }
 
-        public void InsertMiningRule(MiningRuleModel miner)
+        public void SaveConfig(ConfigModel config)
         {
             using (_database)
             {
-                _miningRuleConfigCollection.Insert(miner);
+                if (config.ID > 0)
+                {
+                    _configCollection.Update(config);
+                }
+                else
+                {
+                    _configCollection.Insert(config);
+                }
             }
         }
 
-        public async Task<List<MiningRuleModel>> GetAllMiningRules()
+        public async Task<List<ConfigModel>> GetAllConfigs()
         {
             using (_database)
             {
-                return _miningRuleConfigCollection.FindAll().ToList();
+                return _configCollection.FindAll().ToList();
             }
         }
 
-        public void UpdateMiningRule(MiningRuleModel miner)
+        public void DeleteConfig(ConfigModel config)
         {
             using (_database)
             {
-                _miningRuleConfigCollection.Update(miner);
-            }
-        }
-
-        public async Task<MiningRuleModel> GetMiningRuleByID(int minerID)
-        {
-            using (_database)
-            {
-                return _miningRuleConfigCollection.FindById(minerID);
-            }
-        }
-
-        public void DeleteMiningRule(int minerID)
-        {
-            using (_database)
-            {
-                _miningRuleConfigCollection.Delete(minerID);
+                _configCollection.Delete(config.ID);
             }
         }
 
@@ -167,14 +160,22 @@ namespace MiningApp
             }
         }
 
-        public void InsertWalletConfig(WalletConfigModel wallet)
+        public void SaveWallet(WalletConfigModel wallet)
         {
             using (_database)
             {
-                _walletConfigCollection.Insert(wallet);
+                if (wallet.ID > 0)
+                {
+                    _walletConfigCollection.Update(wallet);
+                }
+                else
+                {
+                    _walletConfigCollection.Insert(wallet);
+                }
             }
         }
 
+        
         public void UpdateWalletConfig(WalletConfigModel wallet)
         {
             using (_database)
@@ -199,11 +200,18 @@ namespace MiningApp
             }
         }
 
-        public void InsertPoolConfig(PoolConfigModel pool)
+        public void SavePoolConfig(PoolConfigModel pool)
         {
             using (_database)
             {
-                _poolConfigCollection.Insert(pool);
+                if (pool.ID > 0)
+                {
+                    _poolConfigCollection.Update(pool);
+                }
+                else
+                {
+                    _poolConfigCollection.Insert(pool);
+                }
             }
         }
 
@@ -223,7 +231,7 @@ namespace MiningApp
             }
         }
 
-        public List<PoolConfigModel> GetAllPoolConfigs()
+        public List<PoolConfigModel> GetPoolConfigs()
         {
             using (_database)
             {
@@ -231,11 +239,18 @@ namespace MiningApp
             }
         }
 
-        public void InsertMinerConfig(MinerConfigModel miner)
+        public void SaveMiner(MinerConfigModel miner)
         {
             using (_database)
             {
-                _minerConfigCollection.Insert(miner);
+                if (miner.ID > 0)
+                {
+                    _minerConfigCollection.Update(miner);
+                }
+                else
+                {
+                    _minerConfigCollection.Insert(miner);
+                }
             }
         }
 
@@ -255,7 +270,7 @@ namespace MiningApp
             }
         }
 
-        public List<MinerConfigModel> GetAllMinerConfigs()
+        public async Task<List<MinerConfigModel>> GetMiners()
         {
             using (_database)
             {

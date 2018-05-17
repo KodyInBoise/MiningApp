@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MiningApp.UI;
 
 namespace MiningApp
 {
@@ -23,7 +24,11 @@ namespace MiningApp
 
         public List<string> Tags { get; set; } = new List<string>();
 
+        public List<string> Pools { get; set; } = new List<string>();
+
         public string Path { get; set; }
+
+        public MinerStatus Status { get; set; }
 
         [BsonIgnore]
         public string LocalDirectory => GetLocalDirectory();

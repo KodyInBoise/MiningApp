@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MiningApp.UI;
 
 namespace MiningApp
 {
@@ -20,8 +21,15 @@ namespace MiningApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        WindowController Controller = new WindowController();
+        public static MainWindow Instance { get; set; }
 
+        public WindowController Controller { get; set; }
+
+        
+        private ElementHelper _elementHelper { get; set; }
+
+
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -31,7 +39,28 @@ namespace MiningApp
 
         private void Startup()
         {
-            this.Visibility = Visibility.Collapsed;
+            Instance = this;
+
+            _elementHelper = new ElementHelper();
+
+            Controller = new WindowController();
+
+            PrimaryTextBlock.Visibility = Visibility.Hidden;
+        }
+
+        public void Shutdown()
+        {
+            Environment.Exit(0);
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Shutdown();
+        }
+
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
         }
     }
 }

@@ -37,8 +37,8 @@ namespace MiningApp.LoggingUtil
 
         private void ShowWindow()
         {
-            _window.Left = WindowController.Instance?.WindowLeft ?? 50;
-            _window.Top = WindowController.Instance?.WindowTop ?? 50;
+            _window.Left = OldWindowController.Instance?.WindowLeft ?? 50;
+            _window.Top = OldWindowController.Instance?.WindowTop ?? 50;
 
             _window.GeneralRadioButton.Checked += (s, e) => LogType_Toggled();
             _window.ErrorsRadioButton.Checked += (s, e) => LogType_Toggled();
