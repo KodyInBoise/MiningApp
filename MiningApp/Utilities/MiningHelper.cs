@@ -10,7 +10,7 @@ namespace MiningApp
     {
         public static MiningHelper Instance { get; set; }
 
-        public List<MiningRuleModel> LocalMiners => DataHelper.Instance.GetAllMiningRules().Result;
+        public List<ConfigModel> LocalMiners => DataHelper.Instance.GetAllConfigs().Result;
 
         public List<MinerConfigModel> AllMiners => ServerHelper.Instance.GetMiners();
 

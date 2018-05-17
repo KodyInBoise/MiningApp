@@ -13,7 +13,7 @@ namespace MiningApp
     {
         private OldWindowController _controller => OldWindowController.Instance;
 
-        private List<MiningRuleModel> _allMiners = new List<MiningRuleModel>();
+        private List<ConfigModel> _allMiners = new List<ConfigModel>();
         private List<Process> _minerProcesses = new List<Process>();
 
         public ProcessHelper()
@@ -43,7 +43,7 @@ namespace MiningApp
             _minerProcesses.ForEach(x => Console.WriteLine(x.ProcessName));
         }
 
-        public void StartMiner(MiningRuleModel miner)
+        public void StartMiner(ConfigModel miner)
         {
             
         }

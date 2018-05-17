@@ -26,7 +26,7 @@ namespace MiningApp
 
         private LiteDatabase _database => GetDatabase();
 
-        private LiteCollection<MiningRuleModel> _miningRuleConfigCollection => GetMiningRuleCollection();
+        private LiteCollection<ConfigModel> _configCollection => GetMiningRuleCollection();
 
         private LiteCollection<WalletConfigModel> _walletConfigCollection => GetWalletCollection();
 
@@ -60,11 +60,11 @@ namespace MiningApp
             return new LiteDatabase(DataFilePath);
         }
 
-        private LiteCollection<MiningRuleModel> GetMiningRuleCollection()
+        private LiteCollection<ConfigModel> GetMiningRuleCollection()
         {
             using (_database)
             {
-                return _database.GetCollection<MiningRuleModel>("miningruleconfigs");
+                return _database.GetCollection<ConfigModel>("miningruleconfigs");
             }
         }
 
@@ -108,43 +108,34 @@ namespace MiningApp
             }
         }
 
-        public void InsertMiningRule(MiningRuleModel miner)
+        public void SaveConfig(ConfigModel config)
         {
             using (_database)
             {
-                _miningRuleConfigCollection.Insert(miner);
+                if (config.ID > 0)
+                {
+                    _configCollection.Update(config);
+                }
+                else
+                {
+                    _configCollection.Insert(config);
+                }
             }
         }
 
-        public async Task<List<MiningRuleModel>> GetAllMiningRules()
+        public async Task<List<ConfigModel>> GetAllConfigs()
         {
             using (_database)
             {
-                return _miningRuleConfigCollection.FindAll().ToList();
+                return _configCollection.FindAll().ToList();
             }
         }
 
-        public void UpdateMiningRule(MiningRuleModel miner)
+        public void DeleteConfig(ConfigModel config)
         {
             using (_database)
             {
-                _miningRuleConfigCollection.Update(miner);
-            }
-        }
-
-        public async Task<MiningRuleModel> GetMiningRuleByID(int minerID)
-        {
-            using (_database)
-            {
-                return _miningRuleConfigCollection.FindById(minerID);
-            }
-        }
-
-        public void DeleteMiningRule(int minerID)
-        {
-            using (_database)
-            {
-                _miningRuleConfigCollection.Delete(minerID);
+                _configCollection.Delete(config.ID);
             }
         }
 
@@ -240,7 +231,7 @@ namespace MiningApp
             }
         }
 
-        public List<PoolConfigModel> GetAllPoolConfigs()
+        public List<PoolConfigModel> GetPoolConfigs()
         {
             using (_database)
             {
@@ -279,7 +270,7 @@ namespace MiningApp
             }
         }
 
-        public async Task<List<MinerConfigModel>> GetAllMinerConfigs()
+        public async Task<List<MinerConfigModel>> GetMiners()
         {
             using (_database)
             {

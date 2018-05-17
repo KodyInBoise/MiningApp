@@ -8,9 +8,9 @@ using System.Windows.Controls;
 
 namespace MiningApp.UI
 {
-    public class MinerSetupVM
+    public class ConfigSetupVM
     {
-        public static MinerSetupVM Instance { get; set; }
+        public static ConfigSetupVM Instance { get; set; }
 
 
         Grid PrimaryGrid { get; set; } = MainWindow.Instance.PrimaryGrid;
@@ -23,7 +23,7 @@ namespace MiningApp.UI
         private SecondaryVM _secondaryVM { get; set; }
 
 
-        public MinerSetupVM()
+        public ConfigSetupVM()
         {
             Instance = this;
 
@@ -40,7 +40,7 @@ namespace MiningApp.UI
         {
             Instance = null;
 
-            WindowController.Instance.MinerSetupView = null;
+            WindowController.Instance.ConfigSetupView = null;
         }
 
         public void DisplayPrimary()
@@ -50,25 +50,23 @@ namespace MiningApp.UI
             _primaryVM = new PrimaryVM();
         }
 
-        public void DisplaySecondary(MinerConfigModel miner = null)
+        public void DisplaySecondary(ConfigModel config = null)
         {
             SecondaryGrid.Children.Clear();
 
-            _secondaryVM = new SecondaryVM(miner);
+            _secondaryVM = new SecondaryVM(config);
         }
 
         public class PrimaryVM
         {
-            MinerSetupVM View { get; set; } = Instance;
+            ConfigSetupVM View { get; set; } = Instance;
 
             Grid ViewGrid { get; set; } = Instance.PrimaryGrid;
 
-            List<FrameworkElement> ActiveElements { get; set; } = new List<FrameworkElement>();
 
+            TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Configs", 40);
 
-            TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Miners", 40);
-
-            Button NewButton { get; set; } = ElementHelper.CreateButton("New Miner", height: buttonHeight, style: ButtonStyle.New);
+            Button NewButton { get; set; } = ElementHelper.CreateButton("New Config", height: buttonHeight, style: ButtonStyle.New);
 
 
             private static int buttonHeight = 60;
@@ -80,9 +78,9 @@ namespace MiningApp.UI
             private double padding = 15;
 
 
-            private List<MinerConfigModel> _miners { get; set; } = new List<MinerConfigModel>();
+            private List<ConfigModel> _configs { get; set; } = new List<ConfigModel>();
 
-            private List<Button> _minerButtons { get; set; } = new List<Button>();
+            private List<Button> _configButtons { get; set; } = new List<Button>();
 
             private Dictionary<Button, int> _buttonDictionary { get; set; } = new Dictionary<Button, int>();
 
@@ -105,19 +103,19 @@ namespace MiningApp.UI
 
             private async void DisplayExisting()
             {
-                _miners = await DataHelper.Instance.GetMiners();
+                _configs = await DataHelper.Instance.GetAllConfigs();
 
                 nextTop = NewButton.Margin.Top + NewButton.Height + padding * 2;
 
-                foreach (var miner in _miners)
+                foreach (var config in _configs)
                 {
-                    var button = ElementHelper.CreateButton(miner.Name);
-                    _minerButtons.Add(button);
-                    _buttonDictionary.Add(button, miner.ID);
+                    var button = ElementHelper.CreateButton(config.Name);
+                    _configButtons.Add(button);
+                    _buttonDictionary.Add(button, config.ID);
 
                     DisplayElement(button);
 
-                    button.Click += ExistingMinerClicked;
+                    button.Click += ExistingConfigClicked;
                 }
             }
 
@@ -126,31 +124,30 @@ namespace MiningApp.UI
                 element.Margin = new Thickness((nextLeft + leftPadding), nextTop + topPadding, 0, 0);
 
                 ViewGrid.Children.Add(element);
-                ActiveElements.Add(element);
 
                 nextTop = element.Margin.Top + element.Height + padding;
             }
 
-            private void ExistingMinerClicked(object sender, EventArgs e)
+            private void ExistingConfigClicked(object sender, EventArgs e)
             {
                 var button = (Button)sender;
 
-                var miner = _miners.Find(x => x.ID == _buttonDictionary[button]);
+                var config = _configs.Find(x => x.ID == _buttonDictionary[button]);
 
-                Instance.DisplaySecondary(miner);
+                Instance.DisplaySecondary(config);
             }
 
-            public void ShowNewMiner(MinerConfigModel miner)
+            public void ShowNewMiner(ConfigModel config)
             {
-                var button = ElementHelper.CreateButton(miner.Name);
-                _minerButtons.Add(button);
-                _buttonDictionary.Add(button, miner.ID);
+                var button = ElementHelper.CreateButton(config.Name);
+                _configButtons.Add(button);
+                _buttonDictionary.Add(button, config.ID);
 
                 DisplayElement(button);
 
-                button.Click += ExistingMinerClicked;
+                button.Click += ExistingConfigClicked;
 
-                _miners.Add(miner);
+                _configs.Add(config);
             }
 
             private void NewButton_Clicked()
@@ -161,45 +158,30 @@ namespace MiningApp.UI
 
         public class SecondaryVM
         {
-            MinerSetupVM View { get; set; } = Instance;
+            ConfigSetupVM View { get; set; } = Instance;
 
             Grid ViewGrid { get; set; } = Instance.SecondaryGrid;
 
             List<FrameworkElement> ActiveElements { get; set; } = new List<FrameworkElement>();
 
 
-            TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("New Miner", fontSize: 40, width: 400);
+            TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("New Config", fontSize: 40, width: 400);
 
             TextBlock StatusTextBlock { get; set; } = ElementHelper.CreateTextBlock("Status", fontSize: 22, width: 725, height: 400);
 
             TextBox NameTextBox { get; set; } = ElementHelper.CreateTextBox("Name");
 
-            TextBox PathTextBox { get; set; } = ElementHelper.CreateTextBox("Path", width: 350);
+            TextBox CryptoTextBox { get; set; } = ElementHelper.CreateTextBox("Path", width: 350);
+
+            ComboBox MinerComboBox { get; set; } = ElementHelper.CreateComboBox("Miners");
+
+            ComboBox PoolsComboBox { get; set; } = ElementHelper.CreateComboBox("Pools", isEditable: true);
+
+            ComboBox WalletsComboBox { get; set; } = ElementHelper.CreateComboBox("Wallets");
+
+            ComboBox CryptosComboBox { get; set; } = ElementHelper.CreateComboBox("Cryptos");
 
 
-            ComboBox PoolsComboBox { get; set; } = ElementHelper.CreateComboBox("Pools", width: 350, isEditable: true);
-
-            ComboBox CryptosComboBox { get; set; } = ElementHelper.CreateComboBox("Cryptos", width: 350);
-
-
-            ListBox PoolsListBox { get; set; } = ElementHelper.CreateListBox("Pools", fontSize: 14);
-
-            ListBox CryptosListBox { get; set; } = ElementHelper.CreateListBox("Cryptos", fontSize: 14);
-
-
-            Button PoolsAddButton { get; set; } = ElementHelper.CreateButton("+", name: "PoolsAdd", fontSize: 14, style: ButtonStyle.New, 
-                width: 40, height: ElementValues.TextBoxs.Height);
-
-            Button PoolsRemoveButton { get; set; } = ElementHelper.CreateButton("-", name: "PoolsAdd", fontSize: 14, style: ButtonStyle.Delete,
-                width: 40, height: ElementValues.TextBoxs.Height);
-
-            Button CryptosAddButton { get; set; } = ElementHelper.CreateButton("+", name: "CryptosAdd", fontSize: 14, style: ButtonStyle.New,
-                width: 40, height: ElementValues.TextBoxs.Height);
-
-            Button CryptosRemoveButton { get; set; } = ElementHelper.CreateButton("-", name: "CryptosRemove", fontSize: 14, style: ButtonStyle.Delete,
-                width: 40, height: ElementValues.TextBoxs.Height);
-
-            Button BrowseButton { get; set; } = ElementHelper.CreateButton("Browse", width: 85, fontSize: 14, height: ElementValues.TextBoxs.Height);
 
             Button DeleteButton { get; set; } = ElementHelper.CreateButton("Delete", height: buttonHeight,
                 width: buttonWidth, style: ButtonStyle.Delete);
@@ -211,9 +193,11 @@ namespace MiningApp.UI
 
             Label NameLabel { get; set; }
 
-            Label PathLabel { get; set; }
+            Label MinerLabel { get; set; }
 
             Label PoolsLabel { get; set; }
+
+            Label WalletsLabel { get; set; }
 
             Label CryptosLabel { get; set; }
 
@@ -232,17 +216,21 @@ namespace MiningApp.UI
 
             private double labelOffset = -5;
 
-            private List<string> ViewingCryptos { get; set; } = CryptoHelper.Instance.GetCryptoNames();
+            private List<MinerConfigModel> ViewingMiners { get; set; }
 
-            private List<PoolConfigModel> ViewingPools { get; set; } = DataHelper.Instance.GetPoolConfigs();
+            private List<PoolConfigModel> ViewingPools { get; set; }
+
+            private List<WalletConfigModel> ViewingWallets { get; set; }
+
+            private List<string> ViewingCryptos { get; set; }
 
 
-            private MinerConfigModel _miner { get; set; }
+            private ConfigModel _config { get; set; }
 
 
-            public SecondaryVM(MinerConfigModel miner = null)
+            public SecondaryVM(ConfigModel config = null)
             {
-                _miner = miner;
+                _config = config;
 
                 Show();
             }
@@ -259,21 +247,21 @@ namespace MiningApp.UI
                 nextTop = 250;
                 DisplayElement(NameTextBox);
 
-                DisplayElement(PathTextBox);
+                DisplayElement(CryptoTextBox);
 
                 DisplayElement(PoolsComboBox, topPadding: padding);
                 PoolsComboBox.ItemsSource = ViewingPools;
-            
+
                 DisplayElement(PoolsListBox);
 
-                DisplayElement(CryptosComboBox, topPadding: padding);
-                CryptosComboBox.ItemsSource = ViewingCryptos;
+                DisplayElement(WalletsComboBox, topPadding: padding);
+                WalletsComboBox.ItemsSource = ViewingCryptos;
 
                 DisplayElement(CryptosListBox);
 
 
-                nextLeft = PathTextBox.Margin.Left + PathTextBox.Width + padding;
-                nextTop = PathTextBox.Margin.Top;
+                nextLeft = CryptoTextBox.Margin.Left + CryptoTextBox.Width + padding;
+                nextTop = CryptoTextBox.Margin.Top;
                 DisplayElement(BrowseButton);
 
                 nextLeft = PoolsComboBox.Margin.Left + PoolsComboBox.Width + padding;
@@ -284,12 +272,12 @@ namespace MiningApp.UI
                 nextTop = PoolsComboBox.Margin.Top;
                 DisplayElement(PoolsRemoveButton);
 
-                nextLeft = CryptosComboBox.Margin.Left + CryptosComboBox.Width + padding;
-                nextTop = CryptosComboBox.Margin.Top;
+                nextLeft = WalletsComboBox.Margin.Left + WalletsComboBox.Width + padding;
+                nextTop = WalletsComboBox.Margin.Top;
                 DisplayElement(CryptosAddButton);
 
                 nextLeft = CryptosAddButton.Margin.Left + CryptosAddButton.Width + 5;
-                nextTop = CryptosComboBox.Margin.Top;
+                nextTop = WalletsComboBox.Margin.Top;
                 DisplayElement(CryptosRemoveButton);
 
                 nextTop = NameTextBox.Margin.Top;
@@ -297,8 +285,8 @@ namespace MiningApp.UI
                 NameLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
                 DisplayElement(NameLabel, ignoreMargin: true);
 
-                nextTop = PathTextBox.Margin.Top;
-                PathLabel = ElementHelper.CreateLabel("Path", PathTextBox);
+                nextTop = CryptoTextBox.Margin.Top;
+                PathLabel = ElementHelper.CreateLabel("Path", CryptoTextBox);
                 PathLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
                 DisplayElement(PathLabel, ignoreMargin: true);
 
@@ -307,8 +295,8 @@ namespace MiningApp.UI
                 PoolsLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
                 DisplayElement(PoolsLabel, ignoreMargin: true);
 
-                nextTop = CryptosComboBox.Margin.Top;
-                CryptosLabel = ElementHelper.CreateLabel("Cryptos", CryptosComboBox);
+                nextTop = WalletsComboBox.Margin.Top;
+                CryptosLabel = ElementHelper.CreateLabel("Cryptos", WalletsComboBox);
                 CryptosLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
                 DisplayElement(CryptosLabel, ignoreMargin: true);
 
@@ -320,26 +308,22 @@ namespace MiningApp.UI
                 nextTop = DeleteButton.Margin.Top;
                 DisplayElement(FinishButton);
 
-                PoolsAddButton.Click += (s, e) => PoolsAddButton_Clicked();
-                PoolsRemoveButton.Click += (s, e) => PoolsRemoveButton_Clicked();
-                CryptosAddButton.Click += (s, e) => CryptosAddButton_Clicked();
-                CryptosRemoveButton.Click += (s, e) => CryptosRemoveButton_Clicked();
                 DeleteButton.Click += (s, e) => DeleteButton_Clicked();
                 FinishButton.Click += (s, e) => FinishButton_Clicked();
 
-                if (_miner == null)
+                if (_config == null)
                 {
-                    _miner = new MinerConfigModel();
+                    _config = new ConfigModel();
                 }
                 else
                 {
-                    TitleTextBlock.Text = "Edit Miner";
+                    TitleTextBlock.Text = "Edit Config";
 
-                    NameTextBox.Text = _miner.Name;
-                    PathTextBox.Text = _miner.Path;
+                    NameTextBox.Text = _config.Name;
+                    CryptoTextBox.Text = _config.CryptoName;
 
-                    PoolsListBox.ItemsSource = _miner.Pools;
-                    CryptosListBox.ItemsSource = _miner.Cryptos;
+                    //PoolsListBox.ItemsSource = _config.Pools;
+                    //CryptosListBox.ItemsSource = _config.Cryptos;
                 }
             }
 
@@ -372,58 +356,6 @@ namespace MiningApp.UI
                 */
             }
 
-            void PoolsAddButton_Clicked()
-            {
-                string value = PoolsComboBox.Text;
-
-                if (!String.IsNullOrEmpty(value) && !PoolsListBox.Items.Contains(value))
-                {
-                    PoolsListBox.Items.Add(value);
-                    PoolsComboBox.Text = "";
-                }
-            }
-
-            void PoolsRemoveButton_Clicked()
-            {
-                try
-                {
-                    string value = (string)PoolsListBox.SelectedItem;
-
-                    PoolsListBox.Items.Remove(PoolsListBox.SelectedItem);
-                    PoolsComboBox.Text = value;
-                }
-                catch
-                {
-
-                }
-            }
-
-            void CryptosAddButton_Clicked()
-            {
-                string value = CryptosComboBox.Text;
-
-                if (!String.IsNullOrEmpty(value) && !CryptosListBox.Items.Contains(value))
-                {
-                    CryptosListBox.Items.Add(value);
-                    CryptosComboBox.Text = "";
-                }
-            }
-
-            void CryptosRemoveButton_Clicked()
-            {
-                try
-                {
-                    string value = (string)CryptosListBox.SelectedItem;
-
-                    CryptosListBox.Items.Remove(CryptosListBox.SelectedItem);
-                    CryptosComboBox.Text = value;
-                }
-                catch
-                {
-
-                }
-            }
-
             private void DeleteButton_Clicked()
             {
                 Delete();
@@ -431,14 +363,14 @@ namespace MiningApp.UI
 
             private void FinishButton_Clicked()
             {
-                SetMinerInfo();
+                SetConfigInfo();
 
                 Save();
             }
 
             private void Delete()
             {
-                DataHelper.Instance.DeleteMinerConfig(_miner);
+                DataHelper.Instance.DeleteConfig(_config);
 
                 View.DisplayPrimary();
                 View.DisplaySecondary();
@@ -446,26 +378,18 @@ namespace MiningApp.UI
 
             private void Save()
             {
-                DataHelper.Instance.SaveMiner(_miner);
+                DataHelper.Instance.SaveConfig(_config);
 
-                StatusTextBlock.Text = "Miner config saved successfully!";
-                TitleTextBlock.Text = "Edit Miner";
+                StatusTextBlock.Text = "Config saved successfully!";
+                TitleTextBlock.Text = "Edit Config";
 
                 View.DisplayPrimary();
             }
 
-            public void SetMinerInfo()
-            {               
-                _miner.CreatedTimestamp = _miner.ID > 0 ? _miner.CreatedTimestamp : DateTime.Now;
-                _miner.Name = NameTextBox.Text;
-                _miner.Path = PathTextBox.Text;
-                _miner.Pools = PoolsListBox.Items.Cast<string>().ToList();
-                _miner.Cryptos = CryptosListBox.Items.Cast<string>().ToList();
-                _miner.Status = MinerStatus.Inactive;                
-            }
-
-            private void DisplayCryptos()
+            public void SetConfigInfo()
             {
+                _config.CreatedTimestamp = _config.ID > 0 ? _config.CreatedTimestamp : DateTime.Now;
+                _config.Name = NameTextBox.Text;
 
             }
         }

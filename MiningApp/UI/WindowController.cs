@@ -37,6 +37,8 @@ namespace MiningApp.UI
 
         public MinerSetupVM MinerSetupView { get; set; } = null;
 
+        public ConfigSetupVM ConfigSetupView { get; set; } = null;
+
         public MainWindow Window => MainWindow.Instance;
 
 
@@ -99,6 +101,10 @@ namespace MiningApp.UI
                 case ViewModelType.ConfigsHome:
                     ConfigsHomeView?.Dispose();
                     ConfigsHomeView = new ConfigsHomeVM();
+                    break;
+                case ViewModelType.ConfigSetup:
+                    ConfigSetupView?.Dispose();
+                    ConfigSetupView = new ConfigSetupVM();
                     break;
                 case ViewModelType.MinersHome:
                     MinersHomeView?.Dispose();
@@ -187,6 +193,11 @@ namespace MiningApp.UI
         public void ShowPoolSetup()
         {
             DisplayViewModel(ViewModelType.PoolSetup, DisplayGrid.Secondary);
+        }
+
+        public void ShowConfigSetup()
+        {
+            DisplayViewModel(ViewModelType.ConfigSetup, DisplayGrid.Secondary);
         }
 
         //TESTING METHOD FOR TEST BUTTON

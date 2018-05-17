@@ -144,7 +144,7 @@ namespace MiningApp
             _miningConfigWindow = new MiningRuleWindow();
         }
 
-        public void ShowEditMiner(MiningRuleModel miner)
+        public void ShowEditMiner(ConfigModel miner)
         {
             MiningConfigView?.Dispose();
 
@@ -166,27 +166,27 @@ namespace MiningApp
             return path;
         }
 
-        public void InsertMiner(MiningRuleModel miner)
+        public void InsertMiner(ConfigModel miner)
         {
-            _dataHelper.InsertMiningRule(miner);
+            _dataHelper.SaveConfig(miner);
         }
 
-        public Task<List<MiningRuleModel>> GetMiners()
+        public Task<List<ConfigModel>> GetMiners()
         {
-            return _dataHelper.GetAllMiningRules();
+            return _dataHelper.GetAllConfigs();
         }
 
-        public void DeleteMiner(MiningRuleModel miner)
+        public void DeleteMiner(ConfigModel miner)
         {
             _dataHelper.DeleteMiningRule(miner.ID);
         }
 
-        public void UpdateMiner(MiningRuleModel miner)
+        public void UpdateMiner(ConfigModel miner)
         {
             _dataHelper.UpdateMiningRule(miner);
         }
 
-        public void LaunchMiner(MiningRuleModel miner)
+        public void LaunchMiner(ConfigModel miner)
         {
             _procHelper.StartMiner(miner);
         }

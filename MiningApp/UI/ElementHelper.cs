@@ -256,11 +256,12 @@ namespace MiningApp.UI
         MinersHome,
         WalletsHome,
         PoolsHome,
-        PoolSetup,
         LogsHome,
         SettingsHome,
         WalletSetup,
-        MinerSetup
+        MinerSetup,
+        PoolSetup,
+        ConfigSetup,
     }
 
     public class ElementValues
