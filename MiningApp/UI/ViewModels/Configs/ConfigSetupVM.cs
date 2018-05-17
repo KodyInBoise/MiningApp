@@ -171,9 +171,7 @@ namespace MiningApp.UI
 
             TextBox NameTextBox { get; set; } = ElementHelper.CreateTextBox("Name");
 
-            TextBox CryptoTextBox { get; set; } = ElementHelper.CreateTextBox("Path", width: 350);
-
-            ComboBox MinerComboBox { get; set; } = ElementHelper.CreateComboBox("Miners");
+            ComboBox MinersComboBox { get; set; } = ElementHelper.CreateComboBox("Miners", width: ElementValues.TextBoxs.Width);
 
             ComboBox PoolsComboBox { get; set; } = ElementHelper.CreateComboBox("Pools", isEditable: true);
 
@@ -193,7 +191,7 @@ namespace MiningApp.UI
 
             Label NameLabel { get; set; }
 
-            Label MinerLabel { get; set; }
+            Label MinersLabel { get; set; }
 
             Label PoolsLabel { get; set; }
 
@@ -247,56 +245,33 @@ namespace MiningApp.UI
                 nextTop = 250;
                 DisplayElement(NameTextBox);
 
-                DisplayElement(CryptoTextBox);
+                DisplayElement(MinersComboBox, topPadding: padding * 2);
+                MinersComboBox.ItemsSource = ViewingMiners;
 
-                DisplayElement(PoolsComboBox, topPadding: padding);
+                DisplayElement(PoolsComboBox);
                 PoolsComboBox.ItemsSource = ViewingPools;
 
-                DisplayElement(PoolsListBox);
-
-                DisplayElement(WalletsComboBox, topPadding: padding);
+                DisplayElement(WalletsComboBox);
                 WalletsComboBox.ItemsSource = ViewingCryptos;
 
-                DisplayElement(CryptosListBox);
-
-
-                nextLeft = CryptoTextBox.Margin.Left + CryptoTextBox.Width + padding;
-                nextTop = CryptoTextBox.Margin.Top;
-                DisplayElement(BrowseButton);
-
-                nextLeft = PoolsComboBox.Margin.Left + PoolsComboBox.Width + padding;
-                nextTop = PoolsComboBox.Margin.Top;
-                DisplayElement(PoolsAddButton);
-
-                nextLeft = PoolsAddButton.Margin.Left + PoolsAddButton.Width + 5;
-                nextTop = PoolsComboBox.Margin.Top;
-                DisplayElement(PoolsRemoveButton);
-
-                nextLeft = WalletsComboBox.Margin.Left + WalletsComboBox.Width + padding;
-                nextTop = WalletsComboBox.Margin.Top;
-                DisplayElement(CryptosAddButton);
-
-                nextLeft = CryptosAddButton.Margin.Left + CryptosAddButton.Width + 5;
-                nextTop = WalletsComboBox.Margin.Top;
-                DisplayElement(CryptosRemoveButton);
 
                 nextTop = NameTextBox.Margin.Top;
                 NameLabel = ElementHelper.CreateLabel("Name", NameTextBox);
                 NameLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
                 DisplayElement(NameLabel, ignoreMargin: true);
 
-                nextTop = CryptoTextBox.Margin.Top;
-                PathLabel = ElementHelper.CreateLabel("Path", CryptoTextBox);
-                PathLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
-                DisplayElement(PathLabel, ignoreMargin: true);
+                nextTop = MinersComboBox.Margin.Top;
+                MinersLabel = ElementHelper.CreateLabel("Miner", MinersComboBox);
+                MinersLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
+                DisplayElement(MinersLabel, ignoreMargin: true);
 
                 nextTop = PoolsComboBox.Margin.Top;
-                PoolsLabel = ElementHelper.CreateLabel("Pools", PoolsComboBox);
+                PoolsLabel = ElementHelper.CreateLabel("Pool", PoolsComboBox);
                 PoolsLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
                 DisplayElement(PoolsLabel, ignoreMargin: true);
 
                 nextTop = WalletsComboBox.Margin.Top;
-                CryptosLabel = ElementHelper.CreateLabel("Cryptos", WalletsComboBox);
+                CryptosLabel = ElementHelper.CreateLabel("Wallet", WalletsComboBox);
                 CryptosLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
                 DisplayElement(CryptosLabel, ignoreMargin: true);
 
@@ -308,6 +283,7 @@ namespace MiningApp.UI
                 nextTop = DeleteButton.Margin.Top;
                 DisplayElement(FinishButton);
 
+                MinersComboBox.DropDownClosed += (s, e) => MinersComboBox_Closed();
                 DeleteButton.Click += (s, e) => DeleteButton_Clicked();
                 FinishButton.Click += (s, e) => FinishButton_Clicked();
 
@@ -320,11 +296,9 @@ namespace MiningApp.UI
                     TitleTextBlock.Text = "Edit Config";
 
                     NameTextBox.Text = _config.Name;
-                    CryptoTextBox.Text = _config.CryptoName;
-
-                    //PoolsListBox.ItemsSource = _config.Pools;
-                    //CryptosListBox.ItemsSource = _config.Cryptos;
                 }
+
+                LoadItems();
             }
 
             private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0, bool ignoreMargin = false)
@@ -338,6 +312,25 @@ namespace MiningApp.UI
                 ActiveElements.Add(element);
 
                 nextTop = element.Margin.Top + element.Height + padding;
+            }
+
+            private async void LoadItems()
+            {
+                ViewingMiners = await DataHelper.Instance.GetMiners();
+                ViewingMiners.ForEach(x => MinersComboBox.Items.Add(x));
+                MinersComboBox.SelectedItem = ViewingMiners.Find(x => x.ID == _config.Miner?.ID);
+
+                ViewingPools = _config.Miner?.Pools ?? new List<PoolConfigModel>();
+                ViewingPools.ForEach(x => PoolsComboBox.Items.Add(x));
+                PoolsComboBox.SelectedItem = ViewingPools.Find(x => x.ID == _config.Pool?.ID);
+
+                ViewingWallets = await DataHelper.Instance.GetWallets();
+                ViewingWallets.ForEach(x => WalletsComboBox.Items.Add(x));
+                WalletsComboBox.SelectedItem = ViewingWallets.Find(x => x.ID == _config.Wallet?.ID);
+
+                var index = ViewingMiners.IndexOf(_config.Miner);
+                PoolsComboBox.SelectedItem = _config.Pool;
+                WalletsComboBox.SelectedItem = _config.Wallet;
             }
 
             private void RadioButton_Toggled()
@@ -390,7 +383,20 @@ namespace MiningApp.UI
             {
                 _config.CreatedTimestamp = _config.ID > 0 ? _config.CreatedTimestamp : DateTime.Now;
                 _config.Name = NameTextBox.Text;
+                _config.Miner = (MinerConfigModel)MinersComboBox.SelectedItem;
+                _config.Pool = (PoolConfigModel)PoolsComboBox.SelectedItem;
+                _config.Wallet = (WalletConfigModel)WalletsComboBox.SelectedItem;
+            }
 
+            private void MinersComboBox_Closed()
+            {
+                PoolsComboBox.Items.Clear();
+
+                var miner = (MinerConfigModel)MinersComboBox.SelectedItem;
+
+                ViewingPools = miner?.Pools ?? new List<PoolConfigModel>();
+                ViewingPools.ForEach(x => PoolsComboBox.Items.Add(x));
+                PoolsComboBox.SelectedItem = ViewingPools.Find(x => x.ID == _config.Pool?.ID);
             }
         }
     }

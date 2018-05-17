@@ -37,6 +37,12 @@ namespace MiningApp
 
         }
 
+        public PoolConfigModel(string name)
+        {
+            CreatedTimestamp = DateTime.Now;
+            Name = name;
+        }
+
         public override string ToString()
         {
             return Name;

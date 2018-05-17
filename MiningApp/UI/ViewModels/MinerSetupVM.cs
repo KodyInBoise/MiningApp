@@ -234,7 +234,7 @@ namespace MiningApp.UI
 
             private List<string> ViewingCryptos { get; set; } = CryptoHelper.Instance.GetCryptoNames();
 
-            private List<PoolConfigModel> ViewingPools { get; set; } = DataHelper.Instance.GetPoolConfigs();
+            private List<PoolConfigModel> ViewingPools { get; set; } = DataHelper.Instance.GetPools().Result;
 
 
             private MinerConfigModel _miner { get; set; }
@@ -374,11 +374,16 @@ namespace MiningApp.UI
 
             void PoolsAddButton_Clicked()
             {
-                string value = PoolsComboBox.Text;
+                var pool = (PoolConfigModel)PoolsComboBox.SelectedItem ?? new PoolConfigModel(PoolsComboBox.Text);
 
-                if (!String.IsNullOrEmpty(value) && !PoolsListBox.Items.Contains(value))
+                if (!String.IsNullOrEmpty(PoolsComboBox.Text) && !PoolsListBox.Items.Contains(pool))
                 {
-                    PoolsListBox.Items.Add(value);
+                    if (!ViewingPools.Contains(pool))
+                    {
+                        ViewingPools.Add(pool);
+                        PoolsComboBox.Items.Refresh();
+                    }
+                    PoolsListBox.Items.Add(pool);
                     PoolsComboBox.Text = "";
                 }
             }
@@ -387,10 +392,10 @@ namespace MiningApp.UI
             {
                 try
                 {
-                    string value = (string)PoolsListBox.SelectedItem;
+                    var pool = (PoolConfigModel)PoolsListBox.SelectedItem;
 
                     PoolsListBox.Items.Remove(PoolsListBox.SelectedItem);
-                    PoolsComboBox.Text = value;
+                    PoolsComboBox.SelectedItem = pool;
                 }
                 catch
                 {
@@ -459,7 +464,7 @@ namespace MiningApp.UI
                 _miner.CreatedTimestamp = _miner.ID > 0 ? _miner.CreatedTimestamp : DateTime.Now;
                 _miner.Name = NameTextBox.Text;
                 _miner.Path = PathTextBox.Text;
-                _miner.Pools = PoolsListBox.Items.Cast<string>().ToList();
+                _miner.Pools = PoolsListBox.Items.Cast<PoolConfigModel>().ToList();
                 _miner.Cryptos = CryptosListBox.Items.Cast<string>().ToList();
                 _miner.Status = MinerStatus.Inactive;                
             }

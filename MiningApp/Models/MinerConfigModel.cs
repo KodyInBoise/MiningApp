@@ -24,7 +24,7 @@ namespace MiningApp
 
         public List<string> Tags { get; set; } = new List<string>();
 
-        public List<string> Pools { get; set; } = new List<string>();
+        public List<PoolConfigModel> Pools { get; set; } = new List<PoolConfigModel>();
 
         public string Path { get; set; }
 
@@ -43,7 +43,12 @@ namespace MiningApp
         public MinerConfigModel()
         {
 
-        }   
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
 
         private string GetLocalDirectory()
         {

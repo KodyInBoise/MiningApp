@@ -105,7 +105,7 @@ namespace MiningApp.UI
 
             private void DisplayExisting()
             {
-                _wallets = DataHelper.Instance.GetWalletConfigs();
+                _wallets = DataHelper.Instance.GetWallets().Result;
 
                 nextTop = NewButton.Margin.Top + NewButton.Height + padding * 2;
 

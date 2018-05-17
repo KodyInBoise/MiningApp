@@ -192,7 +192,7 @@ namespace MiningApp
             }
         }
 
-        public List<WalletConfigModel> GetWalletConfigs()
+        public async Task<List<WalletConfigModel>> GetWallets()
         {
             using (_database)
             {
@@ -231,7 +231,7 @@ namespace MiningApp
             }
         }
 
-        public List<PoolConfigModel> GetPoolConfigs()
+        public async Task<List<PoolConfigModel>> GetPools()
         {
             using (_database)
             {

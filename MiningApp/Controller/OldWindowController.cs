@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MiningApp.Windows;
 using MiningApp.LoggingUtil;
 
 namespace MiningApp
 {
     class OldWindowController
     {
-
+        /*
         public static OldWindowController Instance;
 
         public static UserModel User;
@@ -261,5 +260,6 @@ namespace MiningApp
 
             LogHelper.AddEntry(ex);
         }
+        */
     }
 }
