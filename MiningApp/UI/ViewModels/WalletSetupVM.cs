@@ -161,7 +161,7 @@ namespace MiningApp.UI
 
             TextBox NameTextBox { get; set; } = ElementHelper.CreateTextBox("Name");
 
-            ComboBox CryptoComboBox { get; set; } = ElementHelper.CreateComboBox("Crypto", text: "Select a crypto...", fontSize: 16);
+            ComboBox CryptosComboBox { get; set; } = ElementHelper.CreateComboBox("Crypto", text: "Select a crypto...", fontSize: 16);
 
             TextBox AddressTextBox { get; set; } = ElementHelper.CreateTextBox("Address");
 
@@ -227,13 +227,13 @@ namespace MiningApp.UI
                 nextTop = 250;
                 DisplayElement(NameTextBox);
 
-                DisplayElement(CryptoComboBox);
-                CryptoComboBox.ItemsSource = ViewingCryptos;
+                DisplayElement(CryptosComboBox);
+                CryptosComboBox.ItemsSource = ViewingCryptos;
 
                 DisplayElement(UserCryptosRadioButton, leftPadding: padding * 4);
                 UserCryptosRadioButton.IsChecked = true;
 
-                nextTop = CryptoComboBox.Margin.Top + CryptoComboBox.Height + padding;
+                nextTop = CryptosComboBox.Margin.Top + CryptosComboBox.Height + padding;
                 DisplayElement(AllCryptosRadioButton, leftPadding: padding * 14);
 
                 DisplayElement(AddressTextBox, topPadding: padding * 2);
@@ -246,8 +246,8 @@ namespace MiningApp.UI
                 NameLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
                 DisplayElement(NameLabel, ignoreMargin: true);
 
-                nextTop = CryptoComboBox.Margin.Top;
-                CryptoLabel = ElementHelper.CreateLabel("Crypto", CryptoComboBox);
+                nextTop = CryptosComboBox.Margin.Top;
+                CryptoLabel = ElementHelper.CreateLabel("Crypto", CryptosComboBox);
                 CryptoLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
                 DisplayElement(CryptoLabel, ignoreMargin: true);
 
@@ -287,7 +287,7 @@ namespace MiningApp.UI
                     AddressTextBox.Text = _wallet.Address;
 
                     ViewingCryptos.Insert(0, _wallet.Crypto);
-                    CryptoComboBox.SelectedIndex = 0;
+                    CryptosComboBox.SelectedIndex = 0;
                 }
             }
 
@@ -315,7 +315,7 @@ namespace MiningApp.UI
                     ViewingCryptos = CryptoHelper.Instance.GetCryptoNames();
                 }
 
-                CryptoComboBox.ItemsSource = ViewingCryptos;
+                CryptosComboBox.ItemsSource = ViewingCryptos;
             }
 
             private void DeleteButton_Clicked()
@@ -352,7 +352,7 @@ namespace MiningApp.UI
             {
                 _wallet.CreatedTimestamp = _wallet.ID > 0 ? _wallet.CreatedTimestamp : DateTime.Now;
                 _wallet.Name = NameTextBox.Text;
-                _wallet.Crypto = CryptoComboBox.Text;
+                _wallet.Crypto = CryptosComboBox.Text;
                 _wallet.Address = AddressTextBox.Text;
                 _wallet.Status = WalletStatus.Active;
             }

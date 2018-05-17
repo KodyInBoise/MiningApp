@@ -232,8 +232,7 @@ namespace MiningApp.UI
 
             private double labelOffset = -5;
 
-            private List<string> ViewingCryptos { get; set; } = WindowController.User.WatchingCryptos;
-
+            private List<string> ViewingCryptos { get; set; } = CryptoHelper.Instance.GetCryptoNames();
 
             private MinerConfigModel _miner { get; set; }
 
@@ -264,6 +263,7 @@ namespace MiningApp.UI
                 DisplayElement(PoolsListBox);
 
                 DisplayElement(CryptosComboBox, topPadding: padding);
+                CryptosComboBox.ItemsSource = ViewingCryptos;
 
                 DisplayElement(CryptosListBox);
 
@@ -316,6 +316,10 @@ namespace MiningApp.UI
                 nextTop = DeleteButton.Margin.Top;
                 DisplayElement(FinishButton);
 
+                PoolsAddButton.Click += (s, e) => PoolsAddButton_Clicked();
+                PoolsRemoveButton.Click += (s, e) => PoolsRemoveButton_Clicked();
+                CryptosAddButton.Click += (s, e) => CryptosAddButton_Clicked();
+                CryptosRemoveButton.Click += (s, e) => CryptosRemoveButton_Clicked();
                 DeleteButton.Click += (s, e) => DeleteButton_Clicked();
                 FinishButton.Click += (s, e) => FinishButton_Clicked();
 
@@ -350,7 +354,70 @@ namespace MiningApp.UI
 
             private void RadioButton_Toggled()
             {
+                /*
+                if (UserCryptosRadioButton.IsChecked == true)
+                {
+                    ViewingCryptos = WindowController.User.WatchingCryptos;
+                }
+                else
+                {
+                    ViewingCryptos = CryptoHelper.Instance.GetCryptoNames();
+                }
 
+                CryptoComboBox.ItemsSource = ViewingCryptos;
+                */
+            }
+
+            void PoolsAddButton_Clicked()
+            {
+                string value = PoolsComboBox.Text;
+
+                if (!String.IsNullOrEmpty(value) && !PoolsListBox.Items.Contains(value))
+                {
+                    PoolsListBox.Items.Add(value);
+                    PoolsComboBox.Text = "";
+                }
+            }
+
+            void PoolsRemoveButton_Clicked()
+            {
+                try
+                {
+                    string value = (string)PoolsListBox.SelectedItem;
+
+                    PoolsListBox.Items.Remove(PoolsListBox.SelectedItem);
+                    PoolsComboBox.Text = value;
+                }
+                catch
+                {
+
+                }
+            }
+
+            void CryptosAddButton_Clicked()
+            {
+                string value = CryptosComboBox.Text;
+
+                if (!String.IsNullOrEmpty(value) && !CryptosListBox.Items.Contains(value))
+                {
+                    CryptosListBox.Items.Add(value);
+                    CryptosComboBox.Text = "";
+                }
+            }
+
+            void CryptosRemoveButton_Clicked()
+            {
+                try
+                {
+                    string value = (string)CryptosListBox.SelectedItem;
+
+                    CryptosListBox.Items.Remove(CryptosListBox.SelectedItem);
+                    CryptosComboBox.Text = value;
+                }
+                catch
+                {
+
+                }
             }
 
             private void DeleteButton_Clicked()
@@ -391,6 +458,11 @@ namespace MiningApp.UI
                 _miner.Pools = PoolsListBox.Items.Cast<string>().ToList();
                 _miner.Cryptos = CryptosListBox.Items.Cast<string>().ToList();
                 _miner.Status = MinerStatus.Inactive;                
+            }
+
+            private void DisplayCryptos()
+            {
+
             }
         }
     }
