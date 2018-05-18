@@ -15,6 +15,9 @@ namespace MiningApp.UI
 
         public static UserModel User { get; set; }
 
+        public static List<MiningSessionModel> MiningSessions { get; set; }
+
+
         public NavBarVM NavView { get; set; } = null;
 
         public HomeVM HomeView { get; set; } = null;
@@ -51,6 +54,7 @@ namespace MiningApp.UI
         {
             Instance = this;
             User = new UserModel();
+            MiningSessions = new List<MiningSessionModel>();
 
             NavView = new NavBarVM();
 

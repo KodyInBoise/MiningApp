@@ -239,6 +239,8 @@ namespace MiningApp.UI
 
             private MinerConfigModel _miner { get; set; }
 
+            private string _minerPath { get; set; }
+
 
             public SecondaryVM(MinerConfigModel miner = null)
             {
@@ -337,7 +339,7 @@ namespace MiningApp.UI
                     TitleTextBlock.Text = "Edit Miner";
 
                     NameTextBox.Text = _miner.Name;
-                    PathTextBox.Text = _miner.Path;
+                    PathTextBox.Text = ElementHelper.TrimPath(_miner.Path);
 
                     _miner.Pools.ForEach(x => PoolsListBox.Items.Add(x));
                     _miner.Cryptos.ForEach(x => CryptosListBox.Items.Add(x));
@@ -375,8 +377,8 @@ namespace MiningApp.UI
 
             void BrowseButton_Clicked()
             {
-                _miner.Path = ElementHelper.GetFilePath(DataHelper.MinerDirectory);
-                PathTextBox.Text = ElementHelper.TrimPath(_miner.Path);
+                _minerPath = ElementHelper.GetFilePath(DataHelper.MinerDirectory);
+                PathTextBox.Text = ElementHelper.TrimPath(_minerPath);
             }
 
             void PoolsAddButton_Clicked()
@@ -470,7 +472,7 @@ namespace MiningApp.UI
             {               
                 _miner.CreatedTimestamp = _miner.ID > 0 ? _miner.CreatedTimestamp : DateTime.Now;
                 _miner.Name = NameTextBox.Text;
-                _miner.Path = PathTextBox.Text;
+                _miner.Path = _minerPath;
                 _miner.Pools = PoolsListBox.Items.Cast<PoolConfigModel>().ToList();
                 _miner.Cryptos = CryptosListBox.Items.Cast<string>().ToList();
                 _miner.Status = MinerStatus.Inactive;                

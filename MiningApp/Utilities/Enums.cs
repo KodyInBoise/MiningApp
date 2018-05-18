@@ -11,6 +11,11 @@ namespace MiningApp
         VTC,
     }
 
+    public enum SupportedMiners
+    {
+        CCMiner,
+    }
+
     public enum MiningAlgorithm
     {
 

@@ -36,5 +36,21 @@ namespace MiningApp
         public WalletConfigModel Wallet { get; set; }
 
         public PoolConfigModel Pool { get; set; }
+
+        public SupportedMiners MinerType { get; set; }
+
+
+        public async Task SaveMinerSettings()
+        {
+            switch (MinerType)
+            {
+                case SupportedMiners.CCMiner:
+                    await MinerSettings.CCMiner.SaveParams(Pool.Address, Wallet.Address);
+                    break;
+                default:
+                    await MinerSettings.CCMiner.SaveParams(Pool.Address, Wallet.Address);
+                    break;
+            }
+        }
     }
 }

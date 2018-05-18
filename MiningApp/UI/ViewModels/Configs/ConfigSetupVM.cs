@@ -184,6 +184,9 @@ namespace MiningApp.UI
             Button DeleteButton { get; set; } = ElementHelper.CreateButton("Delete", height: buttonHeight,
                 width: buttonWidth, style: ButtonStyle.Delete);
 
+            Button LaunchButton { get; set; } = ElementHelper.CreateButton("Launch", height: buttonHeight,
+                width: buttonWidth, style: ButtonStyle.Normal);
+
             Button FinishButton { get; set; } = ElementHelper.CreateButton("Finish", height: buttonHeight,
                 width: buttonWidth, style: ButtonStyle.Finish);
 
@@ -279,12 +282,17 @@ namespace MiningApp.UI
                 nextTop = ViewGrid.Height - DeleteButton.Height - padding;
                 DisplayElement(DeleteButton);
 
+                nextLeft = DeleteButton.Margin.Left + DeleteButton.Width + padding * 4;
+                nextTop = DeleteButton.Margin.Top;
+                DisplayElement(LaunchButton);
+
                 nextLeft = ElementValues.Grids.SecondaryNormal - FinishButton.Width - padding;
                 nextTop = DeleteButton.Margin.Top;
                 DisplayElement(FinishButton);
 
                 MinersComboBox.DropDownClosed += (s, e) => MinersComboBox_Closed();
                 DeleteButton.Click += (s, e) => DeleteButton_Clicked();
+                LaunchButton.Click += (s, e) => LaunchButton_Clicked();
                 FinishButton.Click += (s, e) => FinishButton_Clicked();
 
                 if (_config == null)
@@ -352,6 +360,16 @@ namespace MiningApp.UI
             private void DeleteButton_Clicked()
             {
                 Delete();
+            }
+
+            async void LaunchButton_Clicked()
+            {
+                var session = new MiningSessionModel(_config);
+                WindowController.MiningSessions.Add(session);
+
+                await _config.SaveMinerSettings();
+
+                session.Start();
             }
 
             private void FinishButton_Clicked()
