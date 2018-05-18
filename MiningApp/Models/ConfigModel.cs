@@ -1,4 +1,5 @@
 ﻿using LiteDB;
+using MiningApp.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -39,6 +40,9 @@ namespace MiningApp
 
         public MinerType MinerType { get; set; }
 
+        [BsonIgnore]
+        public MiningSessionModel Session { get; set; }
+
 
         public async Task SaveMinerSettings()
         {
@@ -51,6 +55,15 @@ namespace MiningApp
                     await MinerSettings.CCMiner.SaveParams(Pool.Address, Wallet.Address);
                     break;
             }
+        }
+
+        public void StartSession()
+        {
+            Session = new MiningSessionModel(this);
+
+            WindowController.MiningSessions.Add(Session);
+
+            Session.Start();
         }
     }
 }

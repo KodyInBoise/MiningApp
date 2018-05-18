@@ -113,7 +113,9 @@ namespace MiningApp.UI
         private async void LogsButton_Clicked()
         {
             //WindowController.Instance.ShowLogsHome();
-            await MinerSettings.CCMiner.SaveParams();
+            var a = WindowController.MiningSessions[0].Uptime;
+
+            var b = a;
         }
 
         private void SettingsButton_Clicked()

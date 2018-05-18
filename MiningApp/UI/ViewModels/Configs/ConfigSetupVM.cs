@@ -362,14 +362,9 @@ namespace MiningApp.UI
                 Delete();
             }
 
-            async void LaunchButton_Clicked()
+            void LaunchButton_Clicked()
             {
-                var session = new MiningSessionModel(_config);
-                WindowController.MiningSessions.Add(session);
-
-                await _config.SaveMinerSettings();
-
-                session.Start();
+                _config.StartSession();
             }
 
             private void FinishButton_Clicked()

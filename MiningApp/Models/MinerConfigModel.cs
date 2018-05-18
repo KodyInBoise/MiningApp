@@ -42,6 +42,9 @@ namespace MiningApp
         [BsonIgnore]
         public string CryptosString => GetCryptosString();
 
+        [BsonIgnore]
+        public string ProcessName => Path.Split('.')[0];
+
 
         public MinerConfigModel()
         {
