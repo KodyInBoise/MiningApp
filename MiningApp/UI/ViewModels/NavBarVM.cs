@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -108,9 +110,10 @@ namespace MiningApp.UI
             WindowController.Instance.ShowPoolsHome();
         }
 
-        private void LogsButton_Clicked()
+        private async void LogsButton_Clicked()
         {
-            WindowController.Instance.ShowLogsHome();
+            //WindowController.Instance.ShowLogsHome();
+            await MinerSettings.CCMiner.SaveParams();
         }
 
         private void SettingsButton_Clicked()

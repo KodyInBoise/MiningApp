@@ -320,6 +320,7 @@ namespace MiningApp.UI
                 nextTop = DeleteButton.Margin.Top;
                 DisplayElement(FinishButton);
 
+                BrowseButton.Click += (s, e) => BrowseButton_Clicked();
                 PoolsAddButton.Click += (s, e) => PoolsAddButton_Clicked();
                 PoolsRemoveButton.Click += (s, e) => PoolsRemoveButton_Clicked();
                 CryptosAddButton.Click += (s, e) => CryptosAddButton_Clicked();
@@ -338,8 +339,8 @@ namespace MiningApp.UI
                     NameTextBox.Text = _miner.Name;
                     PathTextBox.Text = _miner.Path;
 
-                    PoolsListBox.ItemsSource = _miner.Pools;
-                    CryptosListBox.ItemsSource = _miner.Cryptos;
+                    _miner.Pools.ForEach(x => PoolsListBox.Items.Add(x));
+                    _miner.Cryptos.ForEach(x => CryptosListBox.Items.Add(x));
                 }
             }
 
@@ -370,6 +371,12 @@ namespace MiningApp.UI
 
                 CryptoComboBox.ItemsSource = ViewingCryptos;
                 */
+            }
+
+            void BrowseButton_Clicked()
+            {
+                _miner.Path = ElementHelper.GetFilePath(DataHelper.MinerDirectory);
+                PathTextBox.Text = ElementHelper.TrimPath(_miner.Path);
             }
 
             void PoolsAddButton_Clicked()

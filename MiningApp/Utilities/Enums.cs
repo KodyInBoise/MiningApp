@@ -6,6 +6,16 @@ using System.Threading.Tasks;
 
 namespace MiningApp
 {
+    public enum SupportedCryptos
+    {
+        VTC,
+    }
+
+    public enum MiningAlgorithm
+    {
+
+    }
+
     public enum ButtonStyle
     {
         Normal,

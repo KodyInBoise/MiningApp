@@ -285,6 +285,7 @@ namespace MiningApp.UI
 
                     NameTextBox.Text = _wallet.Name;
                     AddressTextBox.Text = _wallet.Address;
+                    VerifyTextBox.Text = _wallet.Address;
 
                     ViewingCryptos.Insert(0, _wallet.Crypto);
                     CryptosComboBox.SelectedIndex = 0;

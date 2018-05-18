@@ -35,6 +35,11 @@ namespace MiningApp
 
         }
 
+        public WalletConfigModel(string address)
+        {
+            Address = address;
+        }
+
         public override string ToString()
         {
             return Name;

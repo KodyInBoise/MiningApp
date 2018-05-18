@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 using Xceed.Wpf.Toolkit;
 using System.Windows.Controls;
 using System.Windows;
+using System.IO;
 
-namespace MiningApp.UI
+namespace MiningApp
 {
     public class ElementHelper
     {
@@ -230,6 +231,30 @@ namespace MiningApp.UI
             catch
             {
                 return Brushes.White;
+            }
+        }
+
+        public static string GetFilePath(string dir = "")
+        {
+            try
+            {
+                var dialog = new System.Windows.Forms.OpenFileDialog();
+                dialog.InitialDirectory = !String.IsNullOrEmpty(dir) ? dir : Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+                var result = dialog.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    return dialog.FileName;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+            catch
+            {
+                return "";
             }
         }
     }
