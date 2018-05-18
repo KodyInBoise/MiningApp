@@ -61,6 +61,7 @@ namespace MiningApp.UI
             _cryptoHelper = new CryptoHelper();
             _dataHelper = new DataHelper();
 
+            MainWindow.Instance.Closing += (s, e) => Shutdown();
             //TESTING
             MainWindow.Instance.TestButton.Click += (s, e) => TestButton_Clicked();
         }
@@ -222,6 +223,18 @@ namespace MiningApp.UI
 
             testCounter++;
             
+        }
+
+        private void Shutdown()
+        {
+            Task.Run(CloseSessions);
+        }
+
+        private async Task CloseSessions()
+        {
+            var sessions = MiningSessions;
+
+            sessions.ForEach(x => x.Close());
         }
     }
 }

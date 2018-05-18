@@ -63,7 +63,7 @@ namespace MiningApp
 
             WindowController.MiningSessions.Add(Session);
 
-            Session.Start();
+            Task.Run(Session.Start);
         }
     }
 }

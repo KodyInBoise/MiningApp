@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MiningApp.UI;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -16,10 +17,14 @@ namespace MiningApp
 
         public DateTime StartTime { get; set; }
 
-        public TimeSpan Uptime => _sessionTimer.GetUptime();
+        public TimeSpan Uptime => GetUptime();
 
         
         TimerHelper _sessionTimer { get; set; }
+
+        string _output { get; set; } = "";
+
+        bool _redirectOutput { get; set; } = true;
 
 
 
@@ -31,7 +36,7 @@ namespace MiningApp
             _sessionTimer = new TimerHelper();
         }
 
-        public void Start()
+        public async Task Start()
         {
             if (!IsRunning())
             {
@@ -40,13 +45,36 @@ namespace MiningApp
                     StartInfo = new ProcessStartInfo()
                     {
                         FileName = Config.Miner.Path,
+                        UseShellExecute = false,
+
+                        RedirectStandardOutput = _redirectOutput,
+                        CreateNoWindow = _redirectOutput
                     }
                 };
 
                 SetMinerSettings();
 
                 MinerProcess.Start();
+
+                while (!MinerProcess.StandardOutput.EndOfStream)
+                {
+                    var output = MinerProcess.StandardOutput.ReadLine();
+
+                    AppendOutput(output);
+                }
             }
+        }
+
+        private void AppendOutput(string output)
+        {
+            _output += output + Environment.NewLine;
+
+            Console.WriteLine(output);
+        }
+
+        private TimeSpan GetUptime()
+        {
+            return MinerProcess != null ? DateTime.Now.Subtract(MinerProcess.StartTime) : new TimeSpan(0, 0, 0);
         }
 
         private async void SetMinerSettings()
@@ -81,6 +109,14 @@ namespace MiningApp
                 return false;
             }
         }
+
+        public void Close()
+        {
+            WindowController.MiningSessions.Remove(this);
+
+            MinerProcess.Close();
+        }
+
 
         class TimerHelper
         {
