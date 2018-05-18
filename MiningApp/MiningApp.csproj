@@ -110,6 +110,7 @@
     <Compile Include="Models\PoolConfigModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\WalletConfigModel.cs" />
+    <Compile Include="Settings\MinerNames.cs" />
     <Compile Include="UI\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>

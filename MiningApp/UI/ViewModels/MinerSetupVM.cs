@@ -111,7 +111,7 @@ namespace MiningApp.UI
 
                 foreach (var miner in _miners)
                 {
-                    var button = ElementHelper.CreateButton(miner.Name);
+                    var button = ElementHelper.CreateButton(miner.Name.ToString());
                     _minerButtons.Add(button);
                     _buttonDictionary.Add(button, miner.ID);
 
@@ -142,7 +142,7 @@ namespace MiningApp.UI
 
             public void ShowNewMiner(MinerConfigModel miner)
             {
-                var button = ElementHelper.CreateButton(miner.Name);
+                var button = ElementHelper.CreateButton(miner.Name.ToString());
                 _minerButtons.Add(button);
                 _buttonDictionary.Add(button, miner.ID);
 
@@ -338,7 +338,7 @@ namespace MiningApp.UI
                 {
                     TitleTextBlock.Text = "Edit Miner";
 
-                    NameTextBox.Text = _miner.Name;
+                    NameTextBox.Text = _miner.Name.ToString();
                     PathTextBox.Text = ElementHelper.TrimPath(_miner.Path);
 
                     _miner.Pools.ForEach(x => PoolsListBox.Items.Add(x));
@@ -472,6 +472,7 @@ namespace MiningApp.UI
             {               
                 _miner.CreatedTimestamp = _miner.ID > 0 ? _miner.CreatedTimestamp : DateTime.Now;
                 _miner.Name = NameTextBox.Text;
+                _miner.Type = MinerNames.GetTypeByName(_miner.Name);
                 _miner.Path = _minerPath;
                 _miner.Pools = PoolsListBox.Items.Cast<PoolConfigModel>().ToList();
                 _miner.Cryptos = CryptosListBox.Items.Cast<string>().ToList();

@@ -30,6 +30,9 @@ namespace MiningApp
 
         public MinerStatus Status { get; set; }
 
+        public MinerType Type { get; set; }
+
+
         [BsonIgnore]
         public string LocalDirectory => GetLocalDirectory();
 

@@ -37,14 +37,14 @@ namespace MiningApp
 
         public PoolConfigModel Pool { get; set; }
 
-        public SupportedMiners MinerType { get; set; }
+        public MinerType MinerType { get; set; }
 
 
         public async Task SaveMinerSettings()
         {
             switch (MinerType)
             {
-                case SupportedMiners.CCMiner:
+                case MinerType.CCMiner:
                     await MinerSettings.CCMiner.SaveParams(Pool.Address, Wallet.Address);
                     break;
                 default:

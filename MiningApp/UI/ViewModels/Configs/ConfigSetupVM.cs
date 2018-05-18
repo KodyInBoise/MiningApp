@@ -282,10 +282,6 @@ namespace MiningApp.UI
                 nextTop = ViewGrid.Height - DeleteButton.Height - padding;
                 DisplayElement(DeleteButton);
 
-                nextLeft = DeleteButton.Margin.Left + DeleteButton.Width + padding * 4;
-                nextTop = DeleteButton.Margin.Top;
-                DisplayElement(LaunchButton);
-
                 nextLeft = ElementValues.Grids.SecondaryNormal - FinishButton.Width - padding;
                 nextTop = DeleteButton.Margin.Top;
                 DisplayElement(FinishButton);
@@ -304,6 +300,10 @@ namespace MiningApp.UI
                     TitleTextBlock.Text = "Edit Config";
 
                     NameTextBox.Text = _config.Name;
+
+                    nextLeft = DeleteButton.Margin.Left + DeleteButton.Width + padding * 4;
+                    nextTop = DeleteButton.Margin.Top;
+                    DisplayElement(LaunchButton);
                 }
 
                 LoadItems();

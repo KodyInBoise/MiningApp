@@ -11,8 +11,9 @@ namespace MiningApp
         VTC,
     }
 
-    public enum SupportedMiners
+    public enum MinerType
     {
+        Empty,
         CCMiner,
     }
 
