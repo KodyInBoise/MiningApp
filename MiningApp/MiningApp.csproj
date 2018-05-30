@@ -116,6 +116,7 @@
     </Compile>
     <Compile Include="UI\ViewModels\Configs\ConfigSetupVM.cs" />
     <Compile Include="UI\ViewModels\Configs\ConfigsHomeVM.cs" />
+    <Compile Include="UI\ViewModels\Sessions\ActiveSessionsVM.cs" />
     <Compile Include="Utilities\ElementHelper.cs" />
     <Compile Include="UI\ViewModels\HomeVM.cs" />
     <Compile Include="UI\ViewModels\IViewModel.cs" />

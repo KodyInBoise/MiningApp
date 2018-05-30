@@ -75,27 +75,27 @@ namespace MiningApp
 
         public static TextBlock CreateTextBlock(string text, int fontSize = -1, int width = -1, int height = -1)
         {
-            string name = "";
+            //string name = "";
             var words = text.Split(' ').ToList();
 
             if (words.Count > 1)
             {
-                foreach (var word in words) name += word;
+                //foreach (var word in words) name += word;
             }
             else
             {
-                name = text;
+                //name = text;
             }
 
             return new TextBlock()
             {
-                Name = $"{name}TextBlock",
+                //Name = $"{name}TextBlock",
                 Text = text,
                 FontFamily = ElementValues.Fonts.Family,
                 FontSize = fontSize > 0 ? fontSize : ElementValues.Fonts.Size,
                 Foreground = ElementValues.Fonts.Color,
-                MaxWidth = width > 0 ? width : 150,
-                MaxHeight = height > 0 ? height : 50,
+                Width = width > 0 ? width : 150,
+                Height = height > 0 ? height : 50,
                 
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Left,

@@ -112,8 +112,7 @@ namespace MiningApp.UI
 
         private async void LogsButton_Clicked()
         {
-            //WindowController.Instance.ShowLogsHome();
-            System.Windows.MessageBox.Show(WindowController.MiningSessions[0].Uptime.ToString());
+            WindowController.Instance.ShowLogsHome();
         }
 
         private void SettingsButton_Clicked()

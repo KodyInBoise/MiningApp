@@ -17,6 +17,9 @@ namespace MiningApp.UI
         List<FrameworkElement> ActiveElements { get; set; } = new List<FrameworkElement>();
 
 
+        ActiveSessionsVM _activeSessionsVM { get; set; }
+
+
         double nextLeft = 10;
 
         double nextTop = 10;
@@ -32,6 +35,8 @@ namespace MiningApp.UI
         private void Show()
         {
             DisplayElement(TitleTextBlock);
+
+            _activeSessionsVM = new ActiveSessionsVM(ViewGrid);
         }
 
         public void Dispose()
