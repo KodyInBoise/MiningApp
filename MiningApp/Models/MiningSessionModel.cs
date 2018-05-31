@@ -17,7 +17,15 @@ namespace MiningApp
 
         public DateTime StartTime { get; set; }
 
+        public DateTime LastOutputTimestamp { get; set; }
+
         public TimeSpan Uptime => GetUptime();
+
+        public string UptimeString => _sessionTimer.GetUptimeFriendlyString();
+
+        public string NewOutput => GetNewOutput();
+
+        public string AllOutput => _output;
 
         
         TimerHelper _sessionTimer { get; set; }
@@ -25,8 +33,6 @@ namespace MiningApp
         string _output { get; set; } = "";
 
         bool _redirectOutput { get; set; } = true;
-
-
 
         public MiningSessionModel(ConfigModel config)
         {
@@ -69,7 +75,19 @@ namespace MiningApp
         {
             _output += output + Environment.NewLine;
 
+            _newOutput = output;
+            LastOutputTimestamp = DateTime.Now;
+
             Console.WriteLine(output);
+        }
+
+        string _newOutput = string.Empty;
+        string GetNewOutput()
+        {
+            var output = _newOutput;
+            _newOutput = string.Empty;
+
+            return output;
         }
 
         private TimeSpan GetUptime()
@@ -115,6 +133,11 @@ namespace MiningApp
             WindowController.MiningSessions.Remove(this);
 
             MinerProcess.Close();
+        }
+
+        public DispatcherTimer GetTimer()
+        {
+            return _sessionTimer.GetTimer();
         }
 
 
@@ -173,6 +196,27 @@ namespace MiningApp
                     _uptimeDays++;
                     _uptimeHours = _uptimeHours % 60;
                 }
+            }
+
+            public DispatcherTimer GetTimer()
+            {
+                return _timer;
+            }
+
+            public string GetUptimeFriendlyString()
+            {
+                var uptime = "";
+
+                if (_uptimeDays > 0)
+                {
+                    uptime = $"{_uptimeDays} Days {_uptimeHours} Hours {_uptimeMinutes} Minutes";
+                }
+                else
+                {
+                    uptime = $"{_uptimeHours} Hours {_uptimeMinutes} Minutes {_uptimeSeconds} Seconds";
+                }
+
+                return uptime;
             }
         }
     }

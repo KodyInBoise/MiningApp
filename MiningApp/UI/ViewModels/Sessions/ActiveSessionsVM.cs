@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace MiningApp.UI
 {
@@ -23,20 +24,24 @@ namespace MiningApp.UI
 
         TextBlock ViewingTextBlock { get; set; } = ElementHelper.CreateTextBlock("0 of 0", fontSize: 20);
 
-        TextBlock MinerTextBlock { get; set; } = ElementHelper.CreateTextBlock("Miner: ", height: 20);
+        TextBlock MinerTextBlock { get; set; } = ElementHelper.CreateTextBlock("Miner: ", width: 450, height: 20);
 
-        TextBlock CryptoTextBlock { get; set; } = ElementHelper.CreateTextBlock("Crypto: ", height: 20);
+        TextBlock CryptoTextBlock { get; set; } = ElementHelper.CreateTextBlock("Crypto: ", width: 450, height: 20);
 
-        TextBlock UptimeTextBlock { get; set; } = ElementHelper.CreateTextBlock("Uptime: ", height: 20);
+        TextBlock UptimeTextBlock { get; set; } = ElementHelper.CreateTextBlock("Uptime: ", width: 450, height: 20);
 
-        TextBlock LastOutputTextBlock { get; set; } = ElementHelper.CreateTextBlock("Last Output: ", height: 20);
+        TextBlock LastOutputTextBlock { get; set; } = ElementHelper.CreateTextBlock("Last Output: ", width: 450, height: 20);
 
-        TextBox OutputTextBox { get; set; } = ElementHelper.CreateTextBox("Output", height: 300);
+        TextBox OutputTextBox { get; set; } = ElementHelper.CreateTextBox("Output", height: 300, width: 500, fontSize: 12);
+
+        DispatcherTimer ActiveSessionTimer { get; set; } = null;
 
 
         private List<MiningSessionModel> _allSessions => WindowController.MiningSessions ?? new List<MiningSessionModel>();
 
-        private MiningSessionModel _activeSession { get; set; } 
+        private MiningSessionModel _activeSession { get; set; }
+
+        private int _currentIndex { get; set; } = 0;
 
 
         public ActiveSessionsVM(Grid displayGrid)
@@ -55,6 +60,11 @@ namespace MiningApp.UI
             DisplayElement(UptimeTextBlock);
             DisplayElement(LastOutputTextBlock);
             DisplayElement(OutputTextBox);
+
+            if (_allSessions.Any())
+            {
+                DisplaySession(_allSessions[0]);
+            }
         }
 
         public void Dispose()
@@ -69,6 +79,38 @@ namespace MiningApp.UI
             ViewingGrid.Children.Add(element);
 
             nextTop = element.Margin.Top + element.Height + padding;
+        }
+
+        void DisplaySession(MiningSessionModel session)
+        {
+            MinerTextBlock.Text = $"Miner: {session.Config.Miner.Name}";
+            CryptoTextBlock.Text = $"Crypto: {session.Config.CryptoName}";
+            UptimeTextBlock.Text = $"Uptime: {session.Uptime}";
+            LastOutputTextBlock.Text = $"Last Output: {session.LastOutputTimestamp}";
+            OutputTextBox.Text = session.AllOutput;
+            ActiveSessionTimer = session.GetTimer();
+
+            ActiveSessionTimer.Tick += (s, e) => ActiveSessionTimer_Tick();
+
+            _activeSession = session;
+            _currentIndex = _allSessions.IndexOf(_activeSession);
+
+            ViewingTextBlock.Text = $"{_currentIndex + 1} of {_allSessions.Count}";
+        }
+
+        void ActiveSessionTimer_Tick()
+        {
+            var newOutput = _activeSession.NewOutput;
+
+            if (!String.IsNullOrEmpty(newOutput))
+            {
+                OutputTextBox.AppendText(newOutput + Environment.NewLine);
+                LastOutputTextBlock.Text = $"Last Output: {_activeSession.LastOutputTimestamp}";
+
+                OutputTextBox.ScrollToEnd();
+            }
+
+            UptimeTextBlock.Text = $"Uptime: {_activeSession.UptimeString}";
         }
     }
 }
