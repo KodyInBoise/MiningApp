@@ -38,6 +38,8 @@ namespace MiningApp
 
         public PoolConfigModel Pool { get; set; }
 
+        public double StaleOutputThreshold { get; set; }
+
         public MinerType MinerType { get; set; }
 
         [BsonIgnore]

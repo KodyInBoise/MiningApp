@@ -78,6 +78,8 @@ namespace MiningApp
             _newOutput = output;
             LastOutputTimestamp = DateTime.Now;
 
+            Task.Run(CheckStaleOutput);
+
             Console.WriteLine(output);
         }
 
@@ -140,6 +142,19 @@ namespace MiningApp
             return _sessionTimer.GetTimer();
         }
 
+        private async Task CheckStaleOutput()
+        {
+            if (Config.StaleOutputThreshold > 0 && DateTime.Now > LastOutputTimestamp.AddMinutes(Config.StaleOutputThreshold))
+            {
+                var procs = Process.GetProcessesByName(MinerProcess.ProcessName);
+                foreach (var proc in procs)
+                {
+                    proc.Kill();
+                }
+
+                Start();
+            }
+        }
 
         class TimerHelper
         {
@@ -217,6 +232,11 @@ namespace MiningApp
                 }
 
                 return uptime;
+            }
+
+            public void RestartMiner()
+            {
+
             }
         }
     }

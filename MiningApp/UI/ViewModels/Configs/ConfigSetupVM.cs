@@ -179,6 +179,8 @@ namespace MiningApp.UI
 
             ComboBox CryptosComboBox { get; set; } = ElementHelper.CreateComboBox("Cryptos");
 
+            TextBox InactiveThresholdTextBox { get; set; } = ElementHelper.CreateTextBox("InactiveThreshold", width: 100);
+
 
 
             Button DeleteButton { get; set; } = ElementHelper.CreateButton("Delete", height: buttonHeight,
@@ -201,6 +203,10 @@ namespace MiningApp.UI
             Label WalletsLabel { get; set; }
 
             Label CryptosLabel { get; set; }
+
+            Label InactiveThresholdLabel { get; set; }
+
+            Label MinutesLabel { get; set; }
 
 
             private static int buttonWidth = 150;
@@ -257,6 +263,8 @@ namespace MiningApp.UI
                 DisplayElement(WalletsComboBox);
                 WalletsComboBox.ItemsSource = ViewingCryptos;
 
+                DisplayElement(InactiveThresholdTextBox, leftPadding: 250, topPadding: padding * 4);
+
 
                 nextTop = NameTextBox.Margin.Top;
                 NameLabel = ElementHelper.CreateLabel("Name", NameTextBox);
@@ -277,6 +285,16 @@ namespace MiningApp.UI
                 CryptosLabel = ElementHelper.CreateLabel("Wallet", WalletsComboBox);
                 CryptosLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
                 DisplayElement(CryptosLabel, ignoreMargin: true);
+
+                nextTop = InactiveThresholdTextBox.Margin.Top;
+                InactiveThresholdLabel = ElementHelper.CreateLabel("Inactivity Threshold:", InactiveThresholdTextBox);
+                InactiveThresholdLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight - 225, 0);
+                DisplayElement(InactiveThresholdLabel, ignoreMargin: true);
+
+                nextTop = InactiveThresholdTextBox.Margin.Top;
+                MinutesLabel = ElementHelper.CreateLabel("Minutes", InactiveThresholdTextBox);
+                MinutesLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight - 475, 0);
+                DisplayElement(MinutesLabel, ignoreMargin: true);
 
                 nextLeft = 15;
                 nextTop = ViewGrid.Height - DeleteButton.Height - padding;
@@ -339,6 +357,8 @@ namespace MiningApp.UI
                 var index = ViewingMiners.IndexOf(_config.Miner);
                 PoolsComboBox.SelectedItem = _config.Pool;
                 WalletsComboBox.SelectedItem = _config.Wallet;
+
+                InactiveThresholdTextBox.Text = _config.StaleOutputThreshold.ToString();
             }
 
             private void RadioButton_Toggled()
@@ -399,6 +419,22 @@ namespace MiningApp.UI
                 _config.Miner = (MinerConfigModel)MinersComboBox.SelectedItem;
                 _config.Pool = (PoolConfigModel)PoolsComboBox.SelectedItem;
                 _config.Wallet = (WalletConfigModel)WalletsComboBox.SelectedItem;
+
+                double staleThreshold;
+                try
+                {
+                    Double.TryParse(InactiveThresholdTextBox.Text, out staleThreshold);
+
+                    if (staleThreshold > 0)
+                    {
+                        _config.StaleOutputThreshold = staleThreshold;
+                    }
+                    else
+                    {
+                        _config.StaleOutputThreshold = -1;
+                    }
+                }
+                catch { _config.StaleOutputThreshold = -1; }               
             }
 
             private void MinersComboBox_Closed()
