@@ -78,7 +78,7 @@ namespace MiningApp
             _newOutput = output;
             LastOutputTimestamp = DateTime.Now;
 
-            Task.Run(CheckStaleOutput);
+            _sessionTimer.ResetStaleOutput();
 
             Console.WriteLine(output);
         }
@@ -153,18 +153,22 @@ namespace MiningApp
             return _sessionTimer.GetTimer();
         }
 
-        private async Task CheckStaleOutput()
+        bool OutputIsStale()
         {
-            if (Config.StaleOutputThreshold > 0 && DateTime.Now > LastOutputTimestamp.AddMinutes(Config.StaleOutputThreshold))
-            {
-                var procs = Process.GetProcessesByName(MinerProcess.ProcessName);
-                foreach (var proc in procs)
-                {
-                    proc.Kill();
-                }
+            return DateTime.Now > LastOutputTimestamp.AddMinutes(Config.StaleOutputThreshold);
+        }
 
-                Start();
+        public async Task CheckForStaleMiners()
+        {
+            if (OutputIsStale())
+            {
+                RestartMiner();
             }
+        }
+
+        public void RestartMiner()
+        {
+
         }
 
         class TimerHelper
@@ -181,6 +185,7 @@ namespace MiningApp
 
             private int _uptimeDays { get; set; }
 
+            private int _staleOutputSeconds { get; set; }
 
             public TimerHelper()
             {
@@ -189,6 +194,8 @@ namespace MiningApp
                 _timer.Tick += (s, e) => Timer_Tick();
 
                 _timer.Start();
+
+                _staleOutputSeconds = 0;
             }
 
             private void Timer_Tick()
@@ -199,6 +206,8 @@ namespace MiningApp
                 {
                     AddUptime();
                 }
+
+                _staleOutputSeconds++;
             }
 
             public TimeSpan GetUptime()
@@ -221,7 +230,7 @@ namespace MiningApp
                 {
                     _uptimeDays++;
                     _uptimeHours = _uptimeHours % 60;
-                }
+                }               
             }
 
             public DispatcherTimer GetTimer()
@@ -245,9 +254,14 @@ namespace MiningApp
                 return uptime;
             }
 
-            public void RestartMiner()
+            public void ResetStaleOutput()
             {
+                _staleOutputSeconds = 0;
+            }
 
+            public int GetStaleOutputSeconds()
+            {
+                return _staleOutputSeconds;
             }
         }
     }
