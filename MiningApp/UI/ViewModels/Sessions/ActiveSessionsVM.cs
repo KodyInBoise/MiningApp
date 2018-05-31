@@ -13,7 +13,7 @@ namespace MiningApp.UI
     {
         private double nextLeft = 50;
 
-        private double nextTop = 150;
+        private double nextTop = 100;
 
         private double padding = 15;
 
@@ -32,7 +32,7 @@ namespace MiningApp.UI
 
         TextBlock LastOutputTextBlock { get; set; } = ElementHelper.CreateTextBlock("Last Output: ", width: 450, height: 20);
 
-        TextBox OutputTextBox { get; set; } = ElementHelper.CreateTextBox("Output", height: 300, width: 500, fontSize: 12);
+        TextBox OutputTextBox { get; set; } = ElementHelper.CreateTextBox("Output", height: 300, width: 500, fontSize: 12, readOnly: true);
 
         DispatcherTimer ActiveSessionTimer { get; set; } = null;
 
@@ -53,9 +53,9 @@ namespace MiningApp.UI
 
         void Show()
         {
-            DisplayElement(TitleTextBlock, leftPadding: 75);
+            DisplayElement(TitleTextBlock, leftPadding: 125);
+            DisplayElement(ViewingTextBlock, leftPadding: 215);
 
-            DisplayElement(ViewingTextBlock, leftPadding: 160);
             DisplayElement(MinerTextBlock);
             DisplayElement(UptimeTextBlock);
             DisplayElement(LastOutputTextBlock);

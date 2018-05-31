@@ -62,9 +62,12 @@ namespace MiningApp.UI
             _dataHelper = new DataHelper();
 
             MainWindow.Instance.Closing += (s, e) => Shutdown();
+
+            Bootstrapper.Startup();
             //TESTING
             MainWindow.Instance.TestButton.Click += (s, e) => TestButton_Clicked();
         }
+
 
         private void DisplayViewModel(ViewModelType viewType, DisplayGrid display = DisplayGrid.Primary)
         {

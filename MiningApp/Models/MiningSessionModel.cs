@@ -94,7 +94,14 @@ namespace MiningApp
 
         private TimeSpan GetUptime()
         {
-            return MinerProcess != null ? DateTime.Now.Subtract(MinerProcess.StartTime) : new TimeSpan(0, 0, 0);
+            try
+            {
+                return MinerProcess != null ? DateTime.Now.Subtract(MinerProcess.StartTime) : new TimeSpan(0, 0, 0);
+            }
+            catch
+            {
+                return new TimeSpan(0, 0, 0);
+            }
         }
 
         private async void SetMinerSettings()
@@ -123,6 +130,10 @@ namespace MiningApp
                 {
                     return false;
                 }
+            }
+            catch (System.IndexOutOfRangeException)
+            {
+                return false;
             }
             catch
             {

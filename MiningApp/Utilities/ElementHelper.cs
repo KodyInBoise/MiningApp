@@ -102,7 +102,7 @@ namespace MiningApp
             };
         }
 
-        public static TextBox CreateTextBox(string name, string text = "", int fontSize = -1, int height = -1, int width = -1)
+        public static TextBox CreateTextBox(string name, string text = "", int fontSize = -1, int height = -1, int width = -1, bool readOnly = false)
         {
             return new TextBox()
             {
@@ -112,6 +112,7 @@ namespace MiningApp
                 FontSize = fontSize > 0 ? fontSize : ElementValues.Fonts.Size,
                 Height = height > 0 ? height : ElementValues.TextBoxs.Height,
                 Width = width > 0 ? width : ElementValues.TextBoxs.Width,
+                IsReadOnly = readOnly,
 
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Left,

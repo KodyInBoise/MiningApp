@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.IO;
 using System.Diagnostics;
+using System.Management;
 
 namespace MiningApp
 {
@@ -47,6 +48,14 @@ namespace MiningApp
         public void StartMiner(ConfigModel miner)
         {
             
+        }
+
+        public static List<Process> GetChildProcesses(Process proc)
+        {
+            var childProcesses = new List<Process>();
+            
+
+            return childProcesses;
         }
     }
 }
