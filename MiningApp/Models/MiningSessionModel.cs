@@ -9,6 +9,19 @@ using System.Windows.Threading;
 
 namespace MiningApp
 {
+    public delegate void OutputReceivedDelegate(OutputReceivedArgs args);
+
+    public class OutputReceivedArgs
+    {
+        public DateTime Timestamp { get; set; }
+        public string NewOutput { get; set; }
+
+        public OutputReceivedArgs()
+        {
+            Timestamp = DateTime.Now;
+        }
+    }
+
     public class MiningSessionModel
     {
         public ConfigModel Config { get; set; }
@@ -27,6 +40,8 @@ namespace MiningApp
 
         public string AllOutput => _output;
 
+        public event OutputReceivedDelegate OutputReceived;
+
         
         TimerHelper _sessionTimer { get; set; }
 
@@ -39,7 +54,7 @@ namespace MiningApp
             StartTime = DateTime.Now;
             Config = config;
 
-            _sessionTimer = new TimerHelper();
+            _sessionTimer = new TimerHelper(this);
         }
 
         public async Task Start()
@@ -73,6 +88,9 @@ namespace MiningApp
 
         private void AppendOutput(string output)
         {
+            var outputArgs = new OutputReceivedArgs() { NewOutput = output };
+            OutputReceived?.Invoke(outputArgs);
+
             _output += output + Environment.NewLine;
 
             _newOutput = output;
@@ -118,22 +136,16 @@ namespace MiningApp
         {
             try
             {
-                var proc = Process.GetProcessesByName(Config.Miner.ProcessName);
+                var existingProcs = Process.GetProcessesByName(Config.Miner.ProcessName).ToList();
 
-                if (proc != null)
+                if (existingProcs.Any())
                 {
-                    MinerProcess = proc[0];
-
                     return true;
                 }
                 else
                 {
                     return false;
                 }
-            }
-            catch (System.IndexOutOfRangeException)
-            {
-                return false;
             }
             catch
             {
@@ -168,11 +180,18 @@ namespace MiningApp
 
         public void RestartMiner()
         {
+            _newOutput = $"\r\r----------------------------\rRestarting Miner {DateTime.Now.ToString()}\r----------------------------\r\r";
+            OutputReceived?.Invoke(new OutputReceivedArgs() { NewOutput = _newOutput });
 
+            MinerProcess.Kill();
+
+            Task.Run(Start);
         }
 
         class TimerHelper
         {
+            private MiningSessionModel _session { get; set; }
+
             private DispatcherTimer _timer { get; set; }
 
             private TimeSpan _uptime { get; set; }
@@ -187,8 +206,10 @@ namespace MiningApp
 
             private int _staleOutputSeconds { get; set; }
 
-            public TimerHelper()
+            public TimerHelper(MiningSessionModel session)
             {
+                _session = session;
+
                 _timer = new DispatcherTimer();
                 _timer.Interval = new TimeSpan(0, 0, 1);
                 _timer.Tick += (s, e) => Timer_Tick();
@@ -208,6 +229,8 @@ namespace MiningApp
                 }
 
                 _staleOutputSeconds++;
+
+                Task.Run(_session.CheckForStaleMiners);
             }
 
             public TimeSpan GetUptime()

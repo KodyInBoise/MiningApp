@@ -43,6 +43,8 @@ namespace MiningApp.UI
 
         private int _currentIndex { get; set; } = 0;
 
+        private string _sessionOutput { get; set; } = string.Empty;
+
 
         public ActiveSessionsVM(Grid displayGrid)
         {
@@ -87,9 +89,12 @@ namespace MiningApp.UI
             CryptoTextBlock.Text = $"Crypto: {session.Config.CryptoName}";
             UptimeTextBlock.Text = $"Uptime: {session.Uptime}";
             LastOutputTextBlock.Text = $"Last Output: {session.LastOutputTimestamp}";
-            OutputTextBox.Text = session.AllOutput;
-            ActiveSessionTimer = session.GetTimer();
 
+            _sessionOutput = session.AllOutput;
+            OutputTextBox.Text = session.AllOutput;
+            session.OutputReceived += SessionOutputReceived;
+
+            ActiveSessionTimer = session.GetTimer();
             ActiveSessionTimer.Tick += (s, e) => ActiveSessionTimer_Tick();
 
             _activeSession = session;
@@ -98,19 +103,38 @@ namespace MiningApp.UI
             ViewingTextBlock.Text = $"{_currentIndex + 1} of {_allSessions.Count}";
         }
 
+        string _oldOutput = string.Empty;
         void ActiveSessionTimer_Tick()
         {
-            var newOutput = _activeSession.NewOutput;
+            bool outputChanged = _sessionOutput != _oldOutput;
 
-            if (!String.IsNullOrEmpty(newOutput))
+            //Need to only scroll when viewing live output
+            if (outputChanged)
             {
+                OutputTextBox.Text = _sessionOutput;
+                OutputTextBox.ScrollToEnd();
+
+                _oldOutput = _sessionOutput;
+            }
+
+            UptimeTextBlock.Text = $"Uptime: {_activeSession.UptimeString}";
+            LastOutputTextBlock.Text = $"Last Output: {_activeSession.LastOutputTimestamp.ToString()}";
+        }
+
+        void SessionOutputReceived(OutputReceivedArgs args)
+        {
+            if (!String.IsNullOrEmpty(args.NewOutput))
+            {
+                _sessionOutput += args.NewOutput + Environment.NewLine;
+
+                //Cannot append textbox text from here due to threading issues with textbox element
+                /*
                 OutputTextBox.AppendText(newOutput + Environment.NewLine);
                 LastOutputTextBlock.Text = $"Last Output: {_activeSession.LastOutputTimestamp}";
 
                 OutputTextBox.ScrollToEnd();
+                */
             }
-
-            UptimeTextBlock.Text = $"Uptime: {_activeSession.UptimeString}";
         }
     }
 }
