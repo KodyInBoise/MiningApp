@@ -38,6 +38,8 @@ namespace MiningApp
 
         private LiteCollection<LogEntry> _errorLogCollection => GetErrorLogCollection();
 
+        private LiteCollection<LogEntry> _sessionLogCollection => GetSessionLogCollection();
+
         public DataHelper()
         {
             Instance = this;
@@ -105,6 +107,14 @@ namespace MiningApp
             using (_database)
             {
                 return _database.GetCollection<LogEntry>("logs-error");
+            }
+        }
+
+        private LiteCollection<LogEntry> GetSessionLogCollection()
+        {
+            using (_database)
+            {
+                return _database.GetCollection<LogEntry>("logs-session");
             }
         }
 
@@ -290,6 +300,9 @@ namespace MiningApp
                     case LogType.Error:
                         _errorLogCollection.Insert(entry);
                         break;
+                    case LogType.Session:
+                        _sessionLogCollection.Insert(entry);
+                        break;
                     default:
                         break;
                 }
@@ -324,6 +337,8 @@ namespace MiningApp
                         return _generalLogCollection.FindAll().ToList();
                     case LogType.Error:
                         return _errorLogCollection.FindAll().ToList();
+                    case LogType.Session:
+                        return _sessionLogCollection.FindAll().ToList();
                     default:
                         return new List<LogEntry>();
                 }

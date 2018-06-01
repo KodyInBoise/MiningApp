@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using MiningApp.LoggingUtil;
 
 namespace MiningApp.UI
 {
@@ -44,6 +45,7 @@ namespace MiningApp.UI
 
         public MainWindow Window => MainWindow.Instance;
 
+        private LogHelper _logHelper { get; set; } = null;
 
         private CryptoHelper _cryptoHelper { get; set; } = null;
 
@@ -58,6 +60,7 @@ namespace MiningApp.UI
 
             NavView = new NavBarVM();
 
+            _logHelper = new LogHelper();
             _cryptoHelper = new CryptoHelper();
             _dataHelper = new DataHelper();
 

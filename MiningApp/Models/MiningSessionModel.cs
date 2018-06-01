@@ -1,4 +1,5 @@
-﻿using MiningApp.UI;
+﻿using MiningApp.LoggingUtil;
+using MiningApp.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -76,6 +77,8 @@ namespace MiningApp
                 SetMinerSettings();
 
                 MinerProcess.Start();
+
+                LogHelper.AddEntry(LogType.Session, $"Session started: Config = \"{Config.Name}\"");
 
                 while (!MinerProcess.StandardOutput.EndOfStream)
                 {
@@ -186,6 +189,8 @@ namespace MiningApp
             MinerProcess.Kill();
 
             Task.Run(Start);
+
+            LogHelper.AddEntry(LogType.Session, $"Restarted session: Config = \"{Config.Name}\"");
         }
 
         class TimerHelper
