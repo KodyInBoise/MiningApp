@@ -10,7 +10,7 @@ namespace MiningApp
     {
         public static WalletHelper Instance { get; set; }
 
-        public List<WalletConfigModel> AllWallets => DataHelper.Instance.GetWalletConfigs();
+        public List<WalletConfigModel> AllWallets => DataHelper.Instance.GetWallets().Result;
 
         public WalletHelper()
         {

@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 using Xceed.Wpf.Toolkit;
 using System.Windows.Controls;
 using System.Windows;
+using System.IO;
 
-namespace MiningApp.UI
+namespace MiningApp
 {
     public class ElementHelper
     {
@@ -74,34 +75,34 @@ namespace MiningApp.UI
 
         public static TextBlock CreateTextBlock(string text, int fontSize = -1, int width = -1, int height = -1)
         {
-            string name = "";
+            //string name = "";
             var words = text.Split(' ').ToList();
 
             if (words.Count > 1)
             {
-                foreach (var word in words) name += word;
+                //foreach (var word in words) name += word;
             }
             else
             {
-                name = text;
+                //name = text;
             }
 
             return new TextBlock()
             {
-                Name = $"{name}TextBlock",
+                //Name = $"{name}TextBlock",
                 Text = text,
                 FontFamily = ElementValues.Fonts.Family,
                 FontSize = fontSize > 0 ? fontSize : ElementValues.Fonts.Size,
                 Foreground = ElementValues.Fonts.Color,
-                MaxWidth = width > 0 ? width : 150,
-                MaxHeight = height > 0 ? height : 50,
+                Width = width > 0 ? width : 150,
+                Height = height > 0 ? height : 50,
                 
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Left,
             };
         }
 
-        public static TextBox CreateTextBox(string name, string text = "", int fontSize = -1, int height = -1, int width = -1)
+        public static TextBox CreateTextBox(string name, string text = "", int fontSize = -1, int height = -1, int width = -1, bool readOnly = false)
         {
             return new TextBox()
             {
@@ -111,11 +112,14 @@ namespace MiningApp.UI
                 FontSize = fontSize > 0 ? fontSize : ElementValues.Fonts.Size,
                 Height = height > 0 ? height : ElementValues.TextBoxs.Height,
                 Width = width > 0 ? width : ElementValues.TextBoxs.Width,
+                IsReadOnly = readOnly,
 
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalContentAlignment = VerticalAlignment.Center,
-                HorizontalContentAlignment = HorizontalAlignment.Left
+                HorizontalContentAlignment = HorizontalAlignment.Left,
+
+                TextWrapping = TextWrapping.Wrap
             };
         }
 
@@ -230,6 +234,30 @@ namespace MiningApp.UI
             catch
             {
                 return Brushes.White;
+            }
+        }
+
+        public static string GetFilePath(string dir = "")
+        {
+            try
+            {
+                var dialog = new System.Windows.Forms.OpenFileDialog();
+                dialog.InitialDirectory = !String.IsNullOrEmpty(dir) ? dir : Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+                var result = dialog.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    return dialog.FileName;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+            catch
+            {
+                return "";
             }
         }
     }

@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.IO;
 using System.Diagnostics;
+using System.Management;
 
 namespace MiningApp
 {
     public class ProcessHelper
     {
-        private OldWindowController _controller => OldWindowController.Instance;
+        //private OldWindowController _controller => OldWindowController.Instance;
 
         private List<ConfigModel> _allMiners = new List<ConfigModel>();
         private List<Process> _minerProcesses = new List<Process>();
@@ -24,11 +25,12 @@ namespace MiningApp
 
         private async void UpdateMiners()
         {
-            _allMiners = await _controller.GetMiners();
+            //_allMiners = await _controller.GetMiners();
         }
 
         private void GetRunningMiners()
         {
+            /*
             foreach (var miner in _allMiners)
             {
                 var proc = miner.GetProcess();
@@ -38,7 +40,7 @@ namespace MiningApp
                     _minerProcesses.Add(proc);
                 }
             }
-
+            */
             //Testing
             _minerProcesses.ForEach(x => Console.WriteLine(x.ProcessName));
         }
@@ -46,6 +48,14 @@ namespace MiningApp
         public void StartMiner(ConfigModel miner)
         {
             
+        }
+
+        public static List<Process> GetChildProcesses(Process proc)
+        {
+            var childProcesses = new List<Process>();
+            
+
+            return childProcesses;
         }
     }
 }

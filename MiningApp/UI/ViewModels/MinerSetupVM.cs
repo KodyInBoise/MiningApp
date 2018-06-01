@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -111,7 +112,7 @@ namespace MiningApp.UI
 
                 foreach (var miner in _miners)
                 {
-                    var button = ElementHelper.CreateButton(miner.Name);
+                    var button = ElementHelper.CreateButton(miner.Name.ToString());
                     _minerButtons.Add(button);
                     _buttonDictionary.Add(button, miner.ID);
 
@@ -142,7 +143,7 @@ namespace MiningApp.UI
 
             public void ShowNewMiner(MinerConfigModel miner)
             {
-                var button = ElementHelper.CreateButton(miner.Name);
+                var button = ElementHelper.CreateButton(miner.Name.ToString());
                 _minerButtons.Add(button);
                 _buttonDictionary.Add(button, miner.ID);
 
@@ -234,10 +235,12 @@ namespace MiningApp.UI
 
             private List<string> ViewingCryptos { get; set; } = CryptoHelper.Instance.GetCryptoNames();
 
-            private List<PoolConfigModel> ViewingPools { get; set; } = DataHelper.Instance.GetPoolConfigs();
+            private List<PoolConfigModel> ViewingPools { get; set; } = DataHelper.Instance.GetPools().Result;
 
 
             private MinerConfigModel _miner { get; set; }
+
+            private string _minerPath { get; set; }
 
 
             public SecondaryVM(MinerConfigModel miner = null)
@@ -320,6 +323,7 @@ namespace MiningApp.UI
                 nextTop = DeleteButton.Margin.Top;
                 DisplayElement(FinishButton);
 
+                BrowseButton.Click += (s, e) => BrowseButton_Clicked();
                 PoolsAddButton.Click += (s, e) => PoolsAddButton_Clicked();
                 PoolsRemoveButton.Click += (s, e) => PoolsRemoveButton_Clicked();
                 CryptosAddButton.Click += (s, e) => CryptosAddButton_Clicked();
@@ -335,11 +339,11 @@ namespace MiningApp.UI
                 {
                     TitleTextBlock.Text = "Edit Miner";
 
-                    NameTextBox.Text = _miner.Name;
-                    PathTextBox.Text = _miner.Path;
+                    NameTextBox.Text = _miner.Name.ToString();
+                    PathTextBox.Text = ElementHelper.TrimPath(_miner.Path);
 
-                    PoolsListBox.ItemsSource = _miner.Pools;
-                    CryptosListBox.ItemsSource = _miner.Cryptos;
+                    _miner.Pools.ForEach(x => PoolsListBox.Items.Add(x));
+                    _miner.Cryptos.ForEach(x => CryptosListBox.Items.Add(x));
                 }
             }
 
@@ -372,13 +376,24 @@ namespace MiningApp.UI
                 */
             }
 
+            void BrowseButton_Clicked()
+            {
+                _minerPath = ElementHelper.GetFilePath(DataHelper.MinerDirectory);
+                PathTextBox.Text = ElementHelper.TrimPath(_minerPath);
+            }
+
             void PoolsAddButton_Clicked()
             {
-                string value = PoolsComboBox.Text;
+                var pool = (PoolConfigModel)PoolsComboBox.SelectedItem ?? new PoolConfigModel(PoolsComboBox.Text);
 
-                if (!String.IsNullOrEmpty(value) && !PoolsListBox.Items.Contains(value))
+                if (!String.IsNullOrEmpty(PoolsComboBox.Text) && !PoolsListBox.Items.Contains(pool))
                 {
-                    PoolsListBox.Items.Add(value);
+                    if (!ViewingPools.Contains(pool))
+                    {
+                        ViewingPools.Add(pool);
+                        PoolsComboBox.Items.Refresh();
+                    }
+                    PoolsListBox.Items.Add(pool);
                     PoolsComboBox.Text = "";
                 }
             }
@@ -387,10 +402,10 @@ namespace MiningApp.UI
             {
                 try
                 {
-                    string value = (string)PoolsListBox.SelectedItem;
+                    var pool = (PoolConfigModel)PoolsListBox.SelectedItem;
 
                     PoolsListBox.Items.Remove(PoolsListBox.SelectedItem);
-                    PoolsComboBox.Text = value;
+                    PoolsComboBox.SelectedItem = pool;
                 }
                 catch
                 {
@@ -458,8 +473,9 @@ namespace MiningApp.UI
             {               
                 _miner.CreatedTimestamp = _miner.ID > 0 ? _miner.CreatedTimestamp : DateTime.Now;
                 _miner.Name = NameTextBox.Text;
-                _miner.Path = PathTextBox.Text;
-                _miner.Pools = PoolsListBox.Items.Cast<string>().ToList();
+                _miner.Type = MinerNames.GetTypeByName(_miner.Name);
+                _miner.Path = _minerPath;
+                _miner.Pools = PoolsListBox.Items.Cast<PoolConfigModel>().ToList();
                 _miner.Cryptos = CryptosListBox.Items.Cast<string>().ToList();
                 _miner.Status = MinerStatus.Inactive;                
             }

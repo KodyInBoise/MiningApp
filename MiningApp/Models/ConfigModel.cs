@@ -1,4 +1,5 @@
 ﻿using LiteDB;
+using MiningApp.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -25,8 +26,6 @@ namespace MiningApp
 
         public string CryptoName { get; set; }
 
-        public string WalletAddress { get; set; }
-
         public string Arguments { get; set; }
 
         public string Output { get; set; } = "";
@@ -34,5 +33,39 @@ namespace MiningApp
         public bool ShowWindow { get; set; } = true;
         
         public MinerConfigModel Miner { get; set; }
+
+        public WalletConfigModel Wallet { get; set; }
+
+        public PoolConfigModel Pool { get; set; }
+
+        public double StaleOutputThreshold { get; set; }
+
+        public MinerType MinerType { get; set; }
+
+        [BsonIgnore]
+        public MiningSessionModel Session { get; set; }
+
+
+        public async Task SaveMinerSettings()
+        {
+            switch (MinerType)
+            {
+                case MinerType.CCMiner:
+                    await MinerSettings.CCMiner.SaveParams(Pool.Address, Wallet.Address);
+                    break;
+                default:
+                    await MinerSettings.CCMiner.SaveParams(Pool.Address, Wallet.Address);
+                    break;
+            }
+        }
+
+        public void StartSession()
+        {
+            Session = new MiningSessionModel(this);
+
+            WindowController.MiningSessions.Add(Session);
+
+            Task.Run(Session.Start);
+        }
     }
 }

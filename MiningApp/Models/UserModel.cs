@@ -38,8 +38,8 @@ namespace MiningApp
 
         private void GetWindowLocation()
         {
-            ControlBarLeft = OldWindowController.Instance.ControlBarWin.Left;
-            ControlBarTop = OldWindowController.Instance.ControlBarWin.Top;
+            //ontrolBarLeft = OldWindowController.Instance.ControlBarWin.Left;
+            //ControlBarTop = OldWindowController.Instance.ControlBarWin.Top;
         }
     }
 }

@@ -105,7 +105,7 @@ namespace MiningApp.UI
 
             private void DisplayExisting()
             {
-                _wallets = DataHelper.Instance.GetWalletConfigs();
+                _wallets = DataHelper.Instance.GetWallets().Result;
 
                 nextTop = NewButton.Margin.Top + NewButton.Height + padding * 2;
 
@@ -285,6 +285,7 @@ namespace MiningApp.UI
 
                     NameTextBox.Text = _wallet.Name;
                     AddressTextBox.Text = _wallet.Address;
+                    VerifyTextBox.Text = _wallet.Address;
 
                     ViewingCryptos.Insert(0, _wallet.Crypto);
                     CryptosComboBox.SelectedIndex = 0;

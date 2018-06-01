@@ -105,7 +105,7 @@ namespace MiningApp.UI
 
             private async void DisplayExisting()
             {
-                _pools = DataHelper.Instance.GetPoolConfigs();
+                _pools = await DataHelper.Instance.GetPools();
 
                 nextTop = NewButton.Margin.Top + NewButton.Height + padding * 2;
 

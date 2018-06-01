@@ -24,11 +24,14 @@ namespace MiningApp
 
         public List<string> Tags { get; set; } = new List<string>();
 
-        public List<string> Pools { get; set; } = new List<string>();
+        public List<PoolConfigModel> Pools { get; set; } = new List<PoolConfigModel>();
 
         public string Path { get; set; }
 
         public MinerStatus Status { get; set; }
+
+        public MinerType Type { get; set; }
+
 
         [BsonIgnore]
         public string LocalDirectory => GetLocalDirectory();
@@ -39,11 +42,19 @@ namespace MiningApp
         [BsonIgnore]
         public string CryptosString => GetCryptosString();
 
+        [BsonIgnore]
+        public string ProcessName => Path.Split('.')[0];
+
 
         public MinerConfigModel()
         {
 
-        }   
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
 
         private string GetLocalDirectory()
         {

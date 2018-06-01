@@ -15,6 +15,9 @@ namespace MiningApp.UI
 
         public static UserModel User { get; set; }
 
+        public static List<MiningSessionModel> MiningSessions { get; set; }
+
+
         public NavBarVM NavView { get; set; } = null;
 
         public HomeVM HomeView { get; set; } = null;
@@ -51,15 +54,20 @@ namespace MiningApp.UI
         {
             Instance = this;
             User = new UserModel();
+            MiningSessions = new List<MiningSessionModel>();
 
             NavView = new NavBarVM();
 
             _cryptoHelper = new CryptoHelper();
             _dataHelper = new DataHelper();
 
+            MainWindow.Instance.Closing += (s, e) => Shutdown();
+
+            Bootstrapper.Startup();
             //TESTING
             MainWindow.Instance.TestButton.Click += (s, e) => TestButton_Clicked();
         }
+
 
         private void DisplayViewModel(ViewModelType viewType, DisplayGrid display = DisplayGrid.Primary)
         {
@@ -218,6 +226,18 @@ namespace MiningApp.UI
 
             testCounter++;
             
+        }
+
+        private void Shutdown()
+        {
+            Task.Run(CloseSessions);
+        }
+
+        private async Task CloseSessions()
+        {
+            var sessions = MiningSessions;
+
+            sessions.ForEach(x => x.Close());
         }
     }
 }
