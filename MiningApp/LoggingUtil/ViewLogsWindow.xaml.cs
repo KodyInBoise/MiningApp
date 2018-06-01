@@ -58,10 +58,10 @@ namespace MiningApp.LoggingUtil
             switch (type)
             {
                 case LogType.General:
-                    _entries = LogHelper.Instance.GeneralLogEntries;
+                    _entries = LogHelper.GeneralLogEntries;
                     break;
                 case LogType.Error:
-                    _entries = LogHelper.Instance.ErrorLogEntries;
+                    _entries = LogHelper.ErrorLogEntries;
                     break;
                 default:
                     _entries = new List<LogEntry>();

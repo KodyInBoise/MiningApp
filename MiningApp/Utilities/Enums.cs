@@ -30,4 +30,11 @@ namespace MiningApp
         Next,
         Finish,
     }
+
+    public enum LogType : int
+    {
+        General = 0, //App startup, shutdown, config / setting changes, etc
+        Error = 1, 
+        Session = 2, //Start, stop, restarts, etc
+    }
 }

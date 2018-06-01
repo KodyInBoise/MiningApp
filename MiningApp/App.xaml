@@ -36,8 +36,11 @@
             <Setter Property="Foreground" Value="DarkRed"/>
             <Setter Property="Template" Value="{StaticResource WindowTemplate}"/>
         </Style>
-        
-        
+
+        <Style x:Key="DataGridColumnHeader" TargetType="DataGridColumnHeader">
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+
 
     </Application.Resources>
 </Application>

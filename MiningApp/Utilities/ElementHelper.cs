@@ -8,6 +8,7 @@ using Xceed.Wpf.Toolkit;
 using System.Windows.Controls;
 using System.Windows;
 using System.IO;
+using System.Windows.Data;
 
 namespace MiningApp
 {
@@ -260,6 +261,38 @@ namespace MiningApp
                 return "";
             }
         }
+
+        public static DataGrid CreateDataGrid(string name, int fontSize = -1, int width = -1, int height = -1)
+        {
+            return new DataGrid()
+            {
+                Name = $"{name}DataGrid",
+                FontFamily = ElementValues.Fonts.Family,
+                FontSize = fontSize > 0 ? fontSize : ElementValues.Fonts.Size,
+                Width = width > 0 ? width : ElementValues.DataGrids.Large.Width,
+                Height = height > 0 ? height : ElementValues.DataGrids.Large.Height,
+
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalContentAlignment = VerticalAlignment.Center,
+
+                AutoGenerateColumns = false
+            };
+        }
+
+        public static DataGridTextColumn CreateGridTextColumn(string header, string binding, int fontSize = -1, int width = -1)
+        {
+            return new DataGridTextColumn()
+            {
+                Binding = new Binding(binding),
+                FontFamily = ElementValues.Fonts.Family,
+                FontSize = fontSize > 0 ? fontSize : ElementValues.DataGrids.CellFontSize,
+                Width = width > 0 ? width : ElementValues.DataGrids.Large.Width,
+
+                Header = header,
+                HeaderStyle = (Style)MainWindow.Instance.FindResource("DataGridColumnHeader"),
+            };
+        }
     }
 
     public enum DisplayGrid
@@ -372,6 +405,22 @@ namespace MiningApp
         {
             public static int Width { get; set; } = 450;
             public static int Height { get; set; } = 100;
+        }
+
+        public static class DataGrids
+        {
+            public static int CellFontSize { get; set; } = 14;
+
+            public static class Small
+            {
+
+            }
+
+            public static class Large
+            {
+                public static int Width { get; set; } = 925;
+                public static int Height { get; set; } = 600;
+            }
         }
     }
 }

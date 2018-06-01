@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MiningApp.LoggingUtil;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,11 +11,19 @@ namespace MiningApp.UI
 {
     public class LogsHomeVM
     {
-        TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Logs Home", 40);
+        TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Logs Home", 40, width: 250);
 
         Grid ViewGrid { get; set; } = MainWindow.Instance.PrimaryGrid;
 
-        List<FrameworkElement> ActiveElements { get; set; } = new List<FrameworkElement>();
+        TextBlock LogTypeTextBlock { get; set; } = ElementHelper.CreateTextBlock("Category", fontSize: 22, height: 30, width: 130);
+
+        ComboBox LogTypeComboBox { get; set; } = ElementHelper.CreateComboBox("Category", width: 200);
+
+        DataGrid DataGrid { get; set; } = ElementHelper.CreateDataGrid("Logs");
+
+        DataGridColumn TimestampColumn { get; set; } = ElementHelper.CreateGridTextColumn("Timestamp", binding: "Timestamp", width: 175);
+
+        DataGridColumn MessageColumn { get; set; } = ElementHelper.CreateGridTextColumn("Message", binding: "Message", width: 740);
 
 
         double nextLeft = 10;
@@ -23,15 +32,37 @@ namespace MiningApp.UI
 
         double padding = 15;
 
+        LogHelper _logHelper { get; set; }
 
         public LogsHomeVM()
         {
+            _logHelper = new LogHelper();
+
             Show();
         }
 
         private void Show()
         {
             DisplayElement(TitleTextBlock);
+
+            nextLeft = nextLeft + padding * 2;
+            nextTop = 100;
+            DisplayElement(LogTypeTextBlock, leftPadding: padding * 17);
+
+            nextTop = LogTypeTextBlock.Margin.Top + 3;
+            nextLeft = LogTypeTextBlock.Margin.Left + LogTypeTextBlock.Width;
+            DisplayElement(LogTypeComboBox);
+
+            nextLeft = TitleTextBlock.Margin.Left + padding * 2;
+            DisplayElement(DataGrid);
+            DataGrid.Columns.Add(TimestampColumn);
+            DataGrid.Columns.Add(MessageColumn);
+
+            LogTypeComboBox.ItemsSource = LogHelper.LogCategories();
+            LogTypeComboBox.DropDownClosed += (s, e) => LogTypeComboBox_DropDownClosed();
+            LogTypeComboBox.SelectedIndex = 0;
+
+            ShowLogs(LogType.General);
         }
 
         public void Dispose()
@@ -44,9 +75,37 @@ namespace MiningApp.UI
             element.Margin = new Thickness((nextLeft + leftPadding), nextTop + topPadding, 0, 0);
 
             ViewGrid.Children.Add(element);
-            ActiveElements.Add(element);
 
             nextTop = element.Margin.Top + element.Height + padding;
+        }
+
+        void ShowLogs(LogType type)
+        {
+            switch (type)
+            {
+                case LogType.Error:
+                    DataGrid.ItemsSource = LogHelper.ErrorLogEntries;
+                    break;
+                case LogType.General:
+                    DataGrid.ItemsSource = LogHelper.GeneralLogEntries;
+                    break;
+                case LogType.Session:
+                    DataGrid.ItemsSource = LogHelper.SessionLogEntries;
+                    break;
+            }
+        }
+
+        string _currentCategory = LogHelper.LogCategories()[0];
+        void LogTypeComboBox_DropDownClosed()
+        {
+            var categoryChanged = _currentCategory != (string)LogTypeComboBox.SelectedItem;
+
+            if (categoryChanged)
+            {
+                ShowLogs((LogType)LogTypeComboBox.SelectedIndex);
+
+                _currentCategory = (string)LogTypeComboBox.SelectedItem;
+            }
         }
     }
 }

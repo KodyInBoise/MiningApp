@@ -6,12 +6,6 @@ using System.Threading.Tasks;
 
 namespace MiningApp.LoggingUtil
 {
-    public enum LogType
-    {
-        General,
-        Error,
-    }
-
     public class LogException : Exception
     {
         public void Handle()
@@ -42,9 +36,11 @@ namespace MiningApp.LoggingUtil
 
         public static DataHelper AppData { get; set; }
 
-        public List<LogEntry> GeneralLogEntries => AppData.GetLogEntries(LogType.General);
+        public static List<LogEntry> GeneralLogEntries => AppData.GetLogEntries(LogType.General);
 
-        public List<LogEntry> ErrorLogEntries => AppData.GetLogEntries(LogType.Error);
+        public static List<LogEntry> ErrorLogEntries => AppData.GetLogEntries(LogType.Error);
+
+        public static List<LogEntry> SessionLogEntries => AppData.GetLogEntries(LogType.Session);
 
 
         private ViewLogsWindow _logWindow { get; set; }
@@ -85,6 +81,16 @@ namespace MiningApp.LoggingUtil
             _logWindow?.Close();
 
             _logWindow = new ViewLogsWindow();
+        }
+
+        public static List<string> LogCategories()
+        {
+            return new List<string>()
+            {
+                "General",
+                "Error",
+                "Session",
+            };
         }
     }
 }
