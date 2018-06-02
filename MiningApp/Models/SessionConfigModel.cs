@@ -16,7 +16,7 @@ namespace MiningApp
         Running
     }
 
-    public class ConfigModel
+    public class SessionConfigModel
     {
         public int ID { get; set; }
 
@@ -33,8 +33,6 @@ namespace MiningApp
         public string CryptoName { get; set; }
 
         public string Arguments { get; set; }
-
-        public string Output { get; set; } = "";
 
         public bool ShowWindow { get; set; } = true;
 
@@ -53,7 +51,7 @@ namespace MiningApp
         public PoolConfigModel Pool { get; set; }
 
         [BsonIgnore]
-        public MiningSessionModel Session { get; set; }
+        public SessionModel Session { get; set; }
 
 
         public async Task SaveMinerSettings()
@@ -71,7 +69,7 @@ namespace MiningApp
 
         public void StartSession()
         {
-            Session = new MiningSessionModel(this);
+            Session = new SessionModel(this);
 
             WindowController.MiningSessions.Add(Session);
 

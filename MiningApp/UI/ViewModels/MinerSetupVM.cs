@@ -384,7 +384,7 @@ namespace MiningApp.UI
 
             void PoolsAddButton_Clicked()
             {
-                var pool = (PoolConfigModel)PoolsComboBox.SelectedItem ?? new PoolConfigModel(PoolsComboBox.Text);
+                var pool = (PoolConfigModel)PoolsComboBox.SelectedItem ?? new PoolConfigModel(PoolsComboBox.Text) { Address = PoolsComboBox.Text };
 
                 if (!String.IsNullOrEmpty(PoolsComboBox.Text) && !PoolsListBox.Items.Contains(pool))
                 {
@@ -395,6 +395,8 @@ namespace MiningApp.UI
                     }
                     PoolsListBox.Items.Add(pool);
                     PoolsComboBox.Text = "";
+
+                    Task.Run(() => DataHelper.Instance.SavePoolConfig(pool));
                 }
             }
 

@@ -26,9 +26,7 @@ namespace MiningApp
 
         private LiteDatabase _database => GetDatabase();
 
-        private LiteCollection<ConfigModel> _configCollection => GetMiningRuleCollection();
-
-        private LiteCollection<SessionModel.Config> _sessionConfigCollection => GetSessionConfigCollection();
+        private LiteCollection<SessionConfigModel> _configCollection => GetSessionConfigCollection();
 
         private LiteCollection<WalletConfigModel> _walletConfigCollection => GetWalletCollection();
 
@@ -64,19 +62,11 @@ namespace MiningApp
             return new LiteDatabase(DataFilePath);
         }
 
-        private LiteCollection<ConfigModel> GetMiningRuleCollection()
+        private LiteCollection<SessionConfigModel> GetSessionConfigCollection()
         {
             using (_database)
             {
-                return _database.GetCollection<ConfigModel>("miningruleconfigs");
-            }
-        }
-
-        private LiteCollection<SessionModel.Config> GetSessionConfigCollection()
-        {
-            using (_database)
-            {
-                return _database.GetCollection<SessionModel.Config>("sessionconfigs");
+                return _database.GetCollection<SessionConfigModel>("session-configs");
             }
         }
 
@@ -128,7 +118,7 @@ namespace MiningApp
             }
         }
 
-        public void SaveConfig(ConfigModel config)
+        public void SaveConfig(SessionConfigModel config)
         {
             using (_database)
             {
@@ -143,7 +133,7 @@ namespace MiningApp
             }
         }
 
-        public async Task<List<ConfigModel>> GetAllConfigs()
+        public async Task<List<SessionConfigModel>> GetAllConfigs()
         {
             using (_database)
             {
@@ -151,7 +141,7 @@ namespace MiningApp
             }
         }
 
-        public void DeleteConfig(ConfigModel config)
+        public void DeleteConfig(SessionConfigModel config)
         {
             using (_database)
             {
@@ -355,21 +345,11 @@ namespace MiningApp
             }
         }
 
-        //old
-        public ConfigModel GetConfigByID(int id)
+        public SessionConfigModel GetSessionConfigByID(int id)
         {
             using (_database)
             {
                 return _configCollection.FindById(id);
-            }
-        }
-
-        //new
-        public SessionModel.Config GetSessionConfigByID(int id)
-        {
-            using (_database)
-            {
-                return _sessionConfigCollection.FindById(id);
             }
         }
 

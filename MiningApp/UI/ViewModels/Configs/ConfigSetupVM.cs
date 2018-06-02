@@ -50,7 +50,7 @@ namespace MiningApp.UI
             _primaryVM = new PrimaryVM();
         }
 
-        public void DisplaySecondary(ConfigModel config = null)
+        public void DisplaySecondary(SessionConfigModel config = null)
         {
             SecondaryGrid.Children.Clear();
 
@@ -78,7 +78,7 @@ namespace MiningApp.UI
             private double padding = 15;
 
 
-            private List<ConfigModel> _configs { get; set; } = new List<ConfigModel>();
+            private List<SessionConfigModel> _configs { get; set; } = new List<SessionConfigModel>();
 
             private List<Button> _configButtons { get; set; } = new List<Button>();
 
@@ -137,7 +137,7 @@ namespace MiningApp.UI
                 Instance.DisplaySecondary(config);
             }
 
-            public void ShowNewMiner(ConfigModel config)
+            public void ShowNewMiner(SessionConfigModel config)
             {
                 var button = ElementHelper.CreateButton(config.Name);
                 _configButtons.Add(button);
@@ -232,10 +232,10 @@ namespace MiningApp.UI
             private List<string> ViewingCryptos { get; set; }
 
 
-            private ConfigModel _config { get; set; }
+            private SessionConfigModel _config { get; set; }
 
 
-            public SecondaryVM(ConfigModel config = null)
+            public SecondaryVM(SessionConfigModel config = null)
             {
                 _config = config;
 
@@ -311,7 +311,7 @@ namespace MiningApp.UI
 
                 if (_config == null)
                 {
-                    _config = new ConfigModel();
+                    _config = new SessionConfigModel();
                 }
                 else
                 {
@@ -344,15 +344,18 @@ namespace MiningApp.UI
             {
                 ViewingMiners = await DataHelper.Instance.GetMiners();
                 ViewingMiners.ForEach(x => MinersComboBox.Items.Add(x));
-                MinersComboBox.SelectedItem = ViewingMiners.Find(x => x.ID == _config.Miner?.ID);
+                _config.Miner = DataHelper.Instance.GetMinerByID(_config.MinerID);
+                MinersComboBox.SelectedItem = ViewingMiners.Find(x => x.ID == _config.MinerID);
 
                 ViewingPools = _config.Miner?.Pools ?? new List<PoolConfigModel>();
                 ViewingPools.ForEach(x => PoolsComboBox.Items.Add(x));
-                PoolsComboBox.SelectedItem = ViewingPools.Find(x => x.ID == _config.Pool?.ID);
+                _config.Pool = DataHelper.Instance.GetPoolByID(_config.PoolID);
+                PoolsComboBox.SelectedItem = ViewingPools.Find(x => x.ID == _config.PoolID);
 
                 ViewingWallets = await DataHelper.Instance.GetWallets();
                 ViewingWallets.ForEach(x => WalletsComboBox.Items.Add(x));
-                WalletsComboBox.SelectedItem = ViewingWallets.Find(x => x.ID == _config.Wallet?.ID);
+                _config.Wallet = DataHelper.Instance.GetWalletByID(_config.WalletID);
+                WalletsComboBox.SelectedItem = ViewingWallets.Find(x => x.ID == _config.WalletID);
 
                 var index = ViewingMiners.IndexOf(_config.Miner);
                 PoolsComboBox.SelectedItem = _config.Pool;

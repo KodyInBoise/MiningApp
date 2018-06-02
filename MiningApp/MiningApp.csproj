@@ -105,11 +105,10 @@
       <DependentUpon>ViewLogsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\CryptoModel.cs" />
-    <Compile Include="Models\ConfigModel.cs" />
+    <Compile Include="Models\SessionConfigModel.cs" />
     <Compile Include="Models\MinerConfigModel.cs" />
-    <Compile Include="Models\MiningSessionModel.cs" />
-    <Compile Include="Models\PoolConfigModel.cs" />
     <Compile Include="Models\SessionModel.cs" />
+    <Compile Include="Models\PoolConfigModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\WalletConfigModel.cs" />
     <Compile Include="Settings\MinerNames.cs" />

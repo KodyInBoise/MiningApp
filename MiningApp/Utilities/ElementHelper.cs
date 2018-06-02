@@ -57,7 +57,7 @@ namespace MiningApp
 
             return new Button()
             {
-                Name = $"{name}Button",
+                //Name = $"{name}Button",
                 Content = content,
                 FontFamily = ElementValues.Fonts.Family,
                 FontSize = fontSize > 0 ? fontSize : ElementValues.Buttons.FontSize,

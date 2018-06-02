@@ -28,12 +28,12 @@ namespace MiningApp.UI
         double padding = 15;
 
 
-        public HomeVM(MiningSessionModel launchSession = null)
+        public HomeVM(SessionModel launchSession = null)
         {
             Show(launchSession);
         }
 
-        private void Show(MiningSessionModel launchSession)
+        private void Show(SessionModel launchSession)
         {
             DisplayElement(TitleTextBlock);
 

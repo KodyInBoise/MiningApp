@@ -41,16 +41,16 @@ namespace MiningApp.UI
         DispatcherTimer ActiveSessionTimer { get; set; } = null;
 
 
-        private List<MiningSessionModel> _allSessions => WindowController.MiningSessions ?? new List<MiningSessionModel>();
+        private List<SessionModel> _allSessions => WindowController.MiningSessions ?? new List<SessionModel>();
 
-        private MiningSessionModel _activeSession { get; set; } = null;
+        private SessionModel _activeSession { get; set; } = null;
 
         private int _currentIndex { get; set; } = 0;
 
         private string _sessionOutput { get; set; } = string.Empty;
 
 
-        public ActiveSessionsVM(Grid displayGrid, MiningSessionModel launchSession = null)
+        public ActiveSessionsVM(Grid displayGrid, SessionModel launchSession = null)
         {
             ViewingGrid = displayGrid;
 
@@ -101,7 +101,7 @@ namespace MiningApp.UI
             nextTop = element.Margin.Top + element.Height + padding;
         }
 
-        void DisplaySession(MiningSessionModel session)
+        void DisplaySession(SessionModel session)
         {
             MinerTextBlock.Text = $"Miner: {session.Config.Miner.Name}";
             CryptoTextBlock.Text = $"Crypto: {session.Config.CryptoName}";

@@ -16,7 +16,7 @@ namespace MiningApp.UI
 
         public static UserModel User { get; set; }
 
-        public static List<MiningSessionModel> MiningSessions { get; set; }
+        public static List<SessionModel> MiningSessions { get; set; }
 
 
         public NavBarVM NavView { get; set; } = null;
@@ -56,7 +56,7 @@ namespace MiningApp.UI
         {
             Instance = this;
             User = new UserModel();
-            MiningSessions = new List<MiningSessionModel>();
+            MiningSessions = new List<SessionModel>();
 
             NavView = new NavBarVM();
 
@@ -73,7 +73,7 @@ namespace MiningApp.UI
 
 
         private void DisplayViewModel(ViewModelType viewType, DisplayGrid display = DisplayGrid.Primary,
-            MiningSessionModel launchSession = null)
+            SessionModel launchSession = null)
         {
             Grid displayGrid = null;
 
@@ -157,7 +157,7 @@ namespace MiningApp.UI
             }
         }
 
-        public void ShowHome(MiningSessionModel launchSession = null)
+        public void ShowHome(SessionModel launchSession = null)
         {
             DisplayViewModel(ViewModelType.Home, DisplayGrid.Primary, launchSession);
         }
