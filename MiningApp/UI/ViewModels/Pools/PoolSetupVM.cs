@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MiningApp.LoggingUtil;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -361,6 +362,8 @@ namespace MiningApp.UI
             {
                 DataHelper.Instance.DeletePoolConfig(_pool);
 
+                Task.Run(() => LogHelper.AddEntry(LogType.General, $"Deleted Pool Config: \"{_pool.Name}\""));
+
                 View.DisplayPrimary();
                 View.DisplaySecondary();
             }
@@ -368,6 +371,8 @@ namespace MiningApp.UI
             private void Save()
             {
                 DataHelper.Instance.SavePoolConfig(_pool);
+
+                Task.Run(() => LogHelper.AddEntry(LogType.General, $"Saved Pool Config: \"{_pool.Name}\""));
 
                 StatusTextBlock.Text = "Mining pool config saved successfully!";
                 TitleTextBlock.Text = "Edit Mining Pool";

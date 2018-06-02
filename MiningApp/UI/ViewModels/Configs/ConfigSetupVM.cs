@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MiningApp.LoggingUtil;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -401,6 +402,8 @@ namespace MiningApp.UI
             {
                 DataHelper.Instance.DeleteConfig(_config);
 
+                Task.Run(() => LogHelper.AddEntry(LogType.General, $"Deleted Session Config: \"{_config.Name}\""));
+
                 View.DisplayPrimary();
                 View.DisplaySecondary();
             }
@@ -408,6 +411,8 @@ namespace MiningApp.UI
             private void Save()
             {
                 DataHelper.Instance.SaveConfig(_config);
+
+                Task.Run(() => LogHelper.AddEntry(LogType.General, $"Saved Session Config: \"{_config.Name}\""));
 
                 StatusTextBlock.Text = "Config saved successfully!";
                 TitleTextBlock.Text = "Edit Config";

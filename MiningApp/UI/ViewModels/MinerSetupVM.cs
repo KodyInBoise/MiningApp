@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MiningApp.LoggingUtil;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -457,6 +458,8 @@ namespace MiningApp.UI
             {
                 DataHelper.Instance.DeleteMinerConfig(_miner);
 
+                Task.Run(() => LogHelper.AddEntry(LogType.General, $"Deleted Miner Config: \"{_miner.Name}\""));
+
                 View.DisplayPrimary();
                 View.DisplaySecondary();
             }
@@ -464,6 +467,8 @@ namespace MiningApp.UI
             private void Save()
             {
                 DataHelper.Instance.SaveMiner(_miner);
+
+                Task.Run(() => LogHelper.AddEntry(LogType.General, $"Saved Miner Config: \"{_miner.Name}\""));
 
                 StatusTextBlock.Text = "Miner config saved successfully!";
                 TitleTextBlock.Text = "Edit Miner";

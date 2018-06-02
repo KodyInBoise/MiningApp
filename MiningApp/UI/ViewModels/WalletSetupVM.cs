@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MiningApp.LoggingUtil;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -335,6 +336,8 @@ namespace MiningApp.UI
             {
                 DataHelper.Instance.DeleteWalletConfig(_wallet);
 
+                Task.Run(() => LogHelper.AddEntry(LogType.General, $"Deleted Wallet Config: \"{_wallet.Name}\""));
+
                 View.DisplayPrimary();
                 View.DisplaySecondary();
             }
@@ -342,6 +345,8 @@ namespace MiningApp.UI
             private void Save()
             {
                 DataHelper.Instance.SaveWallet(_wallet);
+
+                Task.Run(() => LogHelper.AddEntry(LogType.General, $"Saved Wallet Config: \"{_wallet.Name}\""));
 
                 StatusTextBlock.Text = "Wallet config saved successfully!";
                 TitleTextBlock.Text = "Edit Wallet";
