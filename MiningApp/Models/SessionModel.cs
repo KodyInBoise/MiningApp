@@ -181,9 +181,14 @@ namespace MiningApp
 
         bool OutputIsStale()
         {
-            if (DateTime.Now > MinerProcess?.StartTime)
+            if (IsRunning())
             {
-                return DateTime.Now > LastOutputTimestamp.AddMinutes(Config.StaleOutputThreshold);
+                if (DateTime.Now > MinerProcess?.StartTime)
+                {
+                    return DateTime.Now > LastOutputTimestamp.AddMinutes(Config.StaleOutputThreshold);
+                }
+
+                return false;
             }
 
             return false;

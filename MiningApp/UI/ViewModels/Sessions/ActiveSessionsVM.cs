@@ -61,21 +61,21 @@ namespace MiningApp.UI
 
         void Show()
         {
-            DisplayElement(TitleTextBlock, leftPadding: 125);
-            DisplayElement(ViewingTextBlock, leftPadding: 215);
+            DisplayElement(TitleTextBlock, leftPadding: 315);
+            DisplayElement(ViewingTextBlock, leftPadding: 405);
 
             nextTop = ViewingTextBlock.Margin.Top;
-            DisplayElement(PreviousTextBlock, leftPadding: 155);
+            DisplayElement(PreviousTextBlock, leftPadding: 345);
             PreviousTextBlock.MouseDown += (s, e) => PreviousSession();
 
             nextTop = ViewingTextBlock.Margin.Top;
-            DisplayElement(NextTextBlock, leftPadding: 300);
+            DisplayElement(NextTextBlock, leftPadding: 490);
             NextTextBlock.MouseDown += (s, e) => NextSession();
 
-            DisplayElement(MinerTextBlock);
-            DisplayElement(UptimeTextBlock);
-            DisplayElement(LastOutputTextBlock);
-            DisplayElement(OutputTextBox);
+            DisplayElement(MinerTextBlock, leftPadding: 175);
+            DisplayElement(UptimeTextBlock, leftPadding: 175);
+            DisplayElement(LastOutputTextBlock, leftPadding: 175);
+            DisplayElement(OutputTextBox, leftPadding: 175);
 
             if (_activeSession != null)
             {
