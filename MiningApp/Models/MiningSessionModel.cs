@@ -186,7 +186,10 @@ namespace MiningApp
             _newOutput = $"\r\r----------------------------\rRestarting Miner {DateTime.Now.ToString()}\r----------------------------\r\r";
             OutputReceived?.Invoke(new OutputReceivedArgs() { NewOutput = _newOutput });
 
-            MinerProcess.Kill();
+            if (MinerProcess.StartTime != null)
+            {
+                MinerProcess.Kill();
+            }
 
             Task.Run(Start);
 
