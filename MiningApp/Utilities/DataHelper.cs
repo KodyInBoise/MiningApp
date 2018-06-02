@@ -132,7 +132,7 @@ namespace MiningApp
         {
             using (_database)
             {
-                if (config.ConfigID > 0)
+                if (config.ID > 0)
                 {
                     _configCollection.Update(config);
                 }
@@ -155,7 +155,7 @@ namespace MiningApp
         {
             using (_database)
             {
-                _configCollection.Delete(config.ConfigID);
+                _configCollection.Delete(config.ID);
             }
         }
 

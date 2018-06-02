@@ -111,7 +111,7 @@ namespace MiningApp.UI
                 {
                     var button = ElementHelper.CreateButton(config.Name);
                     _configButtons.Add(button);
-                    _buttonDictionary.Add(button, config.ConfigID);
+                    _buttonDictionary.Add(button, config.ID);
 
                     DisplayElement(button);
 
@@ -132,7 +132,7 @@ namespace MiningApp.UI
             {
                 var button = (Button)sender;
 
-                var config = _configs.Find(x => x.ConfigID == _buttonDictionary[button]);
+                var config = _configs.Find(x => x.ID == _buttonDictionary[button]);
 
                 Instance.DisplaySecondary(config);
             }
@@ -141,7 +141,7 @@ namespace MiningApp.UI
             {
                 var button = ElementHelper.CreateButton(config.Name);
                 _configButtons.Add(button);
-                _buttonDictionary.Add(button, config.ConfigID);
+                _buttonDictionary.Add(button, config.ID);
 
                 DisplayElement(button);
 
@@ -414,11 +414,14 @@ namespace MiningApp.UI
 
             public void SetConfigInfo()
             {
-                _config.CreatedTimestamp = _config.ConfigID > 0 ? _config.CreatedTimestamp : DateTime.Now;
+                _config.CreatedTimestamp = _config.ID > 0 ? _config.CreatedTimestamp : DateTime.Now;
                 _config.Name = NameTextBox.Text;
                 _config.Miner = (MinerConfigModel)MinersComboBox.SelectedItem;
+                _config.MinerID = _config.Miner.ID;
                 _config.Pool = (PoolConfigModel)PoolsComboBox.SelectedItem;
+                _config.PoolID = _config.Pool.ID;
                 _config.Wallet = (WalletConfigModel)WalletsComboBox.SelectedItem;
+                _config.WalletID = _config.Wallet.ID;
 
                 double staleThreshold;
                 try

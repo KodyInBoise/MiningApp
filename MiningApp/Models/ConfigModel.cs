@@ -18,11 +18,13 @@ namespace MiningApp
 
     public class ConfigModel
     {
-        public int ConfigID { get; set; }
+        public int ID { get; set; }
 
         public int MinerID { get; set; }
 
         public int WalletID { get; set; }
+
+        public int PoolID { get; set; }
 
         public DateTime CreatedTimestamp { get; set; }
 
@@ -35,16 +37,20 @@ namespace MiningApp
         public string Output { get; set; } = "";
 
         public bool ShowWindow { get; set; } = true;
-        
-        public MinerConfigModel Miner { get; set; }
-
-        public WalletConfigModel Wallet { get; set; }
-
-        public PoolConfigModel Pool { get; set; }
 
         public double StaleOutputThreshold { get; set; }
 
         public MinerType MinerType { get; set; }
+
+
+        [BsonIgnore]
+        public MinerConfigModel Miner { get; set; }
+
+        [BsonIgnore]
+        public WalletConfigModel Wallet { get; set; }
+
+        [BsonIgnore]
+        public PoolConfigModel Pool { get; set; }
 
         [BsonIgnore]
         public MiningSessionModel Session { get; set; }
