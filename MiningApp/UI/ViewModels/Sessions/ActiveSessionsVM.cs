@@ -39,16 +39,18 @@ namespace MiningApp.UI
 
         private List<MiningSessionModel> _allSessions => WindowController.MiningSessions ?? new List<MiningSessionModel>();
 
-        private MiningSessionModel _activeSession { get; set; }
+        private MiningSessionModel _activeSession { get; set; } = null;
 
         private int _currentIndex { get; set; } = 0;
 
         private string _sessionOutput { get; set; } = string.Empty;
 
 
-        public ActiveSessionsVM(Grid displayGrid)
+        public ActiveSessionsVM(Grid displayGrid, MiningSessionModel launchSession = null)
         {
             ViewingGrid = displayGrid;
+
+            _activeSession = launchSession;
 
             Show();
         }
@@ -63,7 +65,11 @@ namespace MiningApp.UI
             DisplayElement(LastOutputTextBlock);
             DisplayElement(OutputTextBox);
 
-            if (_allSessions.Any())
+            if (_activeSession != null)
+            {
+                DisplaySession(_activeSession);
+            }
+            else if (_allSessions.Any())
             {
                 DisplaySession(_allSessions[0]);
             }

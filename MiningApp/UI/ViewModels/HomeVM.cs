@@ -20,6 +20,7 @@ namespace MiningApp.UI
         ActiveSessionsVM _activeSessionsVM { get; set; }
 
 
+
         double nextLeft = 10;
 
         double nextTop = 10;
@@ -27,16 +28,16 @@ namespace MiningApp.UI
         double padding = 15;
 
 
-        public HomeVM()
+        public HomeVM(MiningSessionModel launchSession = null)
         {
-            Show();
+            Show(launchSession);
         }
 
-        private void Show()
+        private void Show(MiningSessionModel launchSession)
         {
             DisplayElement(TitleTextBlock);
 
-            _activeSessionsVM = new ActiveSessionsVM(ViewGrid);
+            _activeSessionsVM = new ActiveSessionsVM(ViewGrid, launchSession);
         }
 
         public void Dispose()

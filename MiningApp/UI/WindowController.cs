@@ -72,7 +72,8 @@ namespace MiningApp.UI
         }
 
 
-        private void DisplayViewModel(ViewModelType viewType, DisplayGrid display = DisplayGrid.Primary)
+        private void DisplayViewModel(ViewModelType viewType, DisplayGrid display = DisplayGrid.Primary,
+            MiningSessionModel launchSession = null)
         {
             Grid displayGrid = null;
 
@@ -107,7 +108,7 @@ namespace MiningApp.UI
             {
                 case ViewModelType.Home:
                     HomeView?.Dispose();
-                    HomeView = new HomeVM();
+                    HomeView = new HomeVM(launchSession);
                     break;
                 case ViewModelType.ConfigsHome:
                     ConfigsHomeView?.Dispose();
@@ -156,9 +157,9 @@ namespace MiningApp.UI
             }
         }
 
-        public void ShowHome()
+        public void ShowHome(MiningSessionModel launchSession = null)
         {
-            DisplayViewModel(ViewModelType.Home, DisplayGrid.Primary);
+            DisplayViewModel(ViewModelType.Home, DisplayGrid.Primary, launchSession);
         }
 
         public void ShowConfigurationsHome()

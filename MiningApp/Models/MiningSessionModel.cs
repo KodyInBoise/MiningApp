@@ -170,7 +170,12 @@ namespace MiningApp
 
         bool OutputIsStale()
         {
-            return DateTime.Now > LastOutputTimestamp.AddMinutes(Config.StaleOutputThreshold);
+            if (DateTime.Now > MinerProcess?.StartTime)
+            {
+                return DateTime.Now > LastOutputTimestamp.AddMinutes(Config.StaleOutputThreshold);
+            }
+
+            return false;
         }
 
         public async Task CheckForStaleMiners()
@@ -186,9 +191,11 @@ namespace MiningApp
             _newOutput = $"\r\r----------------------------\rRestarting Miner {DateTime.Now.ToString()}\r----------------------------\r\r";
             OutputReceived?.Invoke(new OutputReceivedArgs() { NewOutput = _newOutput });
 
-            if (MinerProcess.StartTime != null)
+            var procs = Process.GetProcessesByName(MinerProcess.ProcessName).ToList();
+
+            if (procs.Any())
             {
-                MinerProcess.Kill();
+                procs.ForEach(x => x.Kill());
             }
 
             Task.Run(Start);
