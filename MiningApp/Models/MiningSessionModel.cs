@@ -15,6 +15,7 @@ namespace MiningApp
     public class OutputReceivedArgs
     {
         public DateTime Timestamp { get; set; }
+        public string SessionID { get; set; }
         public string NewOutput { get; set; }
 
         public OutputReceivedArgs()
@@ -25,6 +26,8 @@ namespace MiningApp
 
     public class MiningSessionModel
     {
+        public string SessionID { get; set; }
+
         public ConfigModel Config { get; set; }
 
         public Process MinerProcess { get; set; }
@@ -54,6 +57,8 @@ namespace MiningApp
         {
             StartTime = DateTime.Now;
             Config = config;
+
+            SessionID = Guid.NewGuid().ToString().Substring(0, 8);
 
             _sessionTimer = new TimerHelper(this);
         }
@@ -91,7 +96,7 @@ namespace MiningApp
 
         private void AppendOutput(string output)
         {
-            var outputArgs = new OutputReceivedArgs() { NewOutput = output };
+            var outputArgs = new OutputReceivedArgs() { SessionID = SessionID, NewOutput = output };
             OutputReceived?.Invoke(outputArgs);
 
             _output += output + Environment.NewLine;
@@ -189,7 +194,7 @@ namespace MiningApp
         public void RestartMiner()
         {
             _newOutput = $"\r\r----------------------------\rRestarting Miner {DateTime.Now.ToString()}\r----------------------------\r\r";
-            OutputReceived?.Invoke(new OutputReceivedArgs() { NewOutput = _newOutput });
+            OutputReceived?.Invoke(new OutputReceivedArgs() { SessionID = SessionID, NewOutput = _newOutput });
 
             var procs = Process.GetProcessesByName(MinerProcess.ProcessName).ToList();
 

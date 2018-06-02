@@ -24,6 +24,10 @@ namespace MiningApp.UI
 
         TextBlock ViewingTextBlock { get; set; } = ElementHelper.CreateTextBlock("0 of 0", fontSize: 20);
 
+        TextBlock PreviousTextBlock { get; set; } = ElementHelper.CreateTextBlock("<<", fontSize: 20, width: 50);
+
+        TextBlock NextTextBlock { get; set; } = ElementHelper.CreateTextBlock(">>", fontSize: 20, width: 50);
+
         TextBlock MinerTextBlock { get; set; } = ElementHelper.CreateTextBlock("Miner: ", width: 450, height: 20);
 
         TextBlock CryptoTextBlock { get; set; } = ElementHelper.CreateTextBlock("Crypto: ", width: 450, height: 20);
@@ -59,6 +63,14 @@ namespace MiningApp.UI
         {
             DisplayElement(TitleTextBlock, leftPadding: 125);
             DisplayElement(ViewingTextBlock, leftPadding: 215);
+
+            nextTop = ViewingTextBlock.Margin.Top;
+            DisplayElement(PreviousTextBlock, leftPadding: 155);
+            PreviousTextBlock.MouseDown += (s, e) => PreviousSession();
+
+            nextTop = ViewingTextBlock.Margin.Top;
+            DisplayElement(NextTextBlock, leftPadding: 300);
+            NextTextBlock.MouseDown += (s, e) => NextSession();
 
             DisplayElement(MinerTextBlock);
             DisplayElement(UptimeTextBlock);
@@ -96,6 +108,7 @@ namespace MiningApp.UI
             UptimeTextBlock.Text = $"Uptime: {session.Uptime}";
             LastOutputTextBlock.Text = $"Last Output: {session.LastOutputTimestamp}";
 
+            OutputTextBox.Clear();
             _sessionOutput = session.AllOutput;
             OutputTextBox.Text = session.AllOutput;
             session.OutputReceived += SessionOutputReceived;
@@ -129,17 +142,44 @@ namespace MiningApp.UI
 
         void SessionOutputReceived(OutputReceivedArgs args)
         {
-            if (!String.IsNullOrEmpty(args.NewOutput))
+            if (args.SessionID == _activeSession.SessionID)
             {
-                _sessionOutput += args.NewOutput + Environment.NewLine;
+                if (!String.IsNullOrEmpty(args.NewOutput))
+                {
+                    _sessionOutput += args.NewOutput + Environment.NewLine;
 
-                //Cannot append textbox text from here due to threading issues with textbox element
-                /*
-                OutputTextBox.AppendText(newOutput + Environment.NewLine);
-                LastOutputTextBlock.Text = $"Last Output: {_activeSession.LastOutputTimestamp}";
+                    //Cannot append textbox text from here due to threading issues with textbox element
+                    /*
+                    OutputTextBox.AppendText(newOutput + Environment.NewLine);
+                    LastOutputTextBlock.Text = $"Last Output: {_activeSession.LastOutputTimestamp}";
 
-                OutputTextBox.ScrollToEnd();
-                */
+                    OutputTextBox.ScrollToEnd();
+                    */
+                }
+            }
+        }
+
+        void NextSession()
+        {
+            if (_allSessions.Any())
+            {
+                _currentIndex = _currentIndex == _allSessions.Count - 1 ? 0 :_currentIndex + 1;
+
+                _activeSession.OutputReceived -= SessionOutputReceived;
+
+                DisplaySession(_allSessions[_currentIndex]);
+            }
+        }
+        
+        void PreviousSession()
+        {
+            if (_allSessions.Any())
+            {
+                _currentIndex = _currentIndex == 0 ? _allSessions.Count - 1 : _currentIndex - 1;
+
+                _activeSession.OutputReceived -= SessionOutputReceived;
+
+                DisplaySession(_allSessions[_currentIndex]);
             }
         }
     }
