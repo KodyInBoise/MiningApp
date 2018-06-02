@@ -21,6 +21,8 @@ namespace MiningApp.UI
 
         Button SetupButton { get; set; } = ElementHelper.CreateButton("Setup");
 
+        Button BrowseButton { get; set; } = ElementHelper.CreateButton("Browse");
+
 
         double nextLeft = 10;
 
@@ -44,6 +46,11 @@ namespace MiningApp.UI
             nextLeft = 25;
             DisplayElement(SetupButton);
             SetupButton.Click += (s, e) => SetupButton_Clicked();
+
+            nextTop = SetupButton.Margin.Top;
+            nextLeft = nextLeft + SetupButton.Width + padding * 2;
+            DisplayElement(BrowseButton);
+            BrowseButton.Click += (s, e) => BrowseButton_Clicked();
         }
 
         public void Dispose()
@@ -66,6 +73,16 @@ namespace MiningApp.UI
         private void SetupButton_Clicked()
         {
             WindowController.Instance.ShowMinerSetup();
+        }
+
+        private void BrowseButton_Clicked()
+        {
+            WindowController.Instance.ShowBrowseMiners();
+        }
+
+        private void ShowBrowse()
+        {
+
         }
     }
 }

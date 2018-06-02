@@ -117,13 +117,14 @@
     </Compile>
     <Compile Include="UI\ViewModels\Configs\ConfigSetupVM.cs" />
     <Compile Include="UI\ViewModels\Configs\ConfigsHomeVM.cs" />
+    <Compile Include="UI\ViewModels\Miners\BrowseMinersVM.cs" />
     <Compile Include="UI\ViewModels\Sessions\ActiveSessionsVM.cs" />
     <Compile Include="Utilities\ElementHelper.cs" />
     <Compile Include="UI\ViewModels\HomeVM.cs" />
     <Compile Include="UI\ViewModels\IViewModel.cs" />
     <Compile Include="UI\ViewModels\LogsHomeVM.cs" />
-    <Compile Include="UI\ViewModels\MinerSetupVM.cs" />
-    <Compile Include="UI\ViewModels\MinersHomeVM.cs" />
+    <Compile Include="UI\ViewModels\Miners\MinerSetupVM.cs" />
+    <Compile Include="UI\ViewModels\Miners\MinersHomeVM.cs" />
     <Compile Include="UI\ViewModels\Pools\PoolSetupVM.cs" />
     <Compile Include="UI\ViewModels\Pools\PoolsHomeVM.cs" />
     <Compile Include="UI\ViewModels\PrimaryViewModel.cs" />
@@ -139,7 +140,6 @@
     <Compile Include="Utilities\Enums.cs" />
     <Compile Include="Utilities\FileHelper.cs" />
     <Compile Include="Utilities\MinerSettings.cs" />
-    <Compile Include="Utilities\MiningHelper.cs" />
     <Compile Include="Utilities\PoolHelper.cs" />
     <Compile Include="Utilities\ProcessHelper.cs" />
     <Compile Include="Utilities\ServerHelper.cs" />

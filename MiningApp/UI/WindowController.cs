@@ -27,6 +27,8 @@ namespace MiningApp.UI
 
         public MinersHomeVM MinersHomeView { get; set; } = null;
 
+        public BrowseMinersVM BrowseMinersView { get; set; } = null;
+
         public WalletsHomeVM WalletsHomeView { get; set; } = null;
 
         public PoolsHomeVM PoolsHomeView { get; set; } = null;
@@ -122,6 +124,10 @@ namespace MiningApp.UI
                     MinersHomeView?.Dispose();
                     MinersHomeView = new MinersHomeVM();
                     break;
+                case ViewModelType.BrowseMiners:
+                    BrowseMinersView?.Dispose();
+                    BrowseMinersView = new BrowseMinersVM();
+                    break;
                 case ViewModelType.MinerSetup:
                     MinerSetupView?.Dispose();
                     MinerSetupView = new MinerSetupVM();
@@ -170,6 +176,11 @@ namespace MiningApp.UI
         public void ShowMinersHome()
         {
             DisplayViewModel(ViewModelType.MinersHome, DisplayGrid.Primary);
+        }
+
+        public void ShowBrowseMiners()
+        {
+            DisplayViewModel(ViewModelType.BrowseMiners, DisplayGrid.Primary);
         }
 
         public void ShowWalletsHome()
