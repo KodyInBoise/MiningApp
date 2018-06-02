@@ -315,6 +315,7 @@ namespace MiningApp
         Home,
         ConfigsHome,
         MinersHome,
+        BrowseMiners,
         WalletsHome,
         PoolsHome,
         LogsHome,
@@ -418,7 +419,7 @@ namespace MiningApp
 
             public static class Large
             {
-                public static int Width { get; set; } = 925;
+                public static int Width { get; set; } = 935;
                 public static int Height { get; set; } = 600;
             }
         }

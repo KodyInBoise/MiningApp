@@ -41,16 +41,16 @@ namespace MiningApp
             File.WriteAllText(_minersJsonPath, content);
         }
 
-        public List<MinerConfigModel> GetMiners()
+        public static List<MinerConfigModel> GetMiners()
         {
-            try
+            return new List<MinerConfigModel>()
             {
-                return JsonConvert.DeserializeObject<List<MinerConfigModel>>(File.ReadAllText(_minersJsonPath));
-            }
-            catch
-            {
-                return new List<MinerConfigModel>();
-            }
+                new MinerConfigModel()
+                {
+                    Name = "CCMiner",
+                    Cryptos = new List<string>() { "Vertcoin" },
+                }
+            };
         }
 
         public string GetUniqueMinerID()

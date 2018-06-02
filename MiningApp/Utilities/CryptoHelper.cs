@@ -82,9 +82,9 @@ namespace MiningApp
         private Dictionary<string, string> GetSupportedCryptosDictionary()
         {
             var _dictionary = new Dictionary<string, string>();
-            _dictionary.Add("BTC", "Bitcoin");
-            _dictionary.Add("ETH", "Ethereum");
-            _dictionary.Add("LTC", "Litecoin");
+            //_dictionary.Add("BTC", "Bitcoin");
+            //_dictionary.Add("ETH", "Ethereum");
+            //_dictionary.Add("LTC", "Litecoin");
             _dictionary.Add("VTC", "Vertcoin");
 
             return _dictionary;
