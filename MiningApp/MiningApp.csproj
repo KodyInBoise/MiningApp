@@ -109,6 +109,7 @@
     <Compile Include="Models\MinerConfigModel.cs" />
     <Compile Include="Models\MiningSessionModel.cs" />
     <Compile Include="Models\PoolConfigModel.cs" />
+    <Compile Include="Models\SessionModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\WalletConfigModel.cs" />
     <Compile Include="Settings\MinerNames.cs" />

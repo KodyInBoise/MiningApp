@@ -28,6 +28,8 @@ namespace MiningApp
 
         private LiteCollection<ConfigModel> _configCollection => GetMiningRuleCollection();
 
+        private LiteCollection<SessionModel.Config> _sessionConfigCollection => GetSessionConfigCollection();
+
         private LiteCollection<WalletConfigModel> _walletConfigCollection => GetWalletCollection();
 
         private LiteCollection<PoolConfigModel> _poolConfigCollection => GetPoolCollection();
@@ -67,6 +69,14 @@ namespace MiningApp
             using (_database)
             {
                 return _database.GetCollection<ConfigModel>("miningruleconfigs");
+            }
+        }
+
+        private LiteCollection<SessionModel.Config> GetSessionConfigCollection()
+        {
+            using (_database)
+            {
+                return _database.GetCollection<SessionModel.Config>("sessionconfigs");
             }
         }
 
@@ -122,7 +132,7 @@ namespace MiningApp
         {
             using (_database)
             {
-                if (config.ID > 0)
+                if (config.ConfigID > 0)
                 {
                     _configCollection.Update(config);
                 }
@@ -145,7 +155,7 @@ namespace MiningApp
         {
             using (_database)
             {
-                _configCollection.Delete(config.ID);
+                _configCollection.Delete(config.ConfigID);
             }
         }
 
@@ -342,6 +352,48 @@ namespace MiningApp
                     default:
                         return new List<LogEntry>();
                 }
+            }
+        }
+
+        //old
+        public ConfigModel GetConfigByID(int id)
+        {
+            using (_database)
+            {
+                return _configCollection.FindById(id);
+            }
+        }
+
+        //new
+        public SessionModel.Config GetSessionConfigByID(int id)
+        {
+            using (_database)
+            {
+                return _sessionConfigCollection.FindById(id);
+            }
+        }
+
+        public MinerConfigModel GetMinerByID(int id)
+        {
+            using (_database)
+            {
+                return _minerConfigCollection.FindById(id);
+            }
+        }
+
+        public WalletConfigModel GetWalletByID(int id)
+        {
+            using (_database)
+            {
+                return _walletConfigCollection.FindById(id);
+            }
+        }
+
+        public PoolConfigModel GetPoolByID(int id)
+        {
+            using (_database)
+            {
+                return _poolConfigCollection.FindById(id);
             }
         }
     }

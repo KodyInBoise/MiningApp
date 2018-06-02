@@ -30,6 +30,12 @@ namespace MiningApp
 
         public ConfigModel Config { get; set; }
 
+        public MinerConfigModel Miner => Config.Miner;
+
+        public WalletConfigModel Wallet => Config.Wallet;
+
+        public PoolConfigModel Pool => Config.Pool;
+
         public Process MinerProcess { get; set; }
 
         public DateTime StartTime { get; set; }

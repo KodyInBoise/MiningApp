@@ -18,7 +18,11 @@ namespace MiningApp
 
     public class ConfigModel
     {
-        public int ID { get; set; }
+        public int ConfigID { get; set; }
+
+        public int MinerID { get; set; }
+
+        public int WalletID { get; set; }
 
         public DateTime CreatedTimestamp { get; set; }
 
