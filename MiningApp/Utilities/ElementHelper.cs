@@ -174,6 +174,22 @@ namespace MiningApp
             };
         }
 
+        public static CheckBox CreateCheckBox(string content, double topPadding = 0, int fontSize = -1)
+        {
+            return new CheckBox()
+            {
+                Content = $"     { content }",
+                FontFamily = ElementValues.Fonts.Family,
+                FontSize = fontSize > 0 ? fontSize : ElementValues.Fonts.Size,
+                Foreground = ElementValues.Fonts.Color,
+                Height = ElementValues.CheckBoxs.Height,
+
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalContentAlignment = VerticalAlignment.Center
+            };
+        }
+
         public static ListBox CreateListBox(string name, int fontSize = -1, int width = -1, int height = -1)
         {
             return new ListBox()
@@ -400,6 +416,11 @@ namespace MiningApp
         public static class RadioButtons
         {
             public static int Height { get; set; } = 20;
+        }
+
+        public static class CheckBoxs
+        {
+            public static int Height { get; set; } = 40;
         }
 
         public static class ListBoxs

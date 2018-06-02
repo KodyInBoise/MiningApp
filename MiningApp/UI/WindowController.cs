@@ -200,7 +200,7 @@ namespace MiningApp.UI
 
         public void ShowSettingsHome()
         {
-            DisplayViewModel(ViewModelType.SettingsHome, DisplayGrid.Primary);
+            DisplayViewModel(ViewModelType.SettingsHome, DisplayGrid.Secondary);
         }
 
         public void ShowWalletSetup()

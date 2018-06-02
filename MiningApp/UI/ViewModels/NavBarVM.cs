@@ -117,10 +117,7 @@ namespace MiningApp.UI
 
         private void SettingsButton_Clicked()
         {
-            //WindowController.Instance.ShowSettingsHome();
-
-            //TESTING
-            LoggingUtil.LogHelper.AddEntry(LogType.General, "Test logging...");
+            WindowController.Instance.ShowSettingsHome();
         }
     }
 }

@@ -1,35 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static MiningApp.SettingsModel;
 
 namespace MiningApp
 {
-    public class AppSettings
-    {
-        public static string AppName = "MiningApp";
-
-        public static int CurrentProcessID => Process.GetCurrentProcess().Id;
-
-
-        public AppSettings()
-        {
-
-        }
-    }
 
     public class Bootstrapper
     {
         public static Bootstrapper Instance { get; set; }
 
-        public AppSettings Settings { get; set; }
+        public static SettingsModel Settings { get; set; }
+
+        public static string SettingsFilePath => Path.Combine(RootPath(), $"{AppSettings.AppName}.settings");
 
         public Bootstrapper()
         {
             Instance = this;
-            Settings = new AppSettings();
+
+            Settings = new SettingsModel();
         }
 
         public static async void Startup()
@@ -53,6 +46,11 @@ namespace MiningApp
                     proc.Kill();
                 }
             }
+        }
+
+        public static string RootPath()
+        {
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SimpleMining");
         }
     }
 }
