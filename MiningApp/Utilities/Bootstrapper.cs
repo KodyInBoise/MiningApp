@@ -1,4 +1,7 @@
-﻿using System;
+﻿using IWshRuntimeLibrary;
+using MiningApp.LoggingUtil;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -16,13 +19,13 @@ namespace MiningApp
 
         public static SettingsModel Settings { get; set; }
 
-        public static string SettingsFilePath => Path.Combine(RootPath(), $"{AppSettings.AppName}.settings");
+        public static string SettingsFilePath => Path.Combine(RootPath(), $"simplemining.settings");
 
         public Bootstrapper()
         {
             Instance = this;
 
-            Settings = new SettingsModel();
+            Settings = GetLocalSettings();
         }
 
         public static async void Startup()
@@ -34,6 +37,7 @@ namespace MiningApp
         
         static async Task KillExistingProcesses()
         {
+            /*
             var procs = Process.GetProcessesByName(AppSettings.AppName).ToList();
 
             var currentProcess = Process.GetProcessById(AppSettings.CurrentProcessID);
@@ -46,11 +50,102 @@ namespace MiningApp
                     proc.Kill();
                 }
             }
+            */
         }
 
         public static string RootPath()
         {
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SimpleMining");
+        }
+
+        public SettingsModel GetLocalSettings()
+        {
+            try
+            {
+                if (System.IO.File.Exists(SettingsFilePath))
+                {
+                    var content = System.IO.File.ReadAllText(SettingsFilePath);
+
+                    if (!String.IsNullOrEmpty(content))
+                    {
+                        var settings = JsonConvert.DeserializeObject<SettingsModel>(content);
+
+                        return settings ?? new SettingsModel();
+                    }
+                }
+
+                return new SettingsModel();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddEntry(ex);
+
+                return new SettingsModel();
+            }
+        }
+
+        public void SaveLocalSettings(SettingsModel settings = null)
+        {
+            try
+            {
+                settings = settings != null ? settings : Settings;
+
+                var content = JsonConvert.SerializeObject(settings);
+
+                System.IO.File.WriteAllText(SettingsFilePath, content);
+
+                EnforceSettings();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddEntry(ex);
+            }
+        }
+
+        void EnforceSettings()
+        {
+            try
+            {
+                var startupShortcutPath = Path.Combine(GetStartupPath(), "SimpleMining.lnk");
+
+                if (Settings.LaunchOnStartup)
+                {
+                    CreateShortcut(startupShortcutPath);
+                }
+                else
+                {
+                    if (System.IO.File.Exists(startupShortcutPath))
+                    {
+                        System.IO.File.Delete(startupShortcutPath);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddEntry(ex);
+            }
+        }
+
+        string GetStartupPath()
+        {
+            return Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+        }
+
+        void CreateShortcut(string path)
+        {
+            try
+            {
+                var shell = new WshShell();
+                var windowsApplicationShortcut = (IWshShortcut)shell.CreateShortcut(path);
+                windowsApplicationShortcut.Description = "How to create short for application example";
+                windowsApplicationShortcut.WorkingDirectory = Directory.GetCurrentDirectory();
+                windowsApplicationShortcut.TargetPath = Path.Combine(Directory.GetCurrentDirectory(), "MiningApp.exe");
+                windowsApplicationShortcut.Save();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddEntry(ex);
+            }
         }
     }
 }

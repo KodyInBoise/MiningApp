@@ -144,8 +144,9 @@ namespace MiningApp.UI
 
             TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("General", 40, width: ElementValues.Grids.SecondaryNormal);
 
-            CheckBox LaunchOnStartupCheckBox { get; set; } = ElementHelper.CreateCheckBox("Launch On Startup", fontSize: 22); 
+            CheckBox LaunchOnStartupCheckBox { get; set; } = ElementHelper.CreateCheckBox("Launch On Startup", fontSize: 22);
 
+            Button SaveButton { get; set; } = ElementHelper.CreateButton("Save", height: 60, width: 150, style: ButtonStyle.Finish);
 
             private double nextLeft = 20;
 
@@ -165,6 +166,12 @@ namespace MiningApp.UI
 
                 nextLeft = nextLeft + padding * 4;
                 DisplayElement(LaunchOnStartupCheckBox, topPadding: padding * 4);
+                LaunchOnStartupCheckBox.IsChecked = Bootstrapper.Settings.LaunchOnStartup;
+
+                nextLeft = ElementValues.Grids.SecondaryNormal - SaveButton.Width - padding;
+                nextTop = ViewGrid.Height - SaveButton.Height - padding;
+                DisplayElement(SaveButton);
+                SaveButton.Click += (s, e) => SaveButton_Clicked();
             }
 
             private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
@@ -174,6 +181,13 @@ namespace MiningApp.UI
                 ViewGrid.Children.Add(element);
 
                 nextTop = element.Margin.Top + element.Height + padding;
+            }
+
+            void SaveButton_Clicked()
+            {
+                Bootstrapper.Settings.LaunchOnStartup = LaunchOnStartupCheckBox.IsChecked ?? false;
+
+                Bootstrapper.Instance.SaveLocalSettings();
             }
         }
 
