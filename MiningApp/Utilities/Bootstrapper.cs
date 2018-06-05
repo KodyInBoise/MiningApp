@@ -21,6 +21,8 @@ namespace MiningApp
 
         public static string SettingsFilePath => Path.Combine(RootPath(), $"simplemining.settings");
 
+        public static string AppTempPath => Path.Combine(RootPath(), "Temp");
+
         public Bootstrapper()
         {
             Instance = this;
@@ -108,7 +110,7 @@ namespace MiningApp
             {
                 var startupShortcutPath = Path.Combine(GetStartupPath(), "SimpleMining.lnk");
 
-                if (Settings.LaunchOnStartup)
+                if (Settings.General.LaunchOnStartup)
                 {
                     CreateShortcut(startupShortcutPath);
                 }

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using MiningApp.LoggingUtil;
 using Newtonsoft.Json;
 
 namespace MiningApp
@@ -13,6 +15,9 @@ namespace MiningApp
         public static ServerHelper Instance { get; set; }
 
 
+        FTPHelper _ftpHelper { get; set; }
+
+        VersionHelper _versionHelper { get; set; }
 
         List<MinerConfigModel> _allMiners { get; set; } = new List<MinerConfigModel>();
 
@@ -24,7 +29,26 @@ namespace MiningApp
         {
             Instance = this;
 
+            _ftpHelper = new FTPHelper();
+            _versionHelper = new VersionHelper();
+
             _allMiners = GetMiners();
+        }
+
+        public string GetCurrentVersionString()
+        {
+            var path = "";
+
+            _ftpHelper.DownloadFile(VersionHelper.CurrentVersionPath, out path);
+
+            return File.ReadAllText(path);
+        }
+
+        public async Task<bool> CheckForUpdates()
+        {
+            var current = GetCurrentVersionString();
+
+            return false;
         }
 
         public void UploadMiner(MinerConfigModel miner)
@@ -75,6 +99,51 @@ namespace MiningApp
             var miner = _allMiners.Find(x => x.ServerID == newID);
 
             return miner == null ? true : false;
+        }
+
+        public class FTPHelper
+        {
+            FTPClient client { get; set; }
+
+            static string _address = Path.Combine("ftp://23.229.226.104/");
+            static string _username = "miningappclient@kodykriner.com";
+            static string _password = "conquest.papal.tinny.redress.tuft";
+
+            public FTPHelper()
+            {
+                client = new FTPClient(_address, _username, _password);
+            }
+
+            public void DownloadFile(string remoteFile, out string tmpPath)
+            {
+                try
+                {
+                    var tmpID = Guid.NewGuid().ToString().Substring(0, 8);
+                    tmpPath = Path.Combine(Bootstrapper.AppTempPath, tmpID);
+
+                    client.download(remoteFile, tmpPath);
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.AddEntry(ex);
+
+                    tmpPath = string.Empty;
+                }
+            }
+
+        }
+
+        public class VersionHelper
+        {
+            public static string CurrentVersionPath = "version.info";
+
+            public class VersionModel
+            {
+                public double Number { get; set; }
+                public DateTime ReleaseTimestamp { get; set; }
+                public string Notes { get; set; }
+                public bool Suggested { get; set; }
+            }
         }
     }
 }

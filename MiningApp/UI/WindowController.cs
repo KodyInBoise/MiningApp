@@ -47,11 +47,14 @@ namespace MiningApp.UI
 
         public MainWindow Window => MainWindow.Instance;
 
+
         private LogHelper _logHelper { get; set; } = null;
 
         private CryptoHelper _cryptoHelper { get; set; } = null;
 
         private DataHelper _dataHelper { get; set; } = null;
+
+        private ServerHelper _serverHelper { get; set; } = null;
 
 
         public WindowController()
@@ -65,12 +68,11 @@ namespace MiningApp.UI
             _logHelper = new LogHelper();
             _cryptoHelper = new CryptoHelper();
             _dataHelper = new DataHelper();
+            _serverHelper = new ServerHelper();
 
             MainWindow.Instance.Closing += (s, e) => Shutdown();
 
-            Bootstrapper.Startup();
-            //TESTING
-            MainWindow.Instance.TestButton.Click += (s, e) => TestButton_Clicked();
+            Bootstrapper.Startup();           
         }
 
 
@@ -223,26 +225,6 @@ namespace MiningApp.UI
             DisplayViewModel(ViewModelType.ConfigSetup, DisplayGrid.Secondary);
         }
 
-        //TESTING METHOD FOR TEST BUTTON
-        int testCounter = 0;
-        private void TestButton_Clicked()
-        {
-            //MainWindow.Instance.Background = Brushes.White;
-
-            
-            if (testCounter % 2 == 0)
-            {
-                ShowHome();
-            }
-            else
-            {
-                ShowWalletSetup();
-            }
-
-            testCounter++;
-            
-        }
-
         private void Shutdown()
         {
             Task.Run(CloseSessions);
@@ -253,6 +235,11 @@ namespace MiningApp.UI
             var sessions = MiningSessions;
 
             sessions.ForEach(x => x.Close());
+        }
+
+        public async void Testing()
+        {
+            var updatesAvailable = await ServerHelper.Instance.CheckForUpdates();
         }
     }
 }

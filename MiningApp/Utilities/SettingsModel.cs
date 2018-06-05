@@ -10,6 +10,28 @@ namespace MiningApp
 {
     public class SettingsModel
     {
-        public bool LaunchOnStartup { get; set; } = false;
+        public GeneralSettings General { get; set; }
+
+
+        public SettingsModel()
+        {
+            General = new GeneralSettings();
+        }
+
+        public class AppSettings
+        {
+            public string Name { get; set; } = "MiningApp";
+
+            public double Version { get; set; } = 0.0;
+
+            public DateTime LastUpdate { get; set; }
+        }
+
+        public class GeneralSettings
+        {
+            public bool LaunchOnStartup { get; set; } = false;
+
+            public bool CheckForUpdates { get; set; } = false;
+        }
     }
 }

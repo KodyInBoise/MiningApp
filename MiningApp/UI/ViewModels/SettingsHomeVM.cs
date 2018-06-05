@@ -12,7 +12,7 @@ namespace MiningApp.UI
     public enum SettingType
     {
         General,
-
+        Updates,
     }
 
 
@@ -29,6 +29,8 @@ namespace MiningApp.UI
         private PrimaryVM _primaryVM { get; set; }
 
         private GeneralVM _generalVM { get; set; }
+
+        private UpdatesVM _updatesVM { get; set; }
 
 
         public SettingsHomeVM()
@@ -68,6 +70,9 @@ namespace MiningApp.UI
                 case SettingType.General:
                     _generalVM = new GeneralVM();
                     break;
+                case SettingType.Updates:
+                    _updatesVM = new UpdatesVM();
+                    break;
                 default:
                     break;
             }
@@ -83,6 +88,8 @@ namespace MiningApp.UI
 
             Button GeneralButton { get; set; } = ElementHelper.CreateButton("General", height: buttonHeight);
 
+            Button UpdatesButton { get; set; } = ElementHelper.CreateButton("Updates", height: buttonHeight);
+
 
             private static int buttonHeight = 60;
 
@@ -91,13 +98,6 @@ namespace MiningApp.UI
             private double nextTop = 12;
 
             private double padding = 15;
-
-
-            private List<PoolConfigModel> _pools { get; set; } = new List<PoolConfigModel>();
-
-            private List<Button> _poolButtons { get; set; } = new List<Button>();
-
-            private Dictionary<Button, int> _buttonDictionary { get; set; } = new Dictionary<Button, int>();
 
 
             public PrimaryVM()
@@ -113,12 +113,8 @@ namespace MiningApp.UI
                 DisplayElement(GeneralButton, topPadding: padding * 2);
                 GeneralButton.Click += (s, e) => GeneralButton_Clicked();
 
-                DisplayExisting();
-            }
-
-            private async void DisplayExisting()
-            {
-
+                DisplayElement(UpdatesButton);
+                UpdatesButton.Click += (s, e) => UpdatesButton_Clicked();
             }
 
             private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
@@ -133,6 +129,11 @@ namespace MiningApp.UI
             void GeneralButton_Clicked()
             {
                 View.DisplaySecondary(SettingType.General);
+            }
+
+            void UpdatesButton_Clicked()
+            {
+                View.DisplaySecondary(SettingType.Updates);
             }
         }
         
@@ -166,7 +167,7 @@ namespace MiningApp.UI
 
                 nextLeft = nextLeft + padding * 4;
                 DisplayElement(LaunchOnStartupCheckBox, topPadding: padding * 4);
-                LaunchOnStartupCheckBox.IsChecked = Bootstrapper.Settings.LaunchOnStartup;
+                LaunchOnStartupCheckBox.IsChecked = Bootstrapper.Settings.General.LaunchOnStartup;
 
                 nextLeft = ElementValues.Grids.SecondaryNormal - SaveButton.Width - padding;
                 nextTop = ViewGrid.Height - SaveButton.Height - padding;
@@ -185,11 +186,78 @@ namespace MiningApp.UI
 
             void SaveButton_Clicked()
             {
-                Bootstrapper.Settings.LaunchOnStartup = LaunchOnStartupCheckBox.IsChecked ?? false;
+                Bootstrapper.Settings.General.LaunchOnStartup = LaunchOnStartupCheckBox.IsChecked ?? false;
 
                 Bootstrapper.Instance.SaveLocalSettings();
             }
         }
 
+
+        public class UpdatesVM
+        {
+            SettingsHomeVM View { get; set; } = Instance;
+
+            Grid ViewGrid { get; set; } = Instance.SecondaryGrid;
+
+            TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Updates", 40, width: ElementValues.Grids.SecondaryNormal);
+
+            TextBlock StatusTextBlock { get; set; } = ElementHelper.CreateTextBlock("Status", fontSize: 22, width: 725, height: 400);
+
+            Button CheckNowButton { get; set; } = ElementHelper.CreateButton("Check Now", height: 60, width: 150, style: ButtonStyle.Finish);
+
+            private double nextLeft = 20;
+
+            private double nextTop = 12;
+
+            private double padding = 15;
+
+
+            public UpdatesVM()
+            {
+                Show();
+            }
+
+            private void Show()
+            {
+                DisplayElement(TitleTextBlock);
+
+                nextTop = 75;
+                DisplayElement(StatusTextBlock, leftPadding: 10);
+                //StatusTextBlock.Visibility = Visibility.Collapsed;
+
+                nextTop = ViewGrid.Height - CheckNowButton.Height - padding;
+                DisplayElement(CheckNowButton);
+                CheckNowButton.Click += (s, e) => CheckNow_Clicked();
+            }
+
+            private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
+            {
+                element.Margin = new Thickness((nextLeft + leftPadding), nextTop + topPadding, 0, 0);
+
+                ViewGrid.Children.Add(element);
+
+                nextTop = element.Margin.Top + element.Height + padding;
+            }
+
+            async void CheckNow_Clicked()
+            {
+                var updatesAvailable = await Task.Run(ServerHelper.Instance.CheckForUpdates);
+
+                if (updatesAvailable)
+                {
+                    ShowStatus($"New version available for download!");
+                }
+                else
+                {
+                    ShowStatus("You are up to date!");
+                }
+            }
+
+            void ShowStatus(string message)
+            {
+                StatusTextBlock.Text = message;
+                StatusTextBlock.Visibility = Visibility.Visible;
+            }
+        }
     }
 }

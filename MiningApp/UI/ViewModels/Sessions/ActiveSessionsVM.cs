@@ -28,15 +28,15 @@ namespace MiningApp.UI
 
         TextBlock NextTextBlock { get; set; } = ElementHelper.CreateTextBlock(">>", fontSize: 20, width: 50);
 
-        TextBlock MinerTextBlock { get; set; } = ElementHelper.CreateTextBlock("Miner: ", width: 450, height: 20);
+        TextBlock MinerTextBlock { get; set; } = ElementHelper.CreateTextBlock("Miner: ", width: 700, height: 20);
 
-        TextBlock CryptoTextBlock { get; set; } = ElementHelper.CreateTextBlock("Crypto: ", width: 450, height: 20);
+        TextBlock CryptoTextBlock { get; set; } = ElementHelper.CreateTextBlock("Crypto: ", width: 700, height: 20);
 
-        TextBlock UptimeTextBlock { get; set; } = ElementHelper.CreateTextBlock("Uptime: ", width: 450, height: 20);
+        TextBlock UptimeTextBlock { get; set; } = ElementHelper.CreateTextBlock("Uptime: ", width: 700, height: 20);
 
         TextBlock LastOutputTextBlock { get; set; } = ElementHelper.CreateTextBlock("Last Output: ", width: 450, height: 20);
 
-        TextBox OutputTextBox { get; set; } = ElementHelper.CreateTextBox("Output", height: 300, width: 500, fontSize: 12, readOnly: true);
+        TextBox OutputTextBox { get; set; } = ElementHelper.CreateTextBox("Output", height: 300, width: 700, fontSize: 12, readOnly: true);
 
         DispatcherTimer ActiveSessionTimer { get; set; } = null;
 
@@ -72,10 +72,10 @@ namespace MiningApp.UI
             DisplayElement(NextTextBlock, leftPadding: 490);
             NextTextBlock.MouseDown += (s, e) => NextSession();
 
-            DisplayElement(MinerTextBlock, leftPadding: 175);
-            DisplayElement(UptimeTextBlock, leftPadding: 175);
-            DisplayElement(LastOutputTextBlock, leftPadding: 175);
-            DisplayElement(OutputTextBox, leftPadding: 175);
+            DisplayElement(MinerTextBlock, leftPadding: 100, topPadding: padding * 2);
+            DisplayElement(UptimeTextBlock, leftPadding: 100);
+            DisplayElement(LastOutputTextBlock, leftPadding: 100);
+            DisplayElement(OutputTextBox, leftPadding: 100);
 
             if (_activeSession != null)
             {
