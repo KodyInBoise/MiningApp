@@ -46,7 +46,14 @@ namespace MiningApp
 
         public async Task<bool> CheckForUpdates()
         {
-            var current = GetCurrentVersionString();
+            var versionString = GetCurrentVersionString();
+
+            var currentVersion = JsonConvert.DeserializeObject<VersionHelper.VersionModel>(versionString);
+
+            if (currentVersion.Number > Bootstrapper.Settings.App.AppVersion.Number)
+            {
+                return true;
+            }
 
             return false;
         }
@@ -118,6 +125,11 @@ namespace MiningApp
             {
                 try
                 {
+                    if (!Directory.Exists(Bootstrapper.AppTempPath))
+                    {
+                        Directory.CreateDirectory(Bootstrapper.AppTempPath);
+                    }
+
                     var tmpID = Guid.NewGuid().ToString().Substring(0, 8);
                     tmpPath = Path.Combine(Bootstrapper.AppTempPath, tmpID);
 
@@ -140,9 +152,25 @@ namespace MiningApp
             public class VersionModel
             {
                 public double Number { get; set; }
+
                 public DateTime ReleaseTimestamp { get; set; }
+
                 public string Notes { get; set; }
-                public bool Suggested { get; set; }
+
+                public UrgencyType Urgency { get; set; }
+
+                public enum UrgencyType : int
+                {
+                    Low = 0,
+                    Minor = 1,
+                    Major = 2,
+                    Required = 3,
+                }
+
+                public VersionModel()
+                {
+
+                }
             }
         }
     }

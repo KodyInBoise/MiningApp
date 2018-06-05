@@ -241,6 +241,7 @@ namespace MiningApp.UI
 
             async void CheckNow_Clicked()
             {
+                WindowController.Instance.Testing();
                 var updatesAvailable = await Task.Run(ServerHelper.Instance.CheckForUpdates);
 
                 if (updatesAvailable)

@@ -10,11 +10,14 @@ namespace MiningApp
 {
     public class SettingsModel
     {
+        public AppSettings App { get; set; }
+
         public GeneralSettings General { get; set; }
 
 
         public SettingsModel()
         {
+            App = new AppSettings();
             General = new GeneralSettings();
         }
 
@@ -22,9 +25,7 @@ namespace MiningApp
         {
             public string Name { get; set; } = "MiningApp";
 
-            public double Version { get; set; } = 0.0;
-
-            public DateTime LastUpdate { get; set; }
+            public ServerHelper.VersionHelper.VersionModel AppVersion { get; set; }
         }
 
         public class GeneralSettings

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using MiningApp.LoggingUtil;
+using Newtonsoft.Json;
 
 namespace MiningApp.UI
 {
@@ -239,7 +240,16 @@ namespace MiningApp.UI
 
         public async void Testing()
         {
-            var updatesAvailable = await ServerHelper.Instance.CheckForUpdates();
+            var version = new ServerHelper.VersionHelper.VersionModel()
+            {
+                Number = 0.1,
+                ReleaseTimestamp = DateTime.Now,
+                Notes = "Testing release stuff...",
+                Urgency = ServerHelper.VersionHelper.VersionModel.UrgencyType.Minor
+            };
+
+            Bootstrapper.Settings.App.AppVersion = version;
+            Bootstrapper.Instance.SaveLocalSettings();
         }
     }
 }
