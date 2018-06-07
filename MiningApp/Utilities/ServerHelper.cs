@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MiningApp.LoggingUtil;
 using Newtonsoft.Json;
+using static MiningApp.ServerHelper.VersionHelper;
 
 namespace MiningApp
 {
@@ -35,7 +36,7 @@ namespace MiningApp
             _allMiners = GetMiners();
         }
 
-        public string GetCurrentVersionString()
+        public string GetUpdateVersionString()
         {
             var path = "";
 
@@ -46,16 +47,27 @@ namespace MiningApp
 
         public async Task<bool> CheckForUpdates()
         {
-            var versionString = GetCurrentVersionString();
+            var versionString = GetUpdateVersionString();
 
-            var currentVersion = JsonConvert.DeserializeObject<VersionHelper.VersionModel>(versionString);
+            _updateVersion = JsonConvert.DeserializeObject<VersionModel>(versionString);
 
-            if (currentVersion.Number > Bootstrapper.Settings.App.AppVersion.Number)
+            if (_updateVersion.Number > Bootstrapper.Settings.App.AppVersion.Number)
             {
                 return true;
             }
 
             return false;
+        }
+
+        VersionModel _updateVersion = null;
+        public VersionModel GetUpdateVersion(bool reload = false)
+        {
+            if (reload || _updateVersion == null)
+            {
+                _updateVersion = JsonConvert.DeserializeObject<VersionModel>(GetUpdateVersionString());
+            }
+
+            return _updateVersion;
         }
 
         public void UploadMiner(MinerConfigModel miner)

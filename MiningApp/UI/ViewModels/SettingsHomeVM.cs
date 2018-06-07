@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using static MiningApp.ServerHelper.VersionHelper;
 
 namespace MiningApp.UI
 {
@@ -201,7 +202,15 @@ namespace MiningApp.UI
 
             TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Updates", 40, width: ElementValues.Grids.SecondaryNormal);
 
-            TextBlock StatusTextBlock { get; set; } = ElementHelper.CreateTextBlock("Status", fontSize: 22, width: 725, height: 400);
+            TextBlock StatusTextBlock { get; set; } = ElementHelper.CreateTextBlock("Status", fontSize: 22, width: 725, height: 250);
+
+            TextBlock VersionTextBlock { get; set; } = ElementHelper.CreateTextBlock("Version: ", width: 700, height: 20, fontSize: 18);
+
+            TextBlock ReleaseDateTextBlock { get; set; } = ElementHelper.CreateTextBlock("Release Date: ", width: 700, height: 20, fontSize: 18);
+
+            TextBlock UrgencyTextBlock { get; set; } = ElementHelper.CreateTextBlock("Urgency: ", width: 700, height: 30, fontSize: 18);
+
+            TextBox ReleaseNotesTextBox { get; set; } = ElementHelper.CreateTextBox("Output", height: 300, width: 500, fontSize: 12, readOnly: true);
 
             Button CheckNowButton { get; set; } = ElementHelper.CreateButton("Check Now", height: 60, width: 150, style: ButtonStyle.Finish);
 
@@ -223,11 +232,23 @@ namespace MiningApp.UI
 
                 nextTop = 75;
                 DisplayElement(StatusTextBlock, leftPadding: 10);
-                //StatusTextBlock.Visibility = Visibility.Collapsed;
+
+                nextTop = 200;
+                nextLeft = nextLeft + padding * 8;
+                DisplayElement(VersionTextBlock, topPadding: padding * 2);
+
+                DisplayElement(ReleaseDateTextBlock);
+
+                DisplayElement(UrgencyTextBlock);
+
+                DisplayElement(ReleaseNotesTextBox);
 
                 nextTop = ViewGrid.Height - CheckNowButton.Height - padding;
+                nextLeft = StatusTextBlock.Margin.Left;
                 DisplayElement(CheckNowButton);
                 CheckNowButton.Click += (s, e) => CheckNow_Clicked();
+
+                DisplayCurrent();
             }
 
             private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
@@ -241,15 +262,17 @@ namespace MiningApp.UI
 
             async void CheckNow_Clicked()
             {
-                WindowController.Instance.Testing();
+                //WindowController.Instance.Testing();
                 var updatesAvailable = await Task.Run(ServerHelper.Instance.CheckForUpdates);
 
                 if (updatesAvailable)
                 {
                     ShowStatus($"New version available for download!");
+                    DisplayUpdate(ServerHelper.Instance.GetUpdateVersion());
                 }
                 else
                 {
+                    DisplayCurrent();
                     ShowStatus("You are up to date!");
                 }
             }
@@ -258,6 +281,27 @@ namespace MiningApp.UI
             {
                 StatusTextBlock.Text = message;
                 StatusTextBlock.Visibility = Visibility.Visible;
+            }
+
+            void DisplayCurrent()
+            {
+                StatusTextBlock.Visibility = Visibility.Collapsed;
+                UrgencyTextBlock.Visibility = Visibility.Collapsed;
+                ReleaseNotesTextBox.Visibility = Visibility.Collapsed;
+
+                VersionTextBlock.Text = $"Current Version: v{Bootstrapper.Settings.App.AppVersion.Number}";
+                ReleaseDateTextBlock.Text = $"Release Date: {Bootstrapper.Settings.App.AppVersion.ReleaseTimestamp.ToShortDateString()}";
+            }
+
+            void DisplayUpdate(VersionModel version)
+            {
+                UrgencyTextBlock.Visibility = Visibility.Visible;
+                ReleaseNotesTextBox.Visibility = Visibility.Visible;
+
+                VersionTextBlock.Text = $"New Version: v{version.Number}";
+                ReleaseDateTextBlock.Text = $"Release Date: {version.ReleaseTimestamp.ToShortDateString()}";
+                UrgencyTextBlock.Text = $"Urgency: {version.Urgency}";
+                ReleaseNotesTextBox.Text = "";
             }
         }
     }
