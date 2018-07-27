@@ -38,6 +38,10 @@ namespace MiningApp.UI
 
         TextBox OutputTextBox { get; set; } = ElementHelper.CreateTextBox("Output", height: 300, width: 700, fontSize: 12, readOnly: true);
 
+        Button StopSessionButton { get; set; } = ElementHelper.CreateButton(content: "Stop", name: "StopSession", style: ButtonStyle.Delete, height: 50, width: 150);
+
+        Button ToggleSessionButton { get; set; } = ElementHelper.CreateButton(content: "Resume", name: "StopSession", style: ButtonStyle.New, height: 50, width: 150);
+
         DispatcherTimer ActiveSessionTimer { get; set; } = null;
 
 
@@ -72,10 +76,20 @@ namespace MiningApp.UI
             DisplayElement(NextTextBlock, leftPadding: 490);
             NextTextBlock.MouseDown += (s, e) => NextSession();
 
-            DisplayElement(MinerTextBlock, leftPadding: 100, topPadding: padding * 2);
-            DisplayElement(UptimeTextBlock, leftPadding: 100);
-            DisplayElement(LastOutputTextBlock, leftPadding: 100);
-            DisplayElement(OutputTextBox, leftPadding: 100);
+            nextLeft = nextLeft + 100;
+            DisplayElement(MinerTextBlock, topPadding: padding * 2);
+            DisplayElement(UptimeTextBlock);
+            DisplayElement(LastOutputTextBlock);
+            DisplayElement(OutputTextBox);
+
+            var buttonTop = OutputTextBox.Margin.Top + OutputTextBox.Height + padding;
+
+            nextTop = buttonTop;
+            DisplayElement(StopSessionButton);
+
+            nextTop = buttonTop;
+            nextLeft = OutputTextBox.Margin.Left + OutputTextBox.Width - ToggleSessionButton.Width;
+            DisplayElement(ToggleSessionButton);
 
             if (_activeSession != null)
             {
@@ -84,6 +98,11 @@ namespace MiningApp.UI
             else if (_allSessions.Any())
             {
                 DisplaySession(_allSessions[0]);
+            }
+            else
+            {
+                StopSessionButton.Visibility = Visibility.Collapsed;
+                ToggleSessionButton.Visibility = Visibility.Collapsed;
             }
         }
 
