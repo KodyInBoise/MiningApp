@@ -73,7 +73,7 @@ namespace MiningApp
 
             WindowController.MiningSessions.Add(Session);
 
-            Task.Run(Session.Start);
+            Session.Start();
 
             WindowController.Instance.ShowHome(Session);
         }

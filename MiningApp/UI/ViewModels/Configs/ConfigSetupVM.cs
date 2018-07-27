@@ -67,7 +67,7 @@ namespace MiningApp.UI
 
             TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Configs", 40);
 
-            Button NewButton { get; set; } = ElementHelper.CreateButton("New Config", height: buttonHeight, style: ButtonStyle.New);
+            Button NewButton { get; set; } = ElementHelper.CreateButton("New Config", height: buttonHeight, style: ButtonStyleEnum.New);
 
 
             private static int buttonHeight = 60;
@@ -185,13 +185,13 @@ namespace MiningApp.UI
 
 
             Button DeleteButton { get; set; } = ElementHelper.CreateButton("Delete", height: buttonHeight,
-                width: buttonWidth, style: ButtonStyle.Delete);
+                width: buttonWidth, style: ButtonStyleEnum.Delete);
 
             Button LaunchButton { get; set; } = ElementHelper.CreateButton("Launch", height: buttonHeight,
-                width: buttonWidth, style: ButtonStyle.Normal);
+                width: buttonWidth, style: ButtonStyleEnum.Normal);
 
             Button FinishButton { get; set; } = ElementHelper.CreateButton("Finish", height: buttonHeight,
-                width: buttonWidth, style: ButtonStyle.Finish);
+                width: buttonWidth, style: ButtonStyleEnum.Finish);
 
 
 

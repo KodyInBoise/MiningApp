@@ -22,13 +22,15 @@ namespace MiningApp
 
     }
 
-    public enum ButtonStyle
+    public enum ButtonStyleEnum
     {
         Normal,
         New,
         Delete,
         Next,
         Finish,
+        Yellow,
+        Orange,
     }
 
     public enum LogType : int
@@ -36,5 +38,12 @@ namespace MiningApp
         General = 0, //App startup, shutdown, config / setting changes, etc
         Error = 1, 
         Session = 2, //Start, stop, restarts, etc
+    }
+
+    public enum SessionStatusEnum : int
+    {
+        Stopped = 0,
+        InProgress = 1,
+        Paused = 2
     }
 }

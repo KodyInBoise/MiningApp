@@ -69,7 +69,7 @@ namespace MiningApp.UI
 
             TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Pools", 40);
 
-            Button NewButton { get; set; } = ElementHelper.CreateButton("New Pool", height: buttonHeight, style: ButtonStyle.New);
+            Button NewButton { get; set; } = ElementHelper.CreateButton("New Pool", height: buttonHeight, style: ButtonStyleEnum.New);
 
 
             private static int buttonHeight = 60;
@@ -184,19 +184,19 @@ namespace MiningApp.UI
             ListBox TagsListBox { get; set; } = ElementHelper.CreateListBox("Pools", fontSize: 14);
 
 
-            Button TagsAddButton { get; set; } = ElementHelper.CreateButton("+", name: "PoolsAdd", fontSize: 14, style: ButtonStyle.New,
+            Button TagsAddButton { get; set; } = ElementHelper.CreateButton("+", name: "PoolsAdd", fontSize: 14, style: ButtonStyleEnum.New,
                 width: 40, height: ElementValues.TextBoxs.Height);
 
-            Button TagsRemoveButton { get; set; } = ElementHelper.CreateButton("-", name: "PoolsAdd", fontSize: 14, style: ButtonStyle.Delete,
+            Button TagsRemoveButton { get; set; } = ElementHelper.CreateButton("-", name: "PoolsAdd", fontSize: 14, style: ButtonStyleEnum.Delete,
                 width: 40, height: ElementValues.TextBoxs.Height);
 
 
 
             Button DeleteButton { get; set; } = ElementHelper.CreateButton("Delete", height: buttonHeight,
-                width: buttonWidth, style: ButtonStyle.Delete);
+                width: buttonWidth, style: ButtonStyleEnum.Delete);
 
             Button FinishButton { get; set; } = ElementHelper.CreateButton("Finish", height: buttonHeight,
-                width: buttonWidth, style: ButtonStyle.Finish);
+                width: buttonWidth, style: ButtonStyleEnum.Finish);
 
 
 

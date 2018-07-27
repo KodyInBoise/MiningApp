@@ -228,14 +228,14 @@ namespace MiningApp.UI
 
         private void Shutdown()
         {
-            Task.Run(CloseSessions);
+            CloseSessions();
         }
 
-        private async Task CloseSessions()
+        private void CloseSessions()
         {
             var sessions = MiningSessions;
 
-            sessions.ForEach(x => x.Close());
+            sessions.ForEach(async x => await x.Stop());
         }
 
         public async void Testing()

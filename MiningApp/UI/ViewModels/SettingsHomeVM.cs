@@ -148,7 +148,7 @@ namespace MiningApp.UI
 
             CheckBox LaunchOnStartupCheckBox { get; set; } = ElementHelper.CreateCheckBox("Launch On Startup", fontSize: 22);
 
-            Button SaveButton { get; set; } = ElementHelper.CreateButton("Save", height: 60, width: 150, style: ButtonStyle.Finish);
+            Button SaveButton { get; set; } = ElementHelper.CreateButton("Save", height: 60, width: 150, style: ButtonStyleEnum.Finish);
 
             private double nextLeft = 20;
 
@@ -212,7 +212,7 @@ namespace MiningApp.UI
 
             TextBox ReleaseNotesTextBox { get; set; } = ElementHelper.CreateTextBox("Output", height: 300, width: 500, fontSize: 12, readOnly: true);
 
-            Button CheckNowButton { get; set; } = ElementHelper.CreateButton("Check Now", height: 60, width: 150, style: ButtonStyle.Finish);
+            Button CheckNowButton { get; set; } = ElementHelper.CreateButton("Check Now", height: 60, width: 150, style: ButtonStyleEnum.Finish);
 
             private double nextLeft = 20;
 

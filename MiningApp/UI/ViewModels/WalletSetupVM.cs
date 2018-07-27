@@ -69,7 +69,7 @@ namespace MiningApp.UI
 
             TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Wallets", 40);
 
-            Button NewButton { get; set; } = ElementHelper.CreateButton("New Wallet", height: buttonHeight, style: ButtonStyle.New);
+            Button NewButton { get; set; } = ElementHelper.CreateButton("New Wallet", height: buttonHeight, style: ButtonStyleEnum.New);
 
 
             private static int buttonHeight = 60;
@@ -174,10 +174,10 @@ namespace MiningApp.UI
 
 
             Button DeleteButton { get; set; } = ElementHelper.CreateButton("Delete", height: buttonHeight,
-                width: buttonWidth, style: ButtonStyle.Delete);
+                width: buttonWidth, style: ButtonStyleEnum.Delete);
 
             Button FinishButton { get; set; } = ElementHelper.CreateButton("Finish", height: buttonHeight,
-                width: buttonWidth, style: ButtonStyle.Finish);
+                width: buttonWidth, style: ButtonStyleEnum.Finish);
 
 
             Label NameLabel { get; set; }

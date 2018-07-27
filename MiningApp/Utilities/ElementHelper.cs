@@ -22,7 +22,7 @@ namespace MiningApp
             Instance = this;
         }
 
-        public static Button CreateButton(string content, string name = "", ButtonStyle style = ButtonStyle.Normal, int fontSize = -1,
+        public static Button CreateButton(string content, string name = "", ButtonStyleEnum style = ButtonStyleEnum.Normal, int fontSize = -1,
             int height = -1, int width = -1)
         {
             if (String.IsNullOrEmpty(name))
@@ -42,14 +42,20 @@ namespace MiningApp
             var backgroundColor = ElementValues.Buttons.Colors.Normal;
             switch(style)
             {
-                case ButtonStyle.New:
+                case ButtonStyleEnum.New:
                     backgroundColor = ElementValues.Buttons.Colors.New;
                     break;
-                case ButtonStyle.Delete:
+                case ButtonStyleEnum.Delete:
                     backgroundColor = ElementValues.Buttons.Colors.Delete;
                     break;
-                case ButtonStyle.Finish:
+                case ButtonStyleEnum.Finish:
                     backgroundColor = ElementValues.Buttons.Colors.New;
+                    break;
+                case ButtonStyleEnum.Yellow:
+                    backgroundColor = ElementValues.Buttons.Colors.Yellow;
+                    break;
+                case ButtonStyleEnum.Orange:
+                    backgroundColor = ElementValues.Buttons.Colors.Orange;
                     break;
                 default:
                     break;
@@ -389,6 +395,8 @@ namespace MiningApp
                 public static Brush Normal = ElementHelper.ConvertColorCode("#444447");
                 public static Brush New = ElementHelper.ConvertColorCode("#2b6d17");
                 public static Brush Delete = ElementHelper.ConvertColorCode("#b20303");
+                public static Brush Yellow = ElementHelper.ConvertColorCode("#96a514");
+                public static Brush Orange = ElementHelper.ConvertColorCode("#c48415");
             }
         }
 

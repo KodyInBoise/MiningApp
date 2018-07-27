@@ -38,9 +38,9 @@ namespace MiningApp.UI
 
         TextBox OutputTextBox { get; set; } = ElementHelper.CreateTextBox("Output", height: 300, width: 700, fontSize: 12, readOnly: true);
 
-        Button StopSessionButton { get; set; } = ElementHelper.CreateButton(content: "Stop", name: "StopSession", style: ButtonStyle.Delete, height: 50, width: 150);
+        Button StopSessionButton { get; set; } = ElementHelper.CreateButton(content: "Stop", name: "StopSession", style: ButtonStyleEnum.Delete, height: 50, width: 150);
 
-        Button ToggleSessionButton { get; set; } = ElementHelper.CreateButton(content: "Resume", name: "StopSession", style: ButtonStyle.New, height: 50, width: 150);
+        Button ToggleSessionButton { get; set; } = ElementHelper.CreateButton(content: "Pause", name: "StopSession", style: ButtonStyleEnum.Orange, height: 50, width: 150);
 
         DispatcherTimer ActiveSessionTimer { get; set; } = null;
 
@@ -52,6 +52,8 @@ namespace MiningApp.UI
         private int _currentIndex { get; set; } = 0;
 
         private string _sessionOutput { get; set; } = string.Empty;
+
+        private event SessionStatusToggledDelegate _activeSessionStatusToggled;
 
 
         public ActiveSessionsVM(Grid displayGrid, SessionModel launchSession = null)
@@ -90,6 +92,7 @@ namespace MiningApp.UI
             nextTop = buttonTop;
             nextLeft = OutputTextBox.Margin.Left + OutputTextBox.Width - ToggleSessionButton.Width;
             DisplayElement(ToggleSessionButton);
+            ToggleSessionButton.Click += (s, e) => ToggleSessionButton_Clicked();
 
             if (_activeSession != null)
             {
@@ -103,6 +106,22 @@ namespace MiningApp.UI
             {
                 StopSessionButton.Visibility = Visibility.Collapsed;
                 ToggleSessionButton.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        async void ToggleSessionButton_Clicked()
+        {
+            switch (_activeSession.CurrentStatus)
+            {
+                case SessionStatusEnum.Stopped:
+                    break;
+                case SessionStatusEnum.InProgress:
+                    OutputTextBox.Text += $"\r----------PAUSING MINER----------\r";
+                    _activeSession.Stop();
+                    break;
+                case SessionStatusEnum.Paused:
+                    break;
+                default: break;
             }
         }
 
@@ -130,7 +149,9 @@ namespace MiningApp.UI
             OutputTextBox.Clear();
             _sessionOutput = session.AllOutput;
             OutputTextBox.Text = session.AllOutput;
+
             session.OutputReceived += SessionOutputReceived;
+            session.StatusToggled += SessionStatusToggled;
 
             ActiveSessionTimer = session.GetTimer();
             ActiveSessionTimer.Tick += (s, e) => ActiveSessionTimer_Tick();
@@ -139,6 +160,8 @@ namespace MiningApp.UI
             _currentIndex = _allSessions.IndexOf(_activeSession);
 
             ViewingTextBlock.Text = $"{_currentIndex + 1} of {_allSessions.Count}";
+
+            UpdateStatusButtons(_activeSession.CurrentStatus);
         }
 
         string _oldOutput = string.Empty;
@@ -199,6 +222,74 @@ namespace MiningApp.UI
                 _activeSession.OutputReceived -= SessionOutputReceived;
 
                 DisplaySession(_allSessions[_currentIndex]);
+            }
+        }
+
+        async void SessionStatusToggled(SessionStatusToggledArgs args)
+        {
+            if (args.SessionID == _activeSession.SessionID)
+            {
+                if (args.NewStatus == _activeSession.CurrentStatus)
+                {
+                    return;
+                }
+
+                StopSessionButton.Visibility = Visibility.Collapsed;
+                ToggleSessionButton.Visibility = Visibility.Collapsed;
+
+                switch (args.NewStatus)
+                {
+                    case SessionStatusEnum.Stopped:
+                        await _activeSession.Stop();
+                        ClearActiveSession();
+                        break;
+                    case SessionStatusEnum.InProgress:
+                        break;
+                    case SessionStatusEnum.Paused:
+                        _activeSession.Start();
+                        break;
+                    default:
+                        break;
+                }
+
+                UpdateStatusButtons(args.NewStatus);
+            }
+        }
+
+        void ClearActiveSession()
+        {
+            OutputTextBox.Clear();
+
+            if (_allSessions.Any())
+            {
+                _currentIndex++;
+                DisplaySession(_allSessions[_currentIndex]);
+            }
+        }
+
+        void UpdateStatusButtons(SessionStatusEnum newStatus)
+        {
+            StopSessionButton.Visibility = newStatus != SessionStatusEnum.Stopped ? Visibility.Visible : Visibility.Collapsed;
+            ToggleSessionButton.Visibility = Visibility.Visible;
+
+            switch (newStatus)
+            {
+                case SessionStatusEnum.Stopped:
+                    ToggleSessionButton.Background = ElementValues.Buttons.Colors.New;
+                    ToggleSessionButton.Content = "Start";
+                    break;
+                case SessionStatusEnum.InProgress:
+                    ToggleSessionButton.Background = ElementValues.Buttons.Colors.Orange;
+                    ToggleSessionButton.Content = "Pause";
+                    break;
+                case SessionStatusEnum.Paused:
+                    ToggleSessionButton.Background = ElementValues.Buttons.Colors.New;
+                    ToggleSessionButton.Content = "Resume";
+                    break;
+                default:
+                    StopSessionButton.Visibility = Visibility.Collapsed;
+                    ToggleSessionButton.Visibility = Visibility.Collapsed;
+                    break;
             }
         }
     }

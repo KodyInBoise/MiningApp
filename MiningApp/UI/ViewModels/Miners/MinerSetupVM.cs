@@ -70,7 +70,7 @@ namespace MiningApp.UI
 
             TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Miners", 40);
 
-            Button NewButton { get; set; } = ElementHelper.CreateButton("New Miner", height: buttonHeight, style: ButtonStyle.New);
+            Button NewButton { get; set; } = ElementHelper.CreateButton("New Miner", height: buttonHeight, style: ButtonStyleEnum.New);
 
 
             private static int buttonHeight = 60;
@@ -189,25 +189,25 @@ namespace MiningApp.UI
             ListBox CryptosListBox { get; set; } = ElementHelper.CreateListBox("Cryptos", fontSize: 14);
 
 
-            Button PoolsAddButton { get; set; } = ElementHelper.CreateButton("+", name: "PoolsAdd", fontSize: 14, style: ButtonStyle.New, 
+            Button PoolsAddButton { get; set; } = ElementHelper.CreateButton("+", name: "PoolsAdd", fontSize: 14, style: ButtonStyleEnum.New, 
                 width: 40, height: ElementValues.TextBoxs.Height);
 
-            Button PoolsRemoveButton { get; set; } = ElementHelper.CreateButton("-", name: "PoolsAdd", fontSize: 14, style: ButtonStyle.Delete,
+            Button PoolsRemoveButton { get; set; } = ElementHelper.CreateButton("-", name: "PoolsAdd", fontSize: 14, style: ButtonStyleEnum.Delete,
                 width: 40, height: ElementValues.TextBoxs.Height);
 
-            Button CryptosAddButton { get; set; } = ElementHelper.CreateButton("+", name: "CryptosAdd", fontSize: 14, style: ButtonStyle.New,
+            Button CryptosAddButton { get; set; } = ElementHelper.CreateButton("+", name: "CryptosAdd", fontSize: 14, style: ButtonStyleEnum.New,
                 width: 40, height: ElementValues.TextBoxs.Height);
 
-            Button CryptosRemoveButton { get; set; } = ElementHelper.CreateButton("-", name: "CryptosRemove", fontSize: 14, style: ButtonStyle.Delete,
+            Button CryptosRemoveButton { get; set; } = ElementHelper.CreateButton("-", name: "CryptosRemove", fontSize: 14, style: ButtonStyleEnum.Delete,
                 width: 40, height: ElementValues.TextBoxs.Height);
 
             Button BrowseButton { get; set; } = ElementHelper.CreateButton("Browse", width: 85, fontSize: 14, height: ElementValues.TextBoxs.Height);
 
             Button DeleteButton { get; set; } = ElementHelper.CreateButton("Delete", height: buttonHeight,
-                width: buttonWidth, style: ButtonStyle.Delete);
+                width: buttonWidth, style: ButtonStyleEnum.Delete);
 
             Button FinishButton { get; set; } = ElementHelper.CreateButton("Finish", height: buttonHeight,
-                width: buttonWidth, style: ButtonStyle.Finish);
+                width: buttonWidth, style: ButtonStyleEnum.Finish);
 
 
 

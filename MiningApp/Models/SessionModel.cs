@@ -10,7 +10,12 @@ using System.Windows.Threading;
 
 namespace MiningApp
 {
-    public delegate void OutputReceivedDelegate(OutputReceivedArgs args);
+    public class SessionStatusToggledArgs
+    {
+        public DateTime Timestamp { get; set; }
+        public string SessionID { get; set; }
+        public SessionStatusEnum NewStatus { get; set; }
+    }
 
     public class OutputReceivedArgs
     {
@@ -23,6 +28,12 @@ namespace MiningApp
             Timestamp = DateTime.Now;
         }
     }
+
+
+    public delegate void SessionStatusToggledDelegate(SessionStatusToggledArgs args);
+
+    public delegate void OutputReceivedDelegate(OutputReceivedArgs args);
+
 
     public class SessionModel
     {
@@ -52,7 +63,10 @@ namespace MiningApp
 
         public event OutputReceivedDelegate OutputReceived;
 
-        
+        public SessionStatusEnum CurrentStatus { get; set; } = SessionStatusEnum.Stopped;
+
+        public event SessionStatusToggledDelegate StatusToggled;
+
         TimerHelper _sessionTimer { get; set; }
 
         string _output { get; set; } = "";
@@ -67,36 +81,86 @@ namespace MiningApp
             SessionID = Guid.NewGuid().ToString().Substring(0, 8);
 
             _sessionTimer = new TimerHelper(this);
+
+            StatusToggled += SessionToggled_Invoked;
         }
 
-        public async Task Start()
+        public void Start(bool clearOutput = false)
         {
-            if (!IsRunning())
+            try
             {
-                MinerProcess = new Process()
+                if (!IsRunning())
                 {
-                    StartInfo = new ProcessStartInfo()
-                    {
-                        FileName = Config.Miner.Path,
-                        UseShellExecute = false,
+                    SetMinerSettings();
 
-                        RedirectStandardOutput = _redirectOutput,
-                        CreateNoWindow = _redirectOutput
-                    }
-                };
+                    Task.Run(RunMinerProcess);
 
-                SetMinerSettings();
+                    StatusToggled?.Invoke(new SessionStatusToggledArgs() { Timestamp = DateTime.Now, NewStatus = SessionStatusEnum.InProgress, SessionID = SessionID });
 
-                MinerProcess.Start();
-
-                LogHelper.AddEntry(LogType.Session, $"Session started: Config = \"{Config.Name}\"");
-
-                while (!MinerProcess.StandardOutput.EndOfStream)
-                {
-                    var output = MinerProcess.StandardOutput.ReadLine();
-
-                    AppendOutput(output);
+                    LogHelper.AddEntry(LogType.Session, $"Session started: Config = \"{Config.Name}\"");
                 }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddEntry(ex);
+            }
+        }
+
+        async Task RunMinerProcess()
+        {
+            MinerProcess = new Process()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    FileName = Config.Miner.Path,
+                    UseShellExecute = false,
+
+                    RedirectStandardOutput = _redirectOutput,
+                    CreateNoWindow = _redirectOutput
+                }
+            };
+
+            MinerProcess.Start();
+
+            while (!MinerProcess.StandardOutput.EndOfStream)
+            {
+                var output = MinerProcess.StandardOutput.ReadLine();
+
+                AppendOutput(output);
+            }
+        }
+
+        public void Pause()
+        {
+            StatusToggled?.Invoke(new SessionStatusToggledArgs() { Timestamp = DateTime.Now, NewStatus = SessionStatusEnum.Stopped, SessionID = SessionID });
+
+            MinerProcess.Close();
+        }
+
+        public async Task Stop()
+        {
+            StatusToggled?.Invoke(new SessionStatusToggledArgs() { Timestamp = DateTime.Now, NewStatus = SessionStatusEnum.Stopped, SessionID = SessionID });
+
+            WindowController.MiningSessions.Remove(this);
+
+            MinerProcess.Close();
+        }
+
+        void SessionToggled_Invoked(SessionStatusToggledArgs args)
+        {
+            CurrentStatus = args.NewStatus;
+
+            switch (args.NewStatus)
+            {
+                case SessionStatusEnum.Stopped:
+                    LogHelper.AddEntry(LogType.Session, $"Session stopped: {Config.Name}");
+                    break;
+                case SessionStatusEnum.InProgress:
+                    LogHelper.AddEntry(LogType.Session, $"Session started: {Config.Name}");
+                    break;
+                case SessionStatusEnum.Paused:
+                    LogHelper.AddEntry(LogType.Session, $"Session paused: {Config.Name}");
+                    break;
             }
         }
 
@@ -167,13 +231,6 @@ namespace MiningApp
             }
         }
 
-        public void Close()
-        {
-            WindowController.MiningSessions.Remove(this);
-
-            MinerProcess.Close();
-        }
-
         public DispatcherTimer GetTimer()
         {
             return _sessionTimer.GetTimer();
@@ -202,7 +259,7 @@ namespace MiningApp
             }
         }
 
-        public void RestartMiner()
+        public async void RestartMiner()
         {
             _newOutput = $"\r\r----------------------------\rRestarting Miner {DateTime.Now.ToString()}\r----------------------------\r\r";
             OutputReceived?.Invoke(new OutputReceivedArgs() { SessionID = SessionID, NewOutput = _newOutput });
@@ -214,7 +271,7 @@ namespace MiningApp
                 procs.ForEach(x => x.Kill());
             }
 
-            Task.Run(Start);
+            Start();
 
             LogHelper.AddEntry(LogType.Session, $"Restarted session: Config = \"{Config.Name}\"");
         }
