@@ -155,12 +155,15 @@ namespace MiningApp
             switch (args.NewStatus)
             {
                 case SessionStatusEnum.Stopped:
+                    _sessionTimer.StopTimer();
                     LogHelper.AddEntry(LogType.Session, $"Session stopped: {Config.Name}");
                     break;
                 case SessionStatusEnum.InProgress:
+                    _sessionTimer.ResumeTimer();
                     LogHelper.AddEntry(LogType.Session, $"Session started: {Config.Name}");
                     break;
                 case SessionStatusEnum.Paused:
+                    _sessionTimer.StopTimer();
                     LogHelper.AddEntry(LogType.Session, $"Session paused: {Config.Name}");
                     break;
             }
@@ -380,6 +383,11 @@ namespace MiningApp
             public void StopTimer()
             {
                 _timer.Stop();
+            }
+
+            public void ResumeTimer()
+            {
+                _timer.Start();
             }
         }
     }

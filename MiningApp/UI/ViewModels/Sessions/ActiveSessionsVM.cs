@@ -115,7 +115,7 @@ namespace MiningApp.UI
             await _activeSession.Stop();
         }
 
-        async void ToggleSessionButton_Clicked()
+        void ToggleSessionButton_Clicked()
         {
             switch (_activeSession.CurrentStatus)
             {
@@ -126,6 +126,8 @@ namespace MiningApp.UI
                     _activeSession.Pause();
                     break;
                 case SessionStatusEnum.Paused:
+                    OutputTextBox.Text += $"\r----------RESUMING MINER----------\r";
+                    _activeSession.Start();
                     break;
                 default: break;
             }
@@ -258,7 +260,7 @@ namespace MiningApp.UI
                     case SessionStatusEnum.InProgress:
                         break;
                     case SessionStatusEnum.Paused:
-                        _activeSession.Start();
+                        //_activeSession.Start();
                         break;
                     default:
                         break;
