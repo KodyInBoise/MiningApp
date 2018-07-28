@@ -88,6 +88,7 @@ namespace MiningApp.UI
 
             nextTop = buttonTop;
             DisplayElement(StopSessionButton);
+            StopSessionButton.Click += (s, e) => StopSessionButton_Clicked();
 
             nextTop = buttonTop;
             nextLeft = OutputTextBox.Margin.Left + OutputTextBox.Width - ToggleSessionButton.Width;
@@ -107,6 +108,11 @@ namespace MiningApp.UI
                 StopSessionButton.Visibility = Visibility.Collapsed;
                 ToggleSessionButton.Visibility = Visibility.Collapsed;
             }
+        }
+
+        async void StopSessionButton_Clicked()
+        {
+            await _activeSession.Stop();
         }
 
         async void ToggleSessionButton_Clicked()
@@ -229,10 +235,13 @@ namespace MiningApp.UI
         {
             if (args.SessionID == _activeSession.SessionID)
             {
+                /*
                 if (args.NewStatus == _activeSession.CurrentStatus)
                 {
                     return;
                 }
+                */
+                
 
                 StopSessionButton.Visibility = Visibility.Collapsed;
                 ToggleSessionButton.Visibility = Visibility.Collapsed;
@@ -240,7 +249,10 @@ namespace MiningApp.UI
                 switch (args.NewStatus)
                 {
                     case SessionStatusEnum.Stopped:
-                        await _activeSession.Stop();
+                        if (_activeSession.CurrentStatus != SessionStatusEnum.Stopped)
+                        {
+                            await _activeSession.Stop();
+                        }
                         ClearActiveSession();
                         break;
                     case SessionStatusEnum.InProgress:
@@ -262,7 +274,15 @@ namespace MiningApp.UI
 
             if (_allSessions.Any())
             {
-                _currentIndex++;
+                if (_allSessions.Count > 1)
+                {
+                    _currentIndex++;
+                }
+                else
+                {
+                    _currentIndex = 0;
+                }
+
                 DisplaySession(_allSessions[_currentIndex]);
             }
         }

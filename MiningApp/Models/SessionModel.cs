@@ -91,11 +91,11 @@ namespace MiningApp
             {
                 if (!IsRunning())
                 {
+                    StatusToggled?.Invoke(new SessionStatusToggledArgs() { Timestamp = DateTime.Now, NewStatus = SessionStatusEnum.InProgress, SessionID = SessionID });
+
                     SetMinerSettings();
 
                     Task.Run(RunMinerProcess);
-
-                    StatusToggled?.Invoke(new SessionStatusToggledArgs() { Timestamp = DateTime.Now, NewStatus = SessionStatusEnum.InProgress, SessionID = SessionID });
 
                     LogHelper.AddEntry(LogType.Session, $"Session started: Config = \"{Config.Name}\"");
                 }
@@ -133,6 +133,7 @@ namespace MiningApp
         public void Pause()
         {
             StatusToggled?.Invoke(new SessionStatusToggledArgs() { Timestamp = DateTime.Now, NewStatus = SessionStatusEnum.Stopped, SessionID = SessionID });
+            _sessionTimer.StopTimer();
 
             MinerProcess.Close();
         }
@@ -140,6 +141,7 @@ namespace MiningApp
         public async Task Stop()
         {
             StatusToggled?.Invoke(new SessionStatusToggledArgs() { Timestamp = DateTime.Now, NewStatus = SessionStatusEnum.Stopped, SessionID = SessionID });
+            _sessionTimer.StopTimer();
 
             WindowController.MiningSessions.Remove(this);
 
@@ -373,6 +375,11 @@ namespace MiningApp
             public int GetStaleOutputSeconds()
             {
                 return _staleOutputSeconds;
+            }
+
+            public void StopTimer()
+            {
+                _timer.Stop();
             }
         }
     }
