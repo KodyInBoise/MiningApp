@@ -123,7 +123,7 @@ namespace MiningApp.UI
                     break;
                 case SessionStatusEnum.InProgress:
                     OutputTextBox.Text += $"\r----------PAUSING MINER----------\r";
-                    _activeSession.Stop();
+                    _activeSession.Pause();
                     break;
                 case SessionStatusEnum.Paused:
                     break;

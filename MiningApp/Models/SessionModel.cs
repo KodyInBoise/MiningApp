@@ -132,10 +132,10 @@ namespace MiningApp
 
         public void Pause()
         {
-            StatusToggled?.Invoke(new SessionStatusToggledArgs() { Timestamp = DateTime.Now, NewStatus = SessionStatusEnum.Stopped, SessionID = SessionID });
+            StatusToggled?.Invoke(new SessionStatusToggledArgs() { Timestamp = DateTime.Now, NewStatus = SessionStatusEnum.Paused, SessionID = SessionID });
             _sessionTimer.StopTimer();
 
-            MinerProcess.Close();
+            MinerProcess.Kill();
         }
 
         public async Task Stop()
