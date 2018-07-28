@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MiningApp.LoggingUtil;
 using MiningApp.UI;
 
 namespace MiningApp
@@ -45,12 +46,27 @@ namespace MiningApp
 
             Controller = new WindowController();
 
+            Closing += (s, e) => Shutdown();
+
             PrimaryTextBlock.Visibility = Visibility.Hidden;
         }
 
-        public void Shutdown()
+        public async void Shutdown()
         {
-            Environment.Exit(0);
+            try
+            {
+                Visibility = Visibility.Collapsed;
+
+                await Controller.Shutdown();
+
+                Application.Current.Shutdown();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddEntry(ex);
+
+                Application.Current.Shutdown();
+            }
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

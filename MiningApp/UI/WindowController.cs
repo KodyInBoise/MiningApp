@@ -71,8 +71,6 @@ namespace MiningApp.UI
             _dataHelper = new DataHelper();
             _serverHelper = new ServerHelper();
 
-            MainWindow.Instance.Closing += (s, e) => Shutdown();
-
             Bootstrapper.Startup();           
         }
 
@@ -226,7 +224,7 @@ namespace MiningApp.UI
             DisplayViewModel(ViewModelType.ConfigSetup, DisplayGrid.Secondary);
         }
 
-        private void Shutdown()
+        public async Task Shutdown()
         {
             CloseSessions();
         }
@@ -235,7 +233,7 @@ namespace MiningApp.UI
         {
             var sessions = MiningSessions;
 
-            sessions.ForEach(async x => await x.Stop());
+            MiningSessions.ToList().ForEach(async x => await x.Stop());
         }
 
         public async void Testing()
