@@ -145,7 +145,7 @@ namespace MiningApp
 
             WindowController.MiningSessions.Remove(this);
 
-            MinerProcess.Close();
+            MinerProcess.Kill();
         }
 
         void SessionToggled_Invoked(SessionStatusToggledArgs args)
