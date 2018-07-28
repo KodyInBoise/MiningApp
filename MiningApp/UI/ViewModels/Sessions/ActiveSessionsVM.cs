@@ -270,7 +270,13 @@ namespace MiningApp.UI
 
         void ClearActiveSession()
         {
-            OutputTextBox.Clear();
+            ActiveSessionTimer = null;
+            OutputTextBox.Text = "";
+
+            if (_allSessions.Contains(_activeSession))
+            {
+                _allSessions.Remove(_activeSession);
+            }
 
             if (_allSessions.Any())
             {
@@ -285,31 +291,46 @@ namespace MiningApp.UI
 
                 DisplaySession(_allSessions[_currentIndex]);
             }
+            else
+            {
+                _activeSession = null;
+
+                ViewingTextBlock.Text = "0 of 0";
+                MinerTextBlock.Text = "Miner:";
+                UptimeTextBlock.Text = "Uptime:";
+                LastOutputTextBlock.Text = "Last Output:";
+
+                StopSessionButton.Visibility = Visibility.Collapsed;
+                ToggleSessionButton.Visibility = Visibility.Collapsed;
+            }
         }
 
         void UpdateStatusButtons(SessionStatusEnum newStatus)
         {
-            StopSessionButton.Visibility = newStatus != SessionStatusEnum.Stopped ? Visibility.Visible : Visibility.Collapsed;
-            ToggleSessionButton.Visibility = Visibility.Visible;
-
-            switch (newStatus)
+            if (_activeSession != null)
             {
-                case SessionStatusEnum.Stopped:
-                    ToggleSessionButton.Background = ElementValues.Buttons.Colors.New;
-                    ToggleSessionButton.Content = "Start";
-                    break;
-                case SessionStatusEnum.InProgress:
-                    ToggleSessionButton.Background = ElementValues.Buttons.Colors.Orange;
-                    ToggleSessionButton.Content = "Pause";
-                    break;
-                case SessionStatusEnum.Paused:
-                    ToggleSessionButton.Background = ElementValues.Buttons.Colors.New;
-                    ToggleSessionButton.Content = "Resume";
-                    break;
-                default:
-                    StopSessionButton.Visibility = Visibility.Collapsed;
-                    ToggleSessionButton.Visibility = Visibility.Collapsed;
-                    break;
+                StopSessionButton.Visibility = newStatus != SessionStatusEnum.Stopped ? Visibility.Visible : Visibility.Collapsed;
+                ToggleSessionButton.Visibility = Visibility.Visible;
+
+                switch (newStatus)
+                {
+                    case SessionStatusEnum.Stopped:
+                        ToggleSessionButton.Background = ElementValues.Buttons.Colors.New;
+                        ToggleSessionButton.Content = "Start";
+                        break;
+                    case SessionStatusEnum.InProgress:
+                        ToggleSessionButton.Background = ElementValues.Buttons.Colors.Orange;
+                        ToggleSessionButton.Content = "Pause";
+                        break;
+                    case SessionStatusEnum.Paused:
+                        ToggleSessionButton.Background = ElementValues.Buttons.Colors.New;
+                        ToggleSessionButton.Content = "Resume";
+                        break;
+                    default:
+                        StopSessionButton.Visibility = Visibility.Collapsed;
+                        ToggleSessionButton.Visibility = Visibility.Collapsed;
+                        break;
+                }
             }
         }
     }
