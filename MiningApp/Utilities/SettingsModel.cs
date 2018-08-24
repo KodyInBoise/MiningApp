@@ -21,6 +21,7 @@ namespace MiningApp
         {
             App = new AppSettings();
             General = new GeneralSettings();
+            Mining = new MiningSettings();
         }
 
         public class AppSettings

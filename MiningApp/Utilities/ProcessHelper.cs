@@ -11,10 +11,27 @@ using System.Windows.Threading;
 
 namespace MiningApp
 {
+    public delegate void BlacklistedProcessDelegate(BlacklistedProcessArgs args);
+
+
+    public class BlacklistedProcessArgs
+    {
+        public DateTime Timestamp { get; set; }
+
+        public bool BlacklistedProcsRunning { get; set; }
+
+        public List<string> ProcessNames { get; set; }
+
+        public BlacklistedProcessArgs(List<string> processNames = null)
+        {
+            Timestamp = DateTime.Now;
+            BlacklistedProcsRunning = processNames.Any();
+            ProcessNames = processNames ?? new List<string>();
+        }
+    }
+
     public class ProcessHelper
     {
-        private ProcessWatcher _procWatcher { get; set; }
-
         private List<SessionConfigModel> _allMiners = new List<SessionConfigModel>();
         private List<Process> _minerProcesses = new List<Process>();
 
@@ -64,20 +81,24 @@ namespace MiningApp
     {
         public static ProcessWatcher Instance { get; set; }
 
+        public BlacklistedProcessDelegate BlacklistedProcsDelegate;
+
         List<string> _blacklistedProcesses { get; set; }
 
         DispatcherTimer _timer { get; set; }
 
         int _blacklistCheckInterval { get; set; } = 5;
 
-
         public ProcessWatcher()
         {
             Instance = this;
 
+            _blacklistedProcesses = Bootstrapper.Settings.Mining.BlacklistedProcesses ?? new List<string>();
+
             _timer = new DispatcherTimer();
             _timer.Interval = new TimeSpan(0, 0, _blacklistCheckInterval);
             _timer.Tick += (s, e) => CheckForBlacklistedProcesses();
+            _timer.Start();
         }
 
         bool BlacklistedProcessesRunning()
@@ -98,9 +119,27 @@ namespace MiningApp
             return false;
         }
 
-        void CheckForBlacklistedProcesses()
+        async Task<List<string>> GetRunningBlacklistedProcNames()
         {
+            var processes = new List<string>();
 
+            foreach (var process in _blacklistedProcesses)
+            {
+                var procs = Process.GetProcessesByName(process).ToList();
+                procs.ForEach(x => processes.Add(x.ProcessName));
+            }
+
+            return processes;
+        }
+
+        async void CheckForBlacklistedProcesses()
+        {
+            var runningProcs = await GetRunningBlacklistedProcNames();
+
+            if (runningProcs.Any())
+            {
+
+            }
         }
     }
 }
