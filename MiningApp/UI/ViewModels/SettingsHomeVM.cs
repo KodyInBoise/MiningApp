@@ -255,9 +255,11 @@ namespace MiningApp.UI
                 nextLeft = ProcessesListBox.Margin.Left + ProcessesListBox.Width + padding;
                 nextTop = ProcessesListBox.Margin.Top;
                 DisplayElement(ProcessBrowseButton);
+                ProcessBrowseButton.Click += (s, e) => ProcessBrowseButton_Clicked();
 
                 nextTop = ProcessesListBox.Margin.Top + ProcessesListBox.Height - ProcessRemoveButton.Height;
                 DisplayElement(ProcessRemoveButton);
+                ProcessRemoveButton.Click += (s, e) => ProcessRemoveButton_Clicked();
 
                 nextLeft = ElementValues.Grids.SecondaryNormal - SaveButton.Width - padding;
                 nextTop = ViewGrid.Height - SaveButton.Height - padding;
@@ -272,6 +274,18 @@ namespace MiningApp.UI
                 ViewGrid.Children.Add(element);
 
                 nextTop = element.Margin.Top + element.Height + padding;
+            }
+
+            void ProcessBrowseButton_Clicked()
+            {
+                var processPath = ElementHelper.GetFilePath();
+
+                var proc = processPath;
+            }
+
+            void ProcessRemoveButton_Clicked()
+            {
+
             }
 
             void SaveButton_Clicked()

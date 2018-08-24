@@ -83,6 +83,20 @@ namespace MiningApp
 
             return childProcesses;
         }
+
+        public static string GetProcessNameFromFile(string filePath)
+        {
+            try
+            {
+                var processName = filePath.Substring(0, filePath.LastIndexOf('.'));
+
+                return processName;
+            }
+            catch
+            {
+                return "";
+            }
+        }
     }
 
     public class ProcessWatcher
@@ -145,6 +159,23 @@ namespace MiningApp
             var runningProcs = await GetRunningBlacklistedProcNames();
 
             BlacklistedProcsDelegate?.Invoke(new BlacklistedProcessArgs(runningProcs));
+        }
+    }
+
+    public class BlacklistedProcess
+    {
+        public string ProcessPath { get; set; }
+
+        public string ProcessName => ProcessHelper.GetProcessNameFromFile(ProcessPath);
+
+        public BlacklistedProcess(string path)
+        {
+            ProcessPath = path;
+        }
+
+        public override string ToString()
+        {
+            return ProcessName;
         }
     }
 }
