@@ -169,7 +169,7 @@ namespace MiningApp
             }
         }
 
-        private void AppendOutput(string output)
+        public void AppendOutput(string output)
         {
             var outputArgs = new OutputReceivedArgs() { SessionID = SessionID, NewOutput = output };
             OutputReceived?.Invoke(outputArgs);

@@ -23,6 +23,8 @@ namespace MiningApp
 
         public List<BlacklistedProcess> RunningProcesses { get; set; }
 
+        public string StatusMessage => GetStatusMessage();
+
         public BlacklistedProcessArgs(List<BlacklistedProcess> procs = null)
         {
             Timestamp = DateTime.Now;
@@ -35,6 +37,23 @@ namespace MiningApp
             else
             {
                 BlacklistedProcsRunning = false;
+            }
+        }
+
+        string GetStatusMessage()
+        {
+            var body = "";
+
+            if (BlacklistedProcsRunning)
+            {
+                RunningProcesses.ForEach(x => body += $"{x.ProcessFileName},");
+
+
+                return "Blacklisted processes running: { " + body.TrimEnd(',') + " }";
+            }
+            else
+            {
+                return "No Blacklisted proccesses running...";
             }
         }
     }

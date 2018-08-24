@@ -250,10 +250,12 @@ namespace MiningApp.UI
                     if (args.BlacklistedProcsRunning && session.CurrentStatus == SessionStatusEnum.InProgress)
                     {
                         session.Pause();
+                        //session.AppendOutput($"Session paused: {args.StatusMessage}");
                     }
                     else if (!args.BlacklistedProcsRunning && session.CurrentStatus != SessionStatusEnum.InProgress)
                     {
                         session.Start();
+                        //session.AppendOutput($"Session resumed: {args.StatusMessage}");
                     }
                 }
             }
