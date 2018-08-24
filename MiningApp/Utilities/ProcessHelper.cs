@@ -130,7 +130,7 @@ namespace MiningApp
 
             foreach (var proc in _blacklistedProcesses)
             {
-                var runningProcs = Process.GetProcessesByName(proc.ProcessFileName);
+                var runningProcs = Process.GetProcessesByName(proc.NameWithoutExtension);
                 if (runningProcs.Any())
                 {
                     procs.Add(proc);
