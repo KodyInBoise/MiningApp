@@ -237,6 +237,7 @@ namespace MiningApp.UI
 
             private double padding = 15;
 
+            private List<BlacklistedProcess> _blacklistedProcesses { get; set; } = Bootstrapper.Settings.Mining.BlacklistedProcesses.ToList();
 
             public MiningVM()
             {
@@ -251,6 +252,7 @@ namespace MiningApp.UI
                 DisplayElement(ProcessesTextBlock, topPadding: padding * 4);
 
                 DisplayElement(ProcessesListBox);
+                ProcessesListBox.ItemsSource = _blacklistedProcesses;
 
                 nextLeft = ProcessesListBox.Margin.Left + ProcessesListBox.Width + padding;
                 nextTop = ProcessesListBox.Margin.Top;
@@ -280,16 +282,27 @@ namespace MiningApp.UI
             {
                 var processPath = ElementHelper.GetFilePath();
 
-                var proc = processPath;
+                if (!String.IsNullOrEmpty(processPath))
+                {
+                    var blacklistedProc = new BlacklistedProcess(processPath);
+                    _blacklistedProcesses.Add(blacklistedProc);
+
+                    ProcessesListBox.Items.Refresh();
+                }
             }
 
             void ProcessRemoveButton_Clicked()
             {
+                var blacklistedProc = (BlacklistedProcess)ProcessesListBox.SelectedItem;
+                _blacklistedProcesses.Remove(blacklistedProc);
 
+                ProcessesListBox.Items.Refresh();
             }
 
             void SaveButton_Clicked()
             {
+                Bootstrapper.Settings.Mining.BlacklistedProcesses = _blacklistedProcesses.ToList();
+
                 Bootstrapper.Instance.SaveLocalSettings();
             }
         }

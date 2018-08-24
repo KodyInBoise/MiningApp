@@ -40,13 +40,7 @@ namespace MiningApp
 
         public class MiningSettings
         {
-            public List<string> BlacklistedProcesses { get; set; } = new List<string>();
-
-            public void AddToBlacklist(string filePath)
-            {
-                var processName = filePath.Substring(0, filePath.LastIndexOf('.'));
-                BlacklistedProcesses.Add(processName);
-            }
+            public List<BlacklistedProcess> BlacklistedProcesses { get; set; } = new List<BlacklistedProcess>();
         }
-    }
+    }    
 }

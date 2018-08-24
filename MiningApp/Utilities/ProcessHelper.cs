@@ -8,6 +8,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Management;
 using System.Windows.Threading;
+using LiteDB;
 
 namespace MiningApp
 {
@@ -20,16 +21,16 @@ namespace MiningApp
 
         public bool BlacklistedProcsRunning { get; set; }
 
-        public List<string> ProcessNames { get; set; }
+        public List<BlacklistedProcess> RunningProcesses { get; set; }
 
-        public BlacklistedProcessArgs(List<string> processNames = null)
+        public BlacklistedProcessArgs(List<BlacklistedProcess> procs = null)
         {
             Timestamp = DateTime.Now;
             
-            if (processNames?.Count > 0)
+            if (procs?.Count > 0)
             {
                 BlacklistedProcsRunning = true;
-                ProcessNames = processNames;
+                RunningProcesses = procs;
             }
             else
             {
@@ -105,7 +106,7 @@ namespace MiningApp
 
         public BlacklistedProcessDelegate BlacklistedProcsDelegate;
 
-        List<string> _blacklistedProcesses { get; set; }
+        List<BlacklistedProcess> _blacklistedProcesses { get; set; }
 
         DispatcherTimer _timer { get; set; }
 
@@ -115,7 +116,7 @@ namespace MiningApp
         {
             Instance = this;
 
-            _blacklistedProcesses = Bootstrapper.Settings.Mining.BlacklistedProcesses ?? new List<string>();
+            _blacklistedProcesses = Bootstrapper.Settings.Mining.BlacklistedProcesses ?? new List<BlacklistedProcess>();
 
             _timer = new DispatcherTimer();
             _timer.Interval = new TimeSpan(0, 0, _blacklistCheckInterval);
@@ -123,40 +124,25 @@ namespace MiningApp
             _timer.Start();
         }
 
-        bool BlacklistedProcessesRunning()
+        async Task<List<BlacklistedProcess>> GetRunningBlacklistedProcesses()
         {
-            var processes = new List<Process>();
+            var procs = new List<BlacklistedProcess>();
 
-            foreach (var process in _blacklistedProcesses)
+            foreach (var proc in _blacklistedProcesses)
             {
-                var procs = Process.GetProcessesByName(process);
-                processes.AddRange(procs);
+                var runningProcs = Process.GetProcessesByName(proc.ProcessFileName);
+                if (runningProcs.Any())
+                {
+                    procs.Add(proc);
+                }
             }
 
-            if (processes.Any())
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        async Task<List<string>> GetRunningBlacklistedProcNames()
-        {
-            var processes = new List<string>();
-
-            foreach (var process in _blacklistedProcesses)
-            {
-                var procs = Process.GetProcessesByName(process).ToList();
-                procs.ForEach(x => processes.Add(x.ProcessName));
-            }
-
-            return processes;
+            return procs;
         }
 
         async void CheckForBlacklistedProcesses()
         {
-            var runningProcs = await GetRunningBlacklistedProcNames();
+            var runningProcs = await GetRunningBlacklistedProcesses();
 
             BlacklistedProcsDelegate?.Invoke(new BlacklistedProcessArgs(runningProcs));
         }
@@ -166,16 +152,27 @@ namespace MiningApp
     {
         public string ProcessPath { get; set; }
 
-        public string ProcessName => ProcessHelper.GetProcessNameFromFile(ProcessPath);
+        public string ProcessFileName { get; set; }
+
+        [BsonIgnore]
+        public string NameWithoutExtension => ProcessHelper.GetProcessNameFromFile(ProcessFileName);
+
+        public BlacklistedProcess()
+        {
+
+        }
 
         public BlacklistedProcess(string path)
         {
-            ProcessPath = path;
+            var fileInfo = new FileInfo(path);
+
+            ProcessPath = fileInfo.FullName;
+            ProcessFileName = fileInfo.Name;
         }
 
         public override string ToString()
         {
-            return ProcessName;
+            return ProcessFileName;
         }
     }
 }
