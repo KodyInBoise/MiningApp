@@ -13,6 +13,7 @@ namespace MiningApp.UI
     public enum SettingType
     {
         General,
+        Mining,
         Updates,
     }
 
@@ -30,6 +31,8 @@ namespace MiningApp.UI
         private PrimaryVM _primaryVM { get; set; }
 
         private GeneralVM _generalVM { get; set; }
+
+        private MiningVM _miningVM { get; set; }
 
         private UpdatesVM _updatesVM { get; set; }
 
@@ -71,6 +74,9 @@ namespace MiningApp.UI
                 case SettingType.General:
                     _generalVM = new GeneralVM();
                     break;
+                case SettingType.Mining:
+                    _miningVM = new MiningVM();
+                    break;
                 case SettingType.Updates:
                     _updatesVM = new UpdatesVM();
                     break;
@@ -88,6 +94,8 @@ namespace MiningApp.UI
             TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Settings", 40, width: ElementValues.Grids.PrimarySmall);
 
             Button GeneralButton { get; set; } = ElementHelper.CreateButton("General", height: buttonHeight);
+
+            Button MiningButton { get; set; } = ElementHelper.CreateButton("Mining", height: buttonHeight);
 
             Button UpdatesButton { get; set; } = ElementHelper.CreateButton("Updates", height: buttonHeight);
 
@@ -114,6 +122,9 @@ namespace MiningApp.UI
                 DisplayElement(GeneralButton, topPadding: padding * 2);
                 GeneralButton.Click += (s, e) => GeneralButton_Clicked();
 
+                DisplayElement(MiningButton);
+                MiningButton.Click += (s, e) => MiningButton_Clicked();
+
                 DisplayElement(UpdatesButton);
                 UpdatesButton.Click += (s, e) => UpdatesButton_Clicked();
             }
@@ -130,6 +141,11 @@ namespace MiningApp.UI
             void GeneralButton_Clicked()
             {
                 View.DisplaySecondary(SettingType.General);
+            }
+
+            void MiningButton_Clicked()
+            {
+                View.DisplaySecondary(SettingType.Mining);
             }
 
             void UpdatesButton_Clicked()
@@ -189,6 +205,77 @@ namespace MiningApp.UI
             {
                 Bootstrapper.Settings.General.LaunchOnStartup = LaunchOnStartupCheckBox.IsChecked ?? false;
 
+                Bootstrapper.Instance.SaveLocalSettings();
+            }
+        }
+
+        public class MiningVM
+        {
+            SettingsHomeVM View { get; set; } = Instance;
+
+            Grid ViewGrid { get; set; } = Instance.SecondaryGrid;
+
+            TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Mining", 40, width: ElementValues.Grids.SecondaryNormal);
+
+            TextBlock ProcessesTextBlock { get; set; } = ElementHelper.CreateTextBlock("Blacklisted Processes", fontSize: 18, width: ElementValues.Grids.SecondaryNormal, height: 18);
+
+            TextBox NewProcessTextBox { get; set; } = ElementHelper.CreateTextBox("NewProcess", width: 350);
+
+            ListBox ProcessesListBox { get; set; } = ElementHelper.CreateListBox("Processes", fontSize: 14, height: 125, width: 525);
+
+            Button ProcessBrowseButton { get; set; } = ElementHelper.CreateButton("Browse", name: "ProcsBrowse", fontSize: 14, style: ButtonStyleEnum.Normal,
+                width: 80, height: ElementValues.TextBoxs.Height);
+
+            Button ProcessRemoveButton { get; set; } = ElementHelper.CreateButton("Remove", name: "ProcsRemove", fontSize: 14, style: ButtonStyleEnum.Delete,
+                width: 80, height: ElementValues.TextBoxs.Height);
+
+            Button SaveButton { get; set; } = ElementHelper.CreateButton("Save", height: 60, width: 150, style: ButtonStyleEnum.Finish);
+
+            private double nextLeft = 20;
+
+            private double nextTop = 12;
+
+            private double padding = 15;
+
+
+            public MiningVM()
+            {
+                Show();
+            }
+
+            private void Show()
+            {
+                DisplayElement(TitleTextBlock);
+
+                nextLeft = nextLeft + padding * 4;
+                DisplayElement(ProcessesTextBlock, topPadding: padding * 4);
+
+                DisplayElement(ProcessesListBox);
+
+                nextLeft = ProcessesListBox.Margin.Left + ProcessesListBox.Width + padding;
+                nextTop = ProcessesListBox.Margin.Top;
+                DisplayElement(ProcessBrowseButton);
+
+                nextTop = ProcessesListBox.Margin.Top + ProcessesListBox.Height - ProcessRemoveButton.Height;
+                DisplayElement(ProcessRemoveButton);
+
+                nextLeft = ElementValues.Grids.SecondaryNormal - SaveButton.Width - padding;
+                nextTop = ViewGrid.Height - SaveButton.Height - padding;
+                DisplayElement(SaveButton);
+                SaveButton.Click += (s, e) => SaveButton_Clicked();
+            }
+
+            private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
+            {
+                element.Margin = new Thickness((nextLeft + leftPadding), nextTop + topPadding, 0, 0);
+
+                ViewGrid.Children.Add(element);
+
+                nextTop = element.Margin.Top + element.Height + padding;
+            }
+
+            void SaveButton_Clicked()
+            {
                 Bootstrapper.Instance.SaveLocalSettings();
             }
         }
