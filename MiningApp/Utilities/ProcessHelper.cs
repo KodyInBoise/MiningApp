@@ -120,7 +120,7 @@ namespace MiningApp
 
             _timer = new DispatcherTimer();
             _timer.Interval = new TimeSpan(0, 0, _blacklistCheckInterval);
-            _timer.Tick += (s, e) => CheckForBlacklistedProcesses();
+            _timer.Tick += (s, e) => ProcessWatcherTimer_Tick();
             _timer.Start();
         }
 
@@ -145,6 +145,14 @@ namespace MiningApp
             var runningProcs = await GetRunningBlacklistedProcesses();
 
             BlacklistedProcsDelegate?.Invoke(new BlacklistedProcessArgs(runningProcs));
+        }
+
+        void ProcessWatcherTimer_Tick()
+        {
+            if (Bootstrapper.Settings.Mining.UseBlackList)
+            {
+                CheckForBlacklistedProcesses();
+            }
         }
     }
 

@@ -229,6 +229,8 @@ namespace MiningApp.UI
             Button ProcessRemoveButton { get; set; } = ElementHelper.CreateButton("Remove", name: "ProcsRemove", fontSize: 14, style: ButtonStyleEnum.Delete,
                 width: 80, height: ElementValues.TextBoxs.Height);
 
+            CheckBox UseBlacklistCheckBox { get; set; } = ElementHelper.CreateCheckBox("Use Blacklist to start and stop miners");
+
             Button SaveButton { get; set; } = ElementHelper.CreateButton("Save", height: 60, width: 150, style: ButtonStyleEnum.Finish);
 
             private double nextLeft = 20;
@@ -253,6 +255,9 @@ namespace MiningApp.UI
 
                 DisplayElement(ProcessesListBox);
                 ProcessesListBox.ItemsSource = _blacklistedProcesses;
+
+                DisplayElement(UseBlacklistCheckBox);
+                UseBlacklistCheckBox.IsChecked = Bootstrapper.Settings.Mining.UseBlackList;
 
                 nextLeft = ProcessesListBox.Margin.Left + ProcessesListBox.Width + padding;
                 nextTop = ProcessesListBox.Margin.Top;
@@ -301,6 +306,7 @@ namespace MiningApp.UI
 
             void SaveButton_Clicked()
             {
+                Bootstrapper.Settings.Mining.UseBlackList = UseBlacklistCheckBox.IsChecked == true;
                 Bootstrapper.Settings.Mining.BlacklistedProcesses = _blacklistedProcesses.ToList();
 
                 Bootstrapper.Instance.SaveLocalSettings();
