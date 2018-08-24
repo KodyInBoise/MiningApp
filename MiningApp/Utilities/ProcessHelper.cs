@@ -25,8 +25,16 @@ namespace MiningApp
         public BlacklistedProcessArgs(List<string> processNames = null)
         {
             Timestamp = DateTime.Now;
-            BlacklistedProcsRunning = processNames.Any();
-            ProcessNames = processNames ?? new List<string>();
+            
+            if (processNames?.Count > 0)
+            {
+                BlacklistedProcsRunning = true;
+                ProcessNames = processNames;
+            }
+            else
+            {
+                BlacklistedProcsRunning = false;
+            }
         }
     }
 
@@ -136,10 +144,7 @@ namespace MiningApp
         {
             var runningProcs = await GetRunningBlacklistedProcNames();
 
-            if (runningProcs.Any())
-            {
-
-            }
+            BlacklistedProcsDelegate?.Invoke(new BlacklistedProcessArgs(runningProcs));
         }
     }
 }
