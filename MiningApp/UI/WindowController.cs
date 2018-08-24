@@ -243,7 +243,20 @@ namespace MiningApp.UI
 
         private void BlacklistedProcsDelegate_Invoked(BlacklistedProcessArgs args)
         {
-
+            if (MiningSessions.Any())
+            {
+                foreach (var session in MiningSessions)
+                {
+                    if (args.BlacklistedProcsRunning && session.CurrentStatus == SessionStatusEnum.InProgress)
+                    {
+                        session.Pause();
+                    }
+                    else if (!args.BlacklistedProcsRunning && session.CurrentStatus != SessionStatusEnum.InProgress)
+                    {
+                        session.Start();
+                    }
+                }
+            }
         }
 
         public async void Testing()
