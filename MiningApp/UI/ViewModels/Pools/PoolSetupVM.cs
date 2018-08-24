@@ -187,7 +187,7 @@ namespace MiningApp.UI
             Button TagsAddButton { get; set; } = ElementHelper.CreateButton("+", name: "PoolsAdd", fontSize: 14, style: ButtonStyleEnum.New,
                 width: 40, height: ElementValues.TextBoxs.Height);
 
-            Button TagsRemoveButton { get; set; } = ElementHelper.CreateButton("-", name: "PoolsAdd", fontSize: 14, style: ButtonStyleEnum.Delete,
+            Button TagsRemoveButton { get; set; } = ElementHelper.CreateButton("-", name: "PoolsRemove", fontSize: 14, style: ButtonStyleEnum.Delete,
                 width: 40, height: ElementValues.TextBoxs.Height);
 
 

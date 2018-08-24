@@ -57,10 +57,14 @@ namespace MiningApp.UI
 
         private ServerHelper _serverHelper { get; set; } = null;
 
+        private ProcessWatcher _processWatcher { get; set; } = null;
+
 
         public WindowController()
         {
             Instance = this;
+            Bootstrapper.Startup();
+
             User = new UserModel();
             MiningSessions = new List<SessionModel>();
 
@@ -70,8 +74,9 @@ namespace MiningApp.UI
             _cryptoHelper = new CryptoHelper();
             _dataHelper = new DataHelper();
             _serverHelper = new ServerHelper();
+            _processWatcher = new ProcessWatcher();
 
-            Bootstrapper.Startup();           
+            _processWatcher.BlacklistedProcsDelegate += BlacklistedProcsDelegate_Invoked;
         }
 
 
@@ -234,6 +239,24 @@ namespace MiningApp.UI
             var sessions = MiningSessions;
 
             MiningSessions.ToList().ForEach(async x => await x.Stop());
+        }
+
+        private void BlacklistedProcsDelegate_Invoked(BlacklistedProcessArgs args)
+        {
+            if (MiningSessions.Any())
+            {
+                foreach (var session in MiningSessions)
+                {
+                    if (args.BlacklistedProcsRunning && session.CurrentStatus == SessionStatusEnum.InProgress)
+                    {
+                        session.Pause();
+                    }
+                    else if (!args.BlacklistedProcsRunning && session.CurrentStatus != SessionStatusEnum.InProgress)
+                    {
+                        session.Start();
+                    }
+                }
+            }
         }
 
         public async void Testing()

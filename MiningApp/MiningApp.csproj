@@ -128,7 +128,7 @@
     <Compile Include="Models\SessionModel.cs" />
     <Compile Include="Models\PoolConfigModel.cs" />
     <Compile Include="Utilities\FTPClient.cs" />
-    <Compile Include="Utilities\SettingsModel.cs" />
+    <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\WalletConfigModel.cs" />
     <Compile Include="Settings\MinerNames.cs" />

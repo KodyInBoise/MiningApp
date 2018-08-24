@@ -14,11 +14,14 @@ namespace MiningApp
 
         public GeneralSettings General { get; set; }
 
+        public MiningSettings Mining { get; set; }
+
 
         public SettingsModel()
         {
             App = new AppSettings();
             General = new GeneralSettings();
+            Mining = new MiningSettings();
         }
 
         public class AppSettings
@@ -34,5 +37,11 @@ namespace MiningApp
 
             public bool CheckForUpdates { get; set; } = false;
         }
-    }
+
+        public class MiningSettings
+        {
+            public bool UseBlackList { get; set; } = true;
+            public List<BlacklistedProcess> BlacklistedProcesses { get; set; } = new List<BlacklistedProcess>();
+        }
+    }    
 }
