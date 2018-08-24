@@ -14,6 +14,8 @@ namespace MiningApp
 
         public GeneralSettings General { get; set; }
 
+        public MiningSettings Mining { get; set; }
+
 
         public SettingsModel()
         {
@@ -33,6 +35,17 @@ namespace MiningApp
             public bool LaunchOnStartup { get; set; } = false;
 
             public bool CheckForUpdates { get; set; } = false;
+        }
+
+        public class MiningSettings
+        {
+            public List<string> BlacklistedProcesses { get; set; } = new List<string>();
+
+            public void AddToBlacklist(string filePath)
+            {
+                var processName = filePath.Substring(0, filePath.LastIndexOf('.'));
+                BlacklistedProcesses.Add(processName);
+            }
         }
     }
 }
