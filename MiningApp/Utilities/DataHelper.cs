@@ -349,7 +349,12 @@ namespace MiningApp
         {
             using (_database)
             {
-                return _configCollection.FindById(id);
+                var config = _configCollection.FindById(id);
+                config.Miner = GetMinerByID(config.MinerID);
+                config.Pool = GetPoolByID(config.PoolID);
+                config.Wallet = GetWalletByID(config.WalletID);
+
+                return config;
             }
         }
 

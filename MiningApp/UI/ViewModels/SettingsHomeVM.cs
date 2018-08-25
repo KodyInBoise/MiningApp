@@ -162,7 +162,9 @@ namespace MiningApp.UI
 
             TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("General", 40, width: ElementValues.Grids.SecondaryNormal);
 
-            CheckBox LaunchOnStartupCheckBox { get; set; } = ElementHelper.CreateCheckBox("Launch On Startup", fontSize: 22);
+            CheckBox LaunchOnStartupCheckBox { get; set; } = ElementHelper.CreateCheckBox("Launch On Startup", width: 250, fontSize: 20);
+
+            ComboBox LaunchConfigComboBox { get; set; } = ElementHelper.CreateComboBox("Launch", width: 325);
 
             Button SaveButton { get; set; } = ElementHelper.CreateButton("Save", height: 60, width: 150, style: ButtonStyleEnum.Finish);
 
@@ -172,24 +174,49 @@ namespace MiningApp.UI
 
             private double padding = 15;
 
+            private List<SessionConfigModel> _sessionConfigs { get; set; }
+
 
             public GeneralVM()
             {
                 Show();
             }
 
-            private void Show()
+            private async void Show()
             {
                 DisplayElement(TitleTextBlock);
 
                 nextLeft = nextLeft + padding * 4;
                 DisplayElement(LaunchOnStartupCheckBox, topPadding: padding * 4);
                 LaunchOnStartupCheckBox.IsChecked = Bootstrapper.Settings.General.LaunchOnStartup;
+                LaunchOnStartupCheckBox.Click += (s, e) => LaunchOnStartupCheckBox_Clicked();
+
+                nextLeft = LaunchOnStartupCheckBox.Margin.Left + LaunchOnStartupCheckBox.Width + padding * 4;
+                nextTop = LaunchOnStartupCheckBox.Margin.Top;
+                DisplayElement(LaunchConfigComboBox, topPadding: 7);
+                LaunchConfigComboBox.Visibility = LaunchOnStartupCheckBox.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
 
                 nextLeft = ElementValues.Grids.SecondaryNormal - SaveButton.Width - padding;
                 nextTop = ViewGrid.Height - SaveButton.Height - padding;
                 DisplayElement(SaveButton);
                 SaveButton.Click += (s, e) => SaveButton_Clicked();
+
+                _sessionConfigs = await DataHelper.Instance.GetAllConfigs();
+                LaunchConfigComboBox.ItemsSource = _sessionConfigs;
+
+                if (_sessionConfigs.Any())
+                {
+                    var configID = Bootstrapper.Settings.General.LaunchConfigID;
+                    if (configID > 0)
+                    {
+                        var selectedConfig = _sessionConfigs.FirstOrDefault(x => x.ID == configID);
+                        LaunchConfigComboBox.SelectedItem = selectedConfig;
+                    }
+                    else
+                    {
+                        LaunchConfigComboBox.SelectedIndex = 0;
+                    }
+                }
             }
 
             private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
@@ -201,9 +228,26 @@ namespace MiningApp.UI
                 nextTop = element.Margin.Top + element.Height + padding;
             }
 
+            void LaunchOnStartupCheckBox_Clicked()
+            {
+                LaunchConfigComboBox.Visibility = LaunchOnStartupCheckBox.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+            }
+
             void SaveButton_Clicked()
             {
                 Bootstrapper.Settings.General.LaunchOnStartup = LaunchOnStartupCheckBox.IsChecked ?? false;
+                if (LaunchOnStartupCheckBox.IsChecked == true)
+                {
+                    var selectedConfig = (SessionConfigModel)LaunchConfigComboBox.SelectedItem;
+
+                    Bootstrapper.Settings.General.LaunchOnStartup = true;
+                    Bootstrapper.Settings.General.LaunchConfigID = selectedConfig != null ? selectedConfig.ID : -1;
+                }
+                else
+                {
+                    Bootstrapper.Settings.General.LaunchOnStartup = false;
+                    Bootstrapper.Settings.General.LaunchConfigID = -1;
+                }
 
                 Bootstrapper.Instance.SaveLocalSettings();
             }
@@ -217,7 +261,7 @@ namespace MiningApp.UI
 
             TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Mining", 40, width: ElementValues.Grids.SecondaryNormal);
 
-            TextBlock ProcessesTextBlock { get; set; } = ElementHelper.CreateTextBlock("Blacklisted Processes", fontSize: 18, width: ElementValues.Grids.SecondaryNormal, height: 18);
+            TextBlock ProcessesTextBlock { get; set; } = ElementHelper.CreateTextBlock("Blacklisted Processes", fontSize: 20, width: ElementValues.Grids.SecondaryNormal, height: 20);
 
             TextBox NewProcessTextBox { get; set; } = ElementHelper.CreateTextBox("NewProcess", width: 350);
 

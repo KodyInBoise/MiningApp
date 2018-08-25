@@ -77,5 +77,10 @@ namespace MiningApp
 
             WindowController.Instance.ShowHome(Session);
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

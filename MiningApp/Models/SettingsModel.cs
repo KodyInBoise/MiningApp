@@ -27,14 +27,13 @@ namespace MiningApp
         public class AppSettings
         {
             public string Name { get; set; } = "MiningApp";
-
             public ServerHelper.VersionHelper.VersionModel AppVersion { get; set; }
         }
 
         public class GeneralSettings
         {
             public bool LaunchOnStartup { get; set; } = false;
-
+            public int LaunchConfigID { get; set; } = -1;
             public bool CheckForUpdates { get; set; } = false;
         }
 

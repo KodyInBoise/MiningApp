@@ -20,8 +20,12 @@ namespace MiningApp
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
     public partial class MainWindow : Window
     {
+        public const string STARTUP_ARGUMENT_ID = "startup";
+
+
         public static MainWindow Instance { get; set; }
 
         public WindowController Controller { get; set; }
@@ -38,7 +42,7 @@ namespace MiningApp
             Startup();
         }
 
-        private void Startup()
+        private async void Startup()
         {
             Instance = this;
 
@@ -49,6 +53,30 @@ namespace MiningApp
             Closing += (s, e) => Shutdown();
 
             PrimaryTextBlock.Visibility = Visibility.Hidden;
+
+            var args = await Bootstrapper.GetParseArguments();
+            if (args.Any())
+            {
+                HandleStartupArguments(args);
+            }
+        }
+
+        void HandleStartupArguments(List<string> args)
+        {
+            if (args.Contains(STARTUP_ARGUMENT_ID))
+            {
+                if (Bootstrapper.Settings.General.LaunchOnStartup && Bootstrapper.Settings.General.LaunchConfigID > 0)
+                {
+                    var config = DataHelper.Instance.GetSessionConfigByID(Bootstrapper.Settings.General.LaunchConfigID);
+                    var session = new SessionModel(config);
+
+                    var message = $"Session started with startup argument!";
+                    session.ToggleStatus(SessionStatusEnum.Running, message);
+
+                    WindowController.MiningSessions.Add(session);
+                    Controller.ShowHome(session);
+                }
+            }
         }
 
         public async void Shutdown()

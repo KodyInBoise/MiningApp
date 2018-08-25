@@ -8,13 +8,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using static MiningApp.SettingsModel;
 
 namespace MiningApp
 {
-
     public class Bootstrapper
     {
+        public const char ARGUMENT_IDENTIFIER = '-';
+
+
         public static Bootstrapper Instance { get; set; }
 
         public static SettingsModel Settings { get; set; }
@@ -137,17 +140,37 @@ namespace MiningApp
         {
             try
             {
+                var startupArg = Settings.General.LaunchOnStartup ? "-startup" : string.Empty;
+
                 var shell = new WshShell();
                 var windowsApplicationShortcut = (IWshShortcut)shell.CreateShortcut(path);
-                windowsApplicationShortcut.Description = "How to create short for application example";
+                windowsApplicationShortcut.Description = App.Current.ToString();
                 windowsApplicationShortcut.WorkingDirectory = Directory.GetCurrentDirectory();
-                windowsApplicationShortcut.TargetPath = Path.Combine(Directory.GetCurrentDirectory(), "MiningApp.exe");
+                windowsApplicationShortcut.TargetPath = Path.Combine(Directory.GetCurrentDirectory(), $"MiningApp.exe");
+                windowsApplicationShortcut.Arguments = $"{startupArg}";
                 windowsApplicationShortcut.Save();
             }
             catch (Exception ex)
             {
                 LogHelper.AddEntry(ex);
             }
+        }
+
+        public static async Task<List<string>> GetParseArguments()
+        {
+            var procArg = Process.GetCurrentProcess().MainModule.FileName;
+            var rawArgs = Environment.GetCommandLineArgs().ToList();
+
+            var parsedArgs = new List<string>();
+            foreach (var arg in rawArgs)
+            {
+                if (arg != procArg)
+                {
+                    parsedArgs.Add(arg.TrimStart(ARGUMENT_IDENTIFIER).ToLower());
+                }
+            }
+           
+            return parsedArgs;
         }
     }
 }

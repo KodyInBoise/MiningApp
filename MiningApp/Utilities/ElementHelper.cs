@@ -181,7 +181,7 @@ namespace MiningApp
             };
         }
 
-        public static CheckBox CreateCheckBox(string content, double topPadding = 0, int fontSize = -1)
+        public static CheckBox CreateCheckBox(string content, double topPadding = 0, int fontSize = -1, int width = -1)
         {
             return new CheckBox()
             {
@@ -189,6 +189,7 @@ namespace MiningApp
                 FontFamily = ElementValues.Fonts.Family,
                 FontSize = fontSize > 0 ? fontSize : ElementValues.Fonts.Size,
                 Foreground = ElementValues.Fonts.Color,
+                Width = width > 0 ? width : ElementValues.CheckBoxs.Width,
                 Height = ElementValues.CheckBoxs.Height,
 
                 VerticalAlignment = VerticalAlignment.Top,
@@ -429,6 +430,7 @@ namespace MiningApp
 
         public static class CheckBoxs
         {
+            public static int Width { get; set; } = 450;
             public static int Height { get; set; } = 40;
         }
 
