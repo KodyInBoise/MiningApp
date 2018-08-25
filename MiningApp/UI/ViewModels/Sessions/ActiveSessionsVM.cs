@@ -124,6 +124,7 @@ namespace MiningApp.UI
                     _activeSession.ToggleStatus(SessionStatusEnum.ManuallyPaused);
                     break;
                 case SessionStatusEnum.ManuallyPaused:
+                case SessionStatusEnum.BlacklistPaused:
                     _activeSession.ToggleStatus(SessionStatusEnum.Running);
                     break;
                 default:
@@ -153,14 +154,10 @@ namespace MiningApp.UI
             LastOutputTextBlock.Text = $"Last Output: {session.LastOutputTimestamp}";
 
             OutputTextBox.Clear();
-            //_sessionOutput = session.OutputHelper.GetAllOutput;
+            OutputTextBox.Text = session.OutputHelper.GetAllOutput();
 
-            OutputTextBox.Text = session.OutputHelper.GetAllOutput;
             session.OutputReceived += SessionOutputReceived;
             session.StatusToggled += SessionStatusToggled;
-
-            //ActiveSessionTimer = session.GetTimer();
-            //ActiveSessionTimer.Tick += (s, e) => ActiveSessionTimer_Tick();
 
             _activeSession = session;
             _currentIndex = _allSessions.IndexOf(_activeSession);
@@ -170,7 +167,6 @@ namespace MiningApp.UI
             UpdateStatusButtons(_activeSession.CurrentStatus);
         }
 
-        string _oldOutput = string.Empty;
         void ActiveSessionTimer_Tick()
         {
             /*
@@ -195,8 +191,6 @@ namespace MiningApp.UI
             if (args.SessionID == _activeSession.SessionID)
             {
                 WindowController.InvokeOnMainThread(new Action(() => UpdateSessionOutput(args)));
-                //LastOutputTextBlock.Text = $"Last Output: asdf";
-                //AppendSessionOutput(args.NewOutput);
             }
         }
 
@@ -231,38 +225,12 @@ namespace MiningApp.UI
             }
         }
 
-        async void SessionStatusToggled(SessionStatusToggledArgs args)
+        void SessionStatusToggled(SessionStatusToggledArgs args)
         {
             if (args.SessionID == _activeSession.SessionID)
-            {
-                /*
-                if (args.NewStatus == _activeSession.CurrentStatus)
-                {
-                    return;
-                }
-                */
-                
-
+            {              
                 StopSessionButton.Visibility = Visibility.Collapsed;
                 ToggleSessionButton.Visibility = Visibility.Collapsed;
-
-                switch (args.NewStatus)
-                {
-                    case SessionStatusEnum.Stopped:
-                        if (_activeSession.CurrentStatus != SessionStatusEnum.Stopped)
-                        {
-                            await _activeSession.Stop();
-                        }
-                        ClearActiveSession();
-                        break;
-                    case SessionStatusEnum.Running:
-                        break;
-                    case SessionStatusEnum.ManuallyPaused:
-                        //_activeSession.Start();
-                        break;
-                    default:
-                        break;
-                }
 
                 UpdateStatusButtons(args.NewStatus);
             }
@@ -323,6 +291,7 @@ namespace MiningApp.UI
                         ToggleSessionButton.Content = "Pause";
                         break;
                     case SessionStatusEnum.ManuallyPaused:
+                    case SessionStatusEnum.BlacklistPaused:
                         ToggleSessionButton.Background = ElementValues.Buttons.Colors.New;
                         ToggleSessionButton.Content = "Resume";
                         break;

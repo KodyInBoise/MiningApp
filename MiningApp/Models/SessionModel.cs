@@ -45,7 +45,7 @@ namespace MiningApp
     {
         public class OutputHelperModel
         {
-            public string GetAllOutput => _allOutput;
+            public string GetAllOutput() => _allOutput;
 
             SessionModel _session { get; set; }
 
@@ -136,29 +136,30 @@ namespace MiningApp
                 switch (newStatus)
                 {
                     case SessionStatusEnum.Stopped:
-                        statusMessage = !String.IsNullOrEmpty(message) ? statusMessage += message : statusMessage += "Session Stopped!\r";
-                        OutputHelper.AppendOutput(statusMessage);
+                        statusMessage = !String.IsNullOrEmpty(message) ? statusMessage += message : statusMessage += "Session Stopped!";
+                        OutputHelper.AppendOutput(Environment.NewLine + statusMessage + Environment.NewLine);
                         MinerProcess.Kill();
                         break;
                     case SessionStatusEnum.Running:
-                        statusMessage = !String.IsNullOrEmpty(message) ? statusMessage += message : statusMessage += "Session Started!\r";
-                        OutputHelper.AppendOutput(statusMessage);
+                        statusMessage = !String.IsNullOrEmpty(message) ? statusMessage += message : statusMessage += "Session Started!";
+                        OutputHelper.AppendOutput(Environment.NewLine + statusMessage + Environment.NewLine);
                         Start();
                         break;
                     case SessionStatusEnum.ManuallyPaused:
-                        statusMessage = !String.IsNullOrEmpty(message) ? statusMessage += message : statusMessage += "Session Manually Paused!\r";
-                        OutputHelper.AppendOutput(statusMessage);
+                        statusMessage = !String.IsNullOrEmpty(message) ? statusMessage += message : statusMessage += "Session Manually Paused!";
+                        OutputHelper.AppendOutput(Environment.NewLine + statusMessage + Environment.NewLine);
                         MinerProcess.Kill();
                         break;
                     case SessionStatusEnum.BlacklistPaused:
-                        statusMessage = !String.IsNullOrEmpty(message) ? statusMessage += message : statusMessage += "Session Paused Due To Blacklist Processes Running!\r";
-                        OutputHelper.AppendOutput(statusMessage);
+                        statusMessage = !String.IsNullOrEmpty(message) ? statusMessage += message : statusMessage += "Session Paused Due To Blacklist Processes Running!";
+                        OutputHelper.AppendOutput(Environment.NewLine + statusMessage + Environment.NewLine);
                         MinerProcess.Kill();
                         break;
                     default:
                         break;
                 }
 
+                CurrentStatus = newStatus;
                 StatusToggled?.Invoke(args);
 
                 LogHelper.AddEntry(LogType.Session, statusMessage);

@@ -234,11 +234,21 @@ namespace MiningApp.UI
             CloseSessions();
         }
 
-        private void CloseSessions()
+        private async void CloseSessions()
         {
             var sessions = MiningSessions;
 
-            MiningSessions.ToList().ForEach(async x => await x.Stop());
+            foreach (var session in MiningSessions.ToList())
+            {
+                try
+                {
+                    await session.Stop();
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.AddEntry(ex);
+                }
+            }
         }
 
         private void BlacklistedProcsDelegate_Invoked(BlacklistedProcessArgs args)
@@ -266,19 +276,6 @@ namespace MiningApp.UI
                         default:
                             break;
                     }
-
-                    /*
-                    if (args.BlacklistedProcsRunning && session.CurrentStatus == SessionStatusEnum.Running)
-                    {
-                        session.Pause();
-                        //session.AppendOutput($"Session paused: {args.StatusMessage}");
-                    }
-                    else if (!args.BlacklistedProcsRunning && session.CurrentStatus != SessionStatusEnum.Running)
-                    {
-                        session.Start();
-                        //session.AppendOutput($"Session resumed: {args.StatusMessage}");
-                    }
-                    */
                 }
             }
         }

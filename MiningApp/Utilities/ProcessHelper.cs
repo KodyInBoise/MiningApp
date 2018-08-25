@@ -23,7 +23,7 @@ namespace MiningApp
 
         public List<BlacklistedProcess> RunningProcesses { get; set; }
 
-        public string StatusMessage => GetStatusMessage();
+        public string StatusMessage => GetProcessString();
 
         public BlacklistedProcessArgs(List<BlacklistedProcess> procs = null)
         {
@@ -40,7 +40,7 @@ namespace MiningApp
             }
         }
 
-        string GetStatusMessage()
+        string GetProcessString()
         {
             var body = "";
 
@@ -49,7 +49,7 @@ namespace MiningApp
                 RunningProcesses.ForEach(x => body += $"{x.ProcessFileName},");
 
 
-                return "Blacklisted processes running: { " + body.TrimEnd(',') + " }";
+                return "{ " + body.TrimEnd(',') + " }";
             }
             else
             {
@@ -65,13 +65,7 @@ namespace MiningApp
 
         public ProcessHelper()
         {
-            UpdateMiners();
             GetRunningMiners();
-        }
-
-        private async void UpdateMiners()
-        {
-            //_allMiners = await _controller.GetMiners();
         }
 
         private void GetRunningMiners()
@@ -89,11 +83,6 @@ namespace MiningApp
             */
             //Testing
             _minerProcesses.ForEach(x => Console.WriteLine(x.ProcessName));
-        }
-
-        public void StartMiner(SessionConfigModel miner)
-        {
-            
         }
 
         public static List<Process> GetChildProcesses(Process proc)
