@@ -36,7 +36,8 @@ namespace MiningApp.UI
 
         TextBlock LastOutputTextBlock { get; set; } = ElementHelper.CreateTextBlock("Last Output: ", width: 450, height: 20);
 
-        TextBox OutputTextBox { get; set; } = ElementHelper.CreateTextBox("Output", height: 300, width: 700, fontSize: 12, readOnly: true);
+        TextBox OutputTextBox { get; set; } = ElementHelper.CreateTextBox("Output", height: 300, width: 700, fontSize: 12, readOnly: true,
+            contentVerticalAlignment: VerticalAlignment.Top);
 
         Button StopSessionButton { get; set; } = ElementHelper.CreateButton(content: "Stop", name: "StopSession", style: ButtonStyleEnum.Delete, height: 50, width: 150);
 
@@ -119,17 +120,14 @@ namespace MiningApp.UI
         {
             switch (_activeSession.CurrentStatus)
             {
-                case SessionStatusEnum.Stopped:
+                case SessionStatusEnum.Running:
+                    _activeSession.ToggleStatus(SessionStatusEnum.ManuallyPaused);
                     break;
-                case SessionStatusEnum.InProgress:
-                    OutputTextBox.Text += $"\r----------PAUSING MINER----------\r";
-                    _activeSession.Pause();
+                case SessionStatusEnum.ManuallyPaused:
+                    _activeSession.ToggleStatus(SessionStatusEnum.Running);
                     break;
-                case SessionStatusEnum.Paused:
-                    OutputTextBox.Text += $"\r----------RESUMING MINER----------\r";
-                    _activeSession.Start();
+                default:
                     break;
-                default: break;
             }
         }
 
@@ -155,14 +153,14 @@ namespace MiningApp.UI
             LastOutputTextBlock.Text = $"Last Output: {session.LastOutputTimestamp}";
 
             OutputTextBox.Clear();
-            _sessionOutput = session.AllOutput;
-            OutputTextBox.Text = session.AllOutput;
+            //_sessionOutput = session.OutputHelper.GetAllOutput;
 
+            OutputTextBox.Text = session.OutputHelper.GetAllOutput;
             session.OutputReceived += SessionOutputReceived;
             session.StatusToggled += SessionStatusToggled;
 
-            ActiveSessionTimer = session.GetTimer();
-            ActiveSessionTimer.Tick += (s, e) => ActiveSessionTimer_Tick();
+            //ActiveSessionTimer = session.GetTimer();
+            //ActiveSessionTimer.Tick += (s, e) => ActiveSessionTimer_Tick();
 
             _activeSession = session;
             _currentIndex = _allSessions.IndexOf(_activeSession);
@@ -175,6 +173,7 @@ namespace MiningApp.UI
         string _oldOutput = string.Empty;
         void ActiveSessionTimer_Tick()
         {
+            /*
             bool outputChanged = _sessionOutput != _oldOutput;
 
             //Need to only scroll when viewing live output
@@ -186,27 +185,26 @@ namespace MiningApp.UI
                 _oldOutput = _sessionOutput;
             }
 
-            UptimeTextBlock.Text = $"Uptime: {_activeSession.UptimeString}";
+           // UptimeTextBlock.Text = $"Uptime: {_activeSession.UptimeString}";
             LastOutputTextBlock.Text = $"Last Output: {_activeSession.LastOutputTimestamp.ToString()}";
+            */
         }
 
         void SessionOutputReceived(OutputReceivedArgs args)
         {
             if (args.SessionID == _activeSession.SessionID)
             {
-                if (!String.IsNullOrEmpty(args.NewOutput))
-                {
-                    _sessionOutput += args.NewOutput + Environment.NewLine;
-
-                    //Cannot append textbox text from here due to threading issues with textbox element
-                    /*
-                    OutputTextBox.AppendText(newOutput + Environment.NewLine);
-                    LastOutputTextBlock.Text = $"Last Output: {_activeSession.LastOutputTimestamp}";
-
-                    OutputTextBox.ScrollToEnd();
-                    */
-                }
+                WindowController.InvokeOnMainThread(new Action(() => UpdateSessionOutput(args)));
+                //LastOutputTextBlock.Text = $"Last Output: asdf";
+                //AppendSessionOutput(args.NewOutput);
             }
+        }
+
+        void UpdateSessionOutput(OutputReceivedArgs args)
+        {
+            LastOutputTextBlock.Text = $"Last Output: {args.Timestamp}";
+            OutputTextBox.AppendText(args.NewOutput + Environment.NewLine);
+            OutputTextBox.ScrollToEnd();
         }
 
         void NextSession()
@@ -257,9 +255,9 @@ namespace MiningApp.UI
                         }
                         ClearActiveSession();
                         break;
-                    case SessionStatusEnum.InProgress:
+                    case SessionStatusEnum.Running:
                         break;
-                    case SessionStatusEnum.Paused:
+                    case SessionStatusEnum.ManuallyPaused:
                         //_activeSession.Start();
                         break;
                     default:
@@ -320,11 +318,11 @@ namespace MiningApp.UI
                         ToggleSessionButton.Background = ElementValues.Buttons.Colors.New;
                         ToggleSessionButton.Content = "Start";
                         break;
-                    case SessionStatusEnum.InProgress:
+                    case SessionStatusEnum.Running:
                         ToggleSessionButton.Background = ElementValues.Buttons.Colors.Orange;
                         ToggleSessionButton.Content = "Pause";
                         break;
-                    case SessionStatusEnum.Paused:
+                    case SessionStatusEnum.ManuallyPaused:
                         ToggleSessionButton.Background = ElementValues.Buttons.Colors.New;
                         ToggleSessionButton.Content = "Resume";
                         break;

@@ -43,7 +43,8 @@ namespace MiningApp
     public enum SessionStatusEnum : int
     {
         Stopped = 0,
-        InProgress = 1,
-        Paused = 2
+        Running = 1,
+        ManuallyPaused = 2,
+        BlacklistPaused = 3
     }
 }

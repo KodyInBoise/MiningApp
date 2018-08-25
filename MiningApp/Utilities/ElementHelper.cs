@@ -109,7 +109,8 @@ namespace MiningApp
             };
         }
 
-        public static TextBox CreateTextBox(string name, string text = "", int fontSize = -1, int height = -1, int width = -1, bool readOnly = false)
+        public static TextBox CreateTextBox(string name, string text = "", int fontSize = -1, int height = -1, int width = -1, bool readOnly = false, 
+            VerticalAlignment contentVerticalAlignment = VerticalAlignment.Center)
         {
             return new TextBox()
             {
@@ -123,7 +124,7 @@ namespace MiningApp
 
                 VerticalAlignment = VerticalAlignment.Top,
                 HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalContentAlignment = VerticalAlignment.Center,
+                VerticalContentAlignment = contentVerticalAlignment,
                 HorizontalContentAlignment = HorizontalAlignment.Left,
 
                 TextWrapping = TextWrapping.Wrap

@@ -247,16 +247,38 @@ namespace MiningApp.UI
             {
                 foreach (var session in MiningSessions)
                 {
-                    if (args.BlacklistedProcsRunning && session.CurrentStatus == SessionStatusEnum.InProgress)
+                    switch (session.CurrentStatus)
+                    {
+                        case SessionStatusEnum.Running:
+                            if (args.BlacklistedProcsRunning)
+                            {
+                                var pauseMessage = $"Session Paused Due To Blacklist Processes Running: {args.StatusMessage}";
+                                session.ToggleStatus(SessionStatusEnum.BlacklistPaused, pauseMessage);
+                            }
+                            break;
+                        case SessionStatusEnum.BlacklistPaused:
+                            if (!args.BlacklistedProcsRunning)
+                            {
+                                var startMessage = "Session Started Due To Blacklist Processes Closing";
+                                session.ToggleStatus(SessionStatusEnum.Running, startMessage);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
+                    /*
+                    if (args.BlacklistedProcsRunning && session.CurrentStatus == SessionStatusEnum.Running)
                     {
                         session.Pause();
                         //session.AppendOutput($"Session paused: {args.StatusMessage}");
                     }
-                    else if (!args.BlacklistedProcsRunning && session.CurrentStatus != SessionStatusEnum.InProgress)
+                    else if (!args.BlacklistedProcsRunning && session.CurrentStatus != SessionStatusEnum.Running)
                     {
                         session.Start();
                         //session.AppendOutput($"Session resumed: {args.StatusMessage}");
                     }
+                    */
                 }
             }
         }
@@ -273,6 +295,11 @@ namespace MiningApp.UI
 
             Bootstrapper.Settings.App.AppVersion = version;
             Bootstrapper.Instance.SaveLocalSettings();
+        }
+
+        public static void InvokeOnMainThread(Action action)
+        {
+            Application.Current.Dispatcher.Invoke(action);
         }
     }
 }
