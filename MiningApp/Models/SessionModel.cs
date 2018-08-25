@@ -146,6 +146,11 @@ namespace MiningApp
                     return $"{_seconds} S";
                 }
             }
+
+            public void Stop()
+            {
+                _timer.Stop();
+            }
         }
 
 
@@ -207,6 +212,7 @@ namespace MiningApp
                     case SessionStatusEnum.Stopped:
                         statusMessage = !String.IsNullOrEmpty(message) ? statusMessage += message : statusMessage += "Session Stopped!";
                         OutputHelper.AppendOutput(Environment.NewLine + statusMessage + Environment.NewLine);
+                        UptimeHelper.Stop();
                         MinerProcess.Kill();
                         break;
                     case SessionStatusEnum.Running:
