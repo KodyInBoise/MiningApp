@@ -150,7 +150,7 @@ namespace MiningApp.UI
         {
             MinerTextBlock.Text = $"Miner: {session.Config.Miner.Name}";
             CryptoTextBlock.Text = $"Crypto: {session.Config.CryptoName}";
-            UptimeTextBlock.Text = $"Uptime: {session.Uptime}";
+            UptimeTextBlock.Text = $"Uptime: {session.UptimeString}";
             LastOutputTextBlock.Text = $"Last Output: {session.LastOutputTimestamp}";
 
             OutputTextBox.Clear();
@@ -196,6 +196,7 @@ namespace MiningApp.UI
 
         void UpdateSessionOutput(OutputReceivedArgs args)
         {
+            UptimeTextBlock.Text = $"Uptime: {_activeSession.UptimeString}";
             LastOutputTextBlock.Text = $"Last Output: {args.Timestamp}";
             OutputTextBox.AppendText(args.NewOutput + Environment.NewLine);
             OutputTextBox.ScrollToEnd();

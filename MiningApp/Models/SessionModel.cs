@@ -99,9 +99,7 @@ namespace MiningApp
 
         public DateTime LastOutputTimestamp { get; set; }
 
-        public TimeSpan Uptime => GetUptime();
-
-        //public string UptimeString => _sessionTimer.GetUptimeFriendlyString();
+        public string UptimeString => GetUptimeFriendlyString();
 
         public event SessionStatusToggledDelegate StatusToggled;
 
@@ -212,6 +210,13 @@ namespace MiningApp
                     OutputHelper.AppendOutput(output);
                 }
             }
+        }
+
+        string GetUptimeFriendlyString()
+        {
+            var uptime = GetUptime();
+
+            return $"{uptime.Days}D {uptime.Hours}H {uptime.Minutes}M {uptime.Seconds}S";
         }
 
         /*
