@@ -81,9 +81,81 @@ namespace MiningApp
             }
         }
 
+        public class UptimeHelperModel
+        {
+            public DispatcherTimer GetTimer() => _timer;
+
+            SessionModel _session { get; set; }
+
+            DispatcherTimer _timer { get; set; }
+
+
+            int _seconds = 0;
+            int _minutes = 0;
+            int _hours = 0;
+            int _days = 0;
+
+            public UptimeHelperModel(SessionModel session)
+            {
+                _session = session;
+
+                _timer = new DispatcherTimer();
+                _timer.Interval = new TimeSpan(0, 0, 1);
+                _timer.Tick += (s, e) => Timer_Tick();
+
+                _timer.Start();
+            }
+
+            void Timer_Tick()
+            {
+                _seconds++;
+            }
+
+            public string GetFriendlyUptimeString()
+            {
+                if (_seconds > 60)
+                {
+                    _minutes++;
+                    _seconds -= 60;
+                }
+                if (_minutes > 60)
+                {
+                    _hours++;
+                    _minutes -= 60;
+                }
+                if (_hours > 24)
+                {
+                    _days++;
+                    _hours -= 24;
+                }
+
+                if (_days > 0)
+                {
+                    return $"{_days}D {_hours}H {_minutes}M {_seconds}S";
+                }
+                else if (_hours > 0)
+                {
+                    return $"{_hours}H {_minutes}M {_seconds}S"; 
+                }
+                else if (_minutes > 0)
+                {
+                    return $"{_minutes}M {_seconds}S"; 
+                }
+                else
+                {
+                    return $"{_seconds} S";
+                }
+            }
+        }
+
+
         public string SessionID { get; set; }
 
         public OutputHelperModel OutputHelper { get; set; }
+
+        public UptimeHelperModel UptimeHelper { get; set; }
+
+        public DispatcherTimer GetUptimeTimer() => UptimeHelper.GetTimer();
 
         public SessionConfigModel Config { get; set; }
 
@@ -99,8 +171,6 @@ namespace MiningApp
 
         public DateTime LastOutputTimestamp { get; set; }
 
-        public string UptimeString => GetUptimeFriendlyString();
-
         public event SessionStatusToggledDelegate StatusToggled;
 
         public event OutputReceivedDelegate OutputReceived;
@@ -113,6 +183,7 @@ namespace MiningApp
         public SessionModel(SessionConfigModel config)
         {
             OutputHelper = new OutputHelperModel(this);
+            UptimeHelper = new UptimeHelperModel(this);
 
             StartTime = DateTime.Now;
             Config = config;
@@ -332,6 +403,11 @@ namespace MiningApp
             Start();
 
             LogHelper.AddEntry(LogType.Session, $"Restarted session: Config = \"{Config.Name}\"");
+        }
+
+        public async Task<string> GetUptimeString()
+        {
+            return UptimeHelper.GetFriendlyUptimeString();
         }
 
         /*

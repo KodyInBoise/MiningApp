@@ -43,7 +43,7 @@ namespace MiningApp.UI
 
         Button ToggleSessionButton { get; set; } = ElementHelper.CreateButton(content: "Pause", name: "StopSession", style: ButtonStyleEnum.Orange, height: 50, width: 150);
 
-        DispatcherTimer ActiveSessionTimer { get; set; } = null;
+        DispatcherTimer SessionUptimeTimer { get; set; } = null;
 
 
         private List<SessionModel> _allSessions => WindowController.MiningSessions ?? new List<SessionModel>();
@@ -96,6 +96,11 @@ namespace MiningApp.UI
             DisplayElement(ToggleSessionButton);
             ToggleSessionButton.Click += (s, e) => ToggleSessionButton_Clicked();
 
+            SessionUptimeTimer = new DispatcherTimer();
+            SessionUptimeTimer.Interval = new TimeSpan(0, 0, 1);
+            SessionUptimeTimer.Tick += (s, e) => ActiveSessionTimer_Tick();
+            SessionUptimeTimer.Start();
+
             if (_activeSession != null)
             {
                 DisplaySession(_activeSession);
@@ -111,9 +116,9 @@ namespace MiningApp.UI
             }
         }
 
-        async void StopSessionButton_Clicked()
+        void StopSessionButton_Clicked()
         {
-            await _activeSession.Stop();
+            _activeSession.ToggleStatus(SessionStatusEnum.Stopped);
         }
 
         void ToggleSessionButton_Clicked()
@@ -146,11 +151,10 @@ namespace MiningApp.UI
             nextTop = element.Margin.Top + element.Height + padding;
         }
 
-        void DisplaySession(SessionModel session)
+        async void DisplaySession(SessionModel session)
         {
             MinerTextBlock.Text = $"Miner: {session.Config.Miner.Name}";
             CryptoTextBlock.Text = $"Crypto: {session.Config.CryptoName}";
-            UptimeTextBlock.Text = $"Uptime: {session.UptimeString}";
             LastOutputTextBlock.Text = $"Last Output: {session.LastOutputTimestamp}";
 
             OutputTextBox.Clear();
@@ -167,23 +171,18 @@ namespace MiningApp.UI
             UpdateStatusButtons(_activeSession.CurrentStatus);
         }
 
+        async Task UpdateSessionUptime()
+        {
+            var uptime = _activeSession != null ? await _activeSession.GetUptimeString() : string.Empty;
+
+            WindowController.InvokeOnMainThread(new Action(() => {
+                UptimeTextBlock.Text = $"Uptime: {uptime}";
+            }));
+        }
+
         void ActiveSessionTimer_Tick()
         {
-            /*
-            bool outputChanged = _sessionOutput != _oldOutput;
-
-            //Need to only scroll when viewing live output
-            if (outputChanged)
-            {
-                OutputTextBox.Text = _sessionOutput;
-                OutputTextBox.ScrollToEnd();
-
-                _oldOutput = _sessionOutput;
-            }
-
-           // UptimeTextBlock.Text = $"Uptime: {_activeSession.UptimeString}";
-            LastOutputTextBlock.Text = $"Last Output: {_activeSession.LastOutputTimestamp.ToString()}";
-            */
+            Task.Run(UpdateSessionUptime);
         }
 
         void SessionOutputReceived(OutputReceivedArgs args)
@@ -196,7 +195,6 @@ namespace MiningApp.UI
 
         void UpdateSessionOutput(OutputReceivedArgs args)
         {
-            UptimeTextBlock.Text = $"Uptime: {_activeSession.UptimeString}";
             LastOutputTextBlock.Text = $"Last Output: {args.Timestamp}";
             OutputTextBox.AppendText(args.NewOutput + Environment.NewLine);
             OutputTextBox.ScrollToEnd();
@@ -239,7 +237,7 @@ namespace MiningApp.UI
 
         void ClearActiveSession()
         {
-            ActiveSessionTimer = null;
+            SessionUptimeTimer = null;
             OutputTextBox.Text = "";
 
             if (_allSessions.Contains(_activeSession))
