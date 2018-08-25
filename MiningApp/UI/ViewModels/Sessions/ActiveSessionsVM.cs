@@ -231,6 +231,11 @@ namespace MiningApp.UI
                 StopSessionButton.Visibility = Visibility.Collapsed;
                 ToggleSessionButton.Visibility = Visibility.Collapsed;
 
+                if (args.NewStatus == SessionStatusEnum.Stopped)
+                {
+                    ClearActiveSession();
+                }
+                        
                 UpdateStatusButtons(args.NewStatus);
             }
         }

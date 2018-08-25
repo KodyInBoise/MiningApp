@@ -196,7 +196,7 @@ namespace MiningApp
             SessionID = Guid.NewGuid().ToString().Substring(0, 8);
         }
 
-        public void ToggleStatus(SessionStatusEnum newStatus, string message = "")
+        public async void ToggleStatus(SessionStatusEnum newStatus, string message = "")
         {
             if (newStatus == CurrentStatus)
             {
@@ -212,8 +212,7 @@ namespace MiningApp
                     case SessionStatusEnum.Stopped:
                         statusMessage = !String.IsNullOrEmpty(message) ? statusMessage += message : statusMessage += "Session Stopped!";
                         OutputHelper.AppendOutput(Environment.NewLine + statusMessage + Environment.NewLine);
-                        UptimeHelper.Stop();
-                        MinerProcess.Kill();
+                        await Stop(true);
                         break;
                     case SessionStatusEnum.Running:
                         statusMessage = !String.IsNullOrEmpty(message) ? statusMessage += message : statusMessage += "Session Started!";
@@ -223,12 +222,12 @@ namespace MiningApp
                     case SessionStatusEnum.ManuallyPaused:
                         statusMessage = !String.IsNullOrEmpty(message) ? statusMessage += message : statusMessage += "Session Manually Paused!";
                         OutputHelper.AppendOutput(Environment.NewLine + statusMessage + Environment.NewLine);
-                        MinerProcess.Kill();
+                        await Stop();
                         break;
                     case SessionStatusEnum.BlacklistPaused:
                         statusMessage = !String.IsNullOrEmpty(message) ? statusMessage += message : statusMessage += "Session Paused Due To Blacklist Processes Running!";
                         OutputHelper.AppendOutput(Environment.NewLine + statusMessage + Environment.NewLine);
-                        MinerProcess.Kill();
+                        await Stop();
                         break;
                     default:
                         break;
@@ -289,52 +288,23 @@ namespace MiningApp
             }
         }
 
-        string GetUptimeFriendlyString()
-        {
-            var uptime = GetUptime();
-
-            return $"{uptime.Days}D {uptime.Hours}H {uptime.Minutes}M {uptime.Seconds}S";
-        }
-
-        /*
-        void SessionOutputReceived(string newOutput)
-        {
-            _newOutput = newOutput;
-
-            var args = new OutputReceivedArgs() { SessionID = SessionID, NewOutput = _newOutput };
-            OutputReceived?.Invoke(args);
-        }
-
-        void OutputReceived_Invoked(OutputReceivedArgs args)
-        {
-            LastOutputTimestamp = args.Timestamp;
-            _output += args.NewOutput + Environment.NewLine;
-
-            Console.WriteLine(args.NewOutput);
-        }
-
-        public void AppendOutput(string output)
-        {
-            SessionOutputReceived(output);
-        }
-        */
-
-        public async Task Stop()
-        {
-            WindowController.MiningSessions.Remove(this);
-         
-            MinerProcess.Kill();
-        }
-
-        private TimeSpan GetUptime()
+        public async Task Stop(bool stopUptime = false)
         {
             try
             {
-                return MinerProcess != null ? DateTime.Now.Subtract(MinerProcess.StartTime) : new TimeSpan(0, 0, 0);
+                if (stopUptime)
+                {
+                    UptimeHelper.Stop();
+                }
+
+                WindowController.MiningSessions.Remove(this);
+
+                MinerProcess.Kill();
             }
-            catch
+            catch (InvalidOperationException) { } // Swallow invalid operation exceptions when process is already killed
+            catch (Exception ex)
             {
-                return new TimeSpan(0, 0, 0);
+                LogHelper.AddEntry(ex);
             }
         }
 
@@ -415,117 +385,5 @@ namespace MiningApp
         {
             return UptimeHelper.GetFriendlyUptimeString();
         }
-
-        /*
-        class TimerHelper
-        {
-            private SessionModel _session { get; set; }
-
-            private DispatcherTimer _timer { get; set; }
-
-            private TimeSpan _uptime { get; set; }
-
-            private int _uptimeSeconds { get; set; }
-
-            private int _uptimeMinutes { get; set; }
-
-            private int _uptimeHours { get; set; }
-
-            private int _uptimeDays { get; set; }
-
-            private int _staleOutputSeconds { get; set; }
-
-            public TimerHelper(SessionModel session)
-            {
-                _session = session;
-
-                _timer = new DispatcherTimer();
-                _timer.Interval = new TimeSpan(0, 0, 1);
-                _timer.Tick += (s, e) => Timer_Tick();
-
-                _timer.Start();
-
-                _staleOutputSeconds = 0;
-            }
-
-            private void Timer_Tick()
-            {
-                _uptimeSeconds++;
-
-                if (_uptimeSeconds >= 60)
-                {
-                    AddUptime();
-                }
-
-                _staleOutputSeconds++;
-
-                Task.Run(_session.CheckForStaleMiners);
-            }
-
-            public TimeSpan GetUptime()
-            {
-                return new TimeSpan(_uptimeHours, _uptimeMinutes, _uptimeSeconds);
-            }
-
-            private void AddUptime()
-            {
-                _uptimeMinutes++;
-
-                _uptimeSeconds = 0;
-
-                if (_uptimeMinutes >= 60)
-                {
-                    _uptimeHours++;
-                    _uptimeMinutes = _uptimeMinutes % 60;
-                }
-                if (_uptimeHours >= 60)
-                {
-                    _uptimeDays++;
-                    _uptimeHours = _uptimeHours % 60;
-                }               
-            }
-
-            public DispatcherTimer GetTimer()
-            {
-                return _timer;
-            }
-
-            public string GetUptimeFriendlyString()
-            {
-                var uptime = "";
-
-                if (_uptimeDays > 0)
-                {
-                    uptime = $"{_uptimeDays} Days {_uptimeHours} Hours {_uptimeMinutes} Minutes";
-                }
-                else
-                {
-                    uptime = $"{_uptimeHours} Hours {_uptimeMinutes} Minutes {_uptimeSeconds} Seconds";
-                }
-
-                return uptime;
-            }
-
-            public void ResetStaleOutput()
-            {
-                _staleOutputSeconds = 0;
-            }
-
-            public int GetStaleOutputSeconds()
-            {
-                return _staleOutputSeconds;
-            }
-
-            public void StopTimer()
-            {
-                _timer.Stop();
-            }
-
-            public void ResumeTimer()
-            {
-                _timer.Start();
-            }
-        }
-        */
     }
 }
