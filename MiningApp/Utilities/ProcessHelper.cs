@@ -119,7 +119,7 @@ namespace MiningApp
 
         DispatcherTimer _timer { get; set; }
 
-        int _blacklistCheckInterval { get; set; } = 5;
+        int _blacklistCheckInterval { get; set; } = 15;
 
         public ProcessWatcher()
         {
@@ -161,18 +161,19 @@ namespace MiningApp
 
         async Task<List<BlacklistedItem>> GetRunningBlacklistedProcesses()
         {
-            var procs = new List<BlacklistedItem>();
+            var runningProcs = new List<BlacklistedItem>();
+            _blacklistedProcesses = await GetAllBlacklistedProcesses();
 
             foreach (var proc in _blacklistedProcesses)
             {
-                var runningProcs = Process.GetProcessesByName(proc.NameWithoutExtension);
-                if (runningProcs.Any())
+                var running = Process.GetProcessesByName(proc.NameWithoutExtension);
+                if (running.Any())
                 {
-                    procs.Add(proc);
+                    runningProcs.Add(proc);
                 }
             }
 
-            return procs;
+            return runningProcs;
         }
 
         async void CheckForBlacklistedProcesses()
