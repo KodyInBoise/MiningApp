@@ -267,11 +267,14 @@ namespace MiningApp.UI
 
             ListBox ProcessesListBox { get; set; } = ElementHelper.CreateListBox("Processes", fontSize: 14, height: 125, width: 525);
 
-            Button ProcessBrowseButton { get; set; } = ElementHelper.CreateButton("Browse", name: "ProcsBrowse", fontSize: 14, style: ButtonStyleEnum.Normal,
-                width: 80, height: ElementValues.TextBoxs.Height);
+            Button BrowseFilesButton { get; set; } = ElementHelper.CreateButton("Add File", name: "ProcsBrowse", fontSize: 14, style: ButtonStyleEnum.New,
+                width: 100, height: ElementValues.TextBoxs.Height);
+
+            Button BrowseFoldersButton { get; set; } = ElementHelper.CreateButton("Add Folder", name: "ProcsBrowse", fontSize: 14, style: ButtonStyleEnum.New,
+                width: 100, height: ElementValues.TextBoxs.Height);
 
             Button ProcessRemoveButton { get; set; } = ElementHelper.CreateButton("Remove", name: "ProcsRemove", fontSize: 14, style: ButtonStyleEnum.Delete,
-                width: 80, height: ElementValues.TextBoxs.Height);
+                width: 100, height: ElementValues.TextBoxs.Height);
 
             CheckBox UseBlacklistCheckBox { get; set; } = ElementHelper.CreateCheckBox("Use Blacklist to start and stop miners");
 
@@ -283,7 +286,8 @@ namespace MiningApp.UI
 
             private double padding = 15;
 
-            private List<BlacklistedProcess> _blacklistedProcesses { get; set; } = Bootstrapper.Settings.Mining.BlacklistedProcesses.ToList();
+            private List<BlacklistedItem> _blacklistedItems { get; set; } = Bootstrapper.Settings.Mining.BlacklistedProcesses.ToList();
+
 
             public MiningVM()
             {
@@ -298,15 +302,19 @@ namespace MiningApp.UI
                 DisplayElement(ProcessesTextBlock, topPadding: padding * 4);
 
                 DisplayElement(ProcessesListBox);
-                ProcessesListBox.ItemsSource = _blacklistedProcesses;
+                ProcessesListBox.ItemsSource = _blacklistedItems;
 
                 DisplayElement(UseBlacklistCheckBox);
                 UseBlacklistCheckBox.IsChecked = Bootstrapper.Settings.Mining.UseBlackList;
 
                 nextLeft = ProcessesListBox.Margin.Left + ProcessesListBox.Width + padding;
                 nextTop = ProcessesListBox.Margin.Top;
-                DisplayElement(ProcessBrowseButton);
-                ProcessBrowseButton.Click += (s, e) => ProcessBrowseButton_Clicked();
+                DisplayElement(BrowseFilesButton);
+                BrowseFilesButton.Click += (s, e) => BrowseFilesButtonButton_Clicked();
+
+                nextTop = BrowseFilesButton.Margin.Top + BrowseFilesButton.Height + padding;
+                DisplayElement(BrowseFoldersButton);
+                BrowseFoldersButton.Click += (s, e) => BrowseFoldersButton_Clicked();
 
                 nextTop = ProcessesListBox.Margin.Top + ProcessesListBox.Height - ProcessRemoveButton.Height;
                 DisplayElement(ProcessRemoveButton);
@@ -318,7 +326,7 @@ namespace MiningApp.UI
                 SaveButton.Click += (s, e) => SaveButton_Clicked();
             }
 
-            private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
+            void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
             {
                 element.Margin = new Thickness((nextLeft + leftPadding), nextTop + topPadding, 0, 0);
 
@@ -327,14 +335,25 @@ namespace MiningApp.UI
                 nextTop = element.Margin.Top + element.Height + padding;
             }
 
-            void ProcessBrowseButton_Clicked()
+            void BrowseFilesButtonButton_Clicked()
             {
                 var processPath = ElementHelper.GetFilePath();
 
                 if (!String.IsNullOrEmpty(processPath))
                 {
-                    var blacklistedProc = new BlacklistedProcess(processPath);
-                    _blacklistedProcesses.Add(blacklistedProc);
+                    _blacklistedItems.Add(new BlacklistedItem(BlacklistedItemType.Executable, processPath));
+
+                    ProcessesListBox.Items.Refresh();
+                }
+            }
+
+            void BrowseFoldersButton_Clicked()
+            {
+                var path = ElementHelper.GetFolderPath();
+
+                if (!String.IsNullOrEmpty(path))
+                {
+                    _blacklistedItems.Add(new BlacklistedItem(BlacklistedItemType.Directory, path));
 
                     ProcessesListBox.Items.Refresh();
                 }
@@ -342,8 +361,8 @@ namespace MiningApp.UI
 
             void ProcessRemoveButton_Clicked()
             {
-                var blacklistedProc = (BlacklistedProcess)ProcessesListBox.SelectedItem;
-                _blacklistedProcesses.Remove(blacklistedProc);
+                var blacklistedItem = (BlacklistedItem)ProcessesListBox.SelectedItem;
+                _blacklistedItems.Remove(blacklistedItem);
 
                 ProcessesListBox.Items.Refresh();
             }
@@ -351,7 +370,7 @@ namespace MiningApp.UI
             void SaveButton_Clicked()
             {
                 Bootstrapper.Settings.Mining.UseBlackList = UseBlacklistCheckBox.IsChecked == true;
-                Bootstrapper.Settings.Mining.BlacklistedProcesses = _blacklistedProcesses.ToList();
+                Bootstrapper.Settings.Mining.BlacklistedProcesses = _blacklistedItems.ToList();
 
                 Bootstrapper.Instance.SaveLocalSettings();
             }
@@ -426,7 +445,6 @@ namespace MiningApp.UI
 
             async void CheckNow_Clicked()
             {
-                //WindowController.Instance.Testing();
                 var updatesAvailable = await Task.Run(ServerHelper.Instance.CheckForUpdates);
 
                 if (updatesAvailable)

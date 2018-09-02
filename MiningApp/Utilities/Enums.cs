@@ -47,4 +47,10 @@ namespace MiningApp
         ManuallyPaused = 2,
         BlacklistPaused = 3
     }
+
+    public enum BlacklistedItemType : int
+    {
+        Executable = 0,
+        Directory = 1,
+    }
 }

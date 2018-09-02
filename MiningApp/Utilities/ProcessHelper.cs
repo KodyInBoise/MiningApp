@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Management;
 using System.Windows.Threading;
 using LiteDB;
+using Newtonsoft.Json;
 
 namespace MiningApp
 {
@@ -21,11 +22,11 @@ namespace MiningApp
 
         public bool BlacklistedProcsRunning { get; set; }
 
-        public List<BlacklistedProcess> RunningProcesses { get; set; }
+        public List<BlacklistedItem> RunningProcesses { get; set; }
 
         public string StatusMessage => GetProcessString();
 
-        public BlacklistedProcessArgs(List<BlacklistedProcess> procs = null)
+        public BlacklistedProcessArgs(List<BlacklistedItem> procs = null)
         {
             Timestamp = DateTime.Now;
             
@@ -46,7 +47,7 @@ namespace MiningApp
 
             if (BlacklistedProcsRunning)
             {
-                RunningProcesses.ForEach(x => body += $"{x.ProcessFileName},");
+                RunningProcesses.ForEach(x => body += $"{x.ItemName},");
 
 
                 return "{ " + body.TrimEnd(',') + " }";
@@ -114,7 +115,7 @@ namespace MiningApp
 
         public BlacklistedProcessDelegate BlacklistedProcsDelegate;
 
-        List<BlacklistedProcess> _blacklistedProcesses { get; set; }
+        List<BlacklistedItem> _blacklistedProcesses { get; set; }
 
         DispatcherTimer _timer { get; set; }
 
@@ -124,7 +125,7 @@ namespace MiningApp
         {
             Instance = this;
 
-            _blacklistedProcesses = Bootstrapper.Settings.Mining.BlacklistedProcesses ?? new List<BlacklistedProcess>();
+            _blacklistedProcesses = Bootstrapper.Settings.Mining.BlacklistedProcesses ?? new List<BlacklistedItem>();
 
             _timer = new DispatcherTimer();
             _timer.Interval = new TimeSpan(0, 0, _blacklistCheckInterval);
@@ -132,9 +133,9 @@ namespace MiningApp
             _timer.Start();
         }
 
-        async Task<List<BlacklistedProcess>> GetRunningBlacklistedProcesses()
+        async Task<List<BlacklistedItem>> GetRunningBlacklistedProcesses()
         {
-            var procs = new List<BlacklistedProcess>();
+            var procs = new List<BlacklistedItem>();
 
             foreach (var proc in _blacklistedProcesses)
             {
@@ -164,31 +165,56 @@ namespace MiningApp
         }
     }
 
-    public class BlacklistedProcess
+    public class BlacklistedItem
     {
-        public string ProcessPath { get; set; }
+        public BlacklistedItemType BlacklistType { get; set; }
 
-        public string ProcessFileName { get; set; }
+        public string FullPath { get; set; }
 
-        [BsonIgnore]
-        public string NameWithoutExtension => ProcessHelper.GetProcessNameFromFile(ProcessFileName);
+        public string ItemName => GetItemName();
 
-        public BlacklistedProcess()
+        [JsonIgnore]
+        public string NameWithoutExtension => ProcessHelper.GetProcessNameFromFile(ItemName);
+
+        public BlacklistedItem(BlacklistedItemType type, string path)
         {
-
+            BlacklistType = type;
+            FullPath = path;
         }
 
-        public BlacklistedProcess(string path)
+        string GetItemName()
         {
-            var fileInfo = new FileInfo(path);
-
-            ProcessPath = fileInfo.FullName;
-            ProcessFileName = fileInfo.Name;
+            try
+            {
+                switch (BlacklistType)
+                {
+                    case BlacklistedItemType.Executable:
+                        var file = new FileInfo(FullPath);
+                        return file.Name;
+                    case BlacklistedItemType.Directory:
+                        var dir = new DirectoryInfo(FullPath);
+                        return dir.Name;
+                    default:
+                        return "empty";
+                }
+            }
+            catch
+            {
+                return "error";
+            }
         }
 
         public override string ToString()
         {
-            return ProcessFileName;
+            switch (BlacklistType)
+            {
+                case BlacklistedItemType.Executable:
+                    return ItemName;
+                case BlacklistedItemType.Directory:
+                    return FullPath;
+                default:
+                    return "empty";
+            }
         }
     }
 }

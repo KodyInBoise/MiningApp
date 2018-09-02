@@ -286,6 +286,30 @@ namespace MiningApp
             }
         }
 
+        public static string GetFolderPath(string dir = "")
+        {
+            try
+            {
+                var dialog = new System.Windows.Forms.FolderBrowserDialog();
+                
+
+                var result = dialog.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    return dialog.SelectedPath;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
         public static DataGrid CreateDataGrid(string name, int fontSize = -1, int width = -1, int height = -1)
         {
             return new DataGrid()
