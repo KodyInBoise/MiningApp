@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO.Compression;
+using MiningApp.LoggingUtil;
 
 namespace MiningApp
 {
@@ -29,6 +30,29 @@ namespace MiningApp
             {
                 throw ex;
             }
+        }
+
+        public static List<string> GetAllDirectoryFiles(string dir)
+        {
+            List<string> files = new List<string>();
+
+            try
+            {
+                foreach (var f in Directory.GetFiles(dir))
+                {
+                    files.Add(f);
+                }
+                foreach (var d in Directory.GetDirectories(dir))
+                {
+                    files.AddRange(GetAllDirectoryFiles(d));
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddEntry(ex);
+            }
+
+            return files;
         }
     }
 }

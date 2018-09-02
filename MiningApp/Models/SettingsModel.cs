@@ -40,7 +40,7 @@ namespace MiningApp
         public class MiningSettings
         {
             public bool UseBlackList { get; set; } = true;
-            public List<BlacklistedItem> BlacklistedProcesses { get; set; } = new List<BlacklistedItem>();
+            public List<BlacklistedItem> BlacklistedItems { get; set; } = new List<BlacklistedItem>();
         }
     }    
 }

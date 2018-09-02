@@ -286,7 +286,7 @@ namespace MiningApp.UI
 
             private double padding = 15;
 
-            private List<BlacklistedItem> _blacklistedItems { get; set; } = Bootstrapper.Settings.Mining.BlacklistedProcesses.ToList();
+            private List<BlacklistedItem> _blacklistedItems { get; set; } = Bootstrapper.Settings.Mining.BlacklistedItems.ToList();
 
 
             public MiningVM()
@@ -370,7 +370,7 @@ namespace MiningApp.UI
             void SaveButton_Clicked()
             {
                 Bootstrapper.Settings.Mining.UseBlackList = UseBlacklistCheckBox.IsChecked == true;
-                Bootstrapper.Settings.Mining.BlacklistedProcesses = _blacklistedItems.ToList();
+                Bootstrapper.Settings.Mining.BlacklistedItems = _blacklistedItems.ToList();
 
                 Bootstrapper.Instance.SaveLocalSettings();
             }
