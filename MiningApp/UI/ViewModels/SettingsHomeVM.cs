@@ -1,6 +1,7 @@
 ﻿using MiningApp.LoggingUtil;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -265,15 +266,21 @@ namespace MiningApp.UI
 
             TextBox NewProcessTextBox { get; set; } = ElementHelper.CreateTextBox("NewProcess", width: 350);
 
+            TextBox PreviewBlacklistTextBox { get; set; } = ElementHelper.CreateTextBox("PreviewBlacklist", width: 525, height: 225, 
+                readOnly: true, contentVerticalAlignment: VerticalAlignment.Top);
+
             ListBox ProcessesListBox { get; set; } = ElementHelper.CreateListBox("Processes", fontSize: 14, height: 125, width: 525);
 
-            Button BrowseFilesButton { get; set; } = ElementHelper.CreateButton("Add File", name: "ProcsBrowse", fontSize: 14, style: ButtonStyleEnum.New,
+            Button BrowseFilesButton { get; set; } = ElementHelper.CreateButton("Add File", name: "BrowseFiles", fontSize: 14, style: ButtonStyleEnum.New,
                 width: 100, height: ElementValues.TextBoxs.Height);
 
-            Button BrowseFoldersButton { get; set; } = ElementHelper.CreateButton("Add Folder", name: "ProcsBrowse", fontSize: 14, style: ButtonStyleEnum.New,
+            Button BrowseFoldersButton { get; set; } = ElementHelper.CreateButton("Add Folder", name: "BrowseFolders", fontSize: 14, style: ButtonStyleEnum.New,
                 width: 100, height: ElementValues.TextBoxs.Height);
 
             Button ProcessRemoveButton { get; set; } = ElementHelper.CreateButton("Remove", name: "ProcsRemove", fontSize: 14, style: ButtonStyleEnum.Delete,
+                width: 100, height: ElementValues.TextBoxs.Height);
+
+            Button PreviewBlacklistButton { get; set; } = ElementHelper.CreateButton("Preview", name: "PreviewBlacklist", fontSize: 14, style: ButtonStyleEnum.Normal,
                 width: 100, height: ElementValues.TextBoxs.Height);
 
             CheckBox UseBlacklistCheckBox { get; set; } = ElementHelper.CreateCheckBox("Use Blacklist to start and stop miners");
@@ -286,7 +293,7 @@ namespace MiningApp.UI
 
             private double padding = 15;
 
-            private List<BlacklistedItem> _blacklistedItems { get; set; } = Bootstrapper.Settings.Mining.BlacklistedItems.ToList();
+            private List<BlacklistItem> _blacklistedItems { get; set; } = Bootstrapper.Settings.Mining.BlacklistedItems.ToList();
 
 
             public MiningVM()
@@ -320,6 +327,11 @@ namespace MiningApp.UI
                 DisplayElement(ProcessRemoveButton);
                 ProcessRemoveButton.Click += (s, e) => ProcessRemoveButton_Clicked();
 
+                nextLeft = ProcessesListBox.Margin.Left + ProcessesListBox.Width - PreviewBlacklistButton.Width;
+                nextTop = UseBlacklistCheckBox.Margin.Top;
+                DisplayElement(PreviewBlacklistButton, topPadding: 7);
+                PreviewBlacklistButton.Click += (s, e) => PreviewBlacklistButton_Clicked();
+
                 nextLeft = ElementValues.Grids.SecondaryNormal - SaveButton.Width - padding;
                 nextTop = ViewGrid.Height - SaveButton.Height - padding;
                 DisplayElement(SaveButton);
@@ -341,7 +353,7 @@ namespace MiningApp.UI
 
                 if (!String.IsNullOrEmpty(processPath))
                 {
-                    _blacklistedItems.Add(new BlacklistedItem(BlacklistedItemType.Executable, processPath));
+                    _blacklistedItems.Add(new BlacklistItem(BlacklistedItemType.Executable, processPath));
 
                     ProcessesListBox.Items.Refresh();
                 }
@@ -353,7 +365,7 @@ namespace MiningApp.UI
 
                 if (!String.IsNullOrEmpty(path))
                 {
-                    _blacklistedItems.Add(new BlacklistedItem(BlacklistedItemType.Directory, path));
+                    _blacklistedItems.Add(new BlacklistItem(BlacklistedItemType.Directory, path));
 
                     ProcessesListBox.Items.Refresh();
                 }
@@ -361,10 +373,43 @@ namespace MiningApp.UI
 
             void ProcessRemoveButton_Clicked()
             {
-                var blacklistedItem = (BlacklistedItem)ProcessesListBox.SelectedItem;
+                var blacklistedItem = (BlacklistItem)ProcessesListBox.SelectedItem;
                 _blacklistedItems.Remove(blacklistedItem);
 
                 ProcessesListBox.Items.Refresh();
+            }
+
+            async void PreviewBlacklistButton_Clicked()
+            {
+                try
+                {
+                    if (ViewGrid.Children.Contains(PreviewBlacklistTextBox))
+                    {
+                        ViewGrid.Children.Remove(PreviewBlacklistTextBox);
+                    }
+                    else
+                    {
+                        nextLeft = ProcessesListBox.Margin.Left;
+                        nextTop = PreviewBlacklistButton.Margin.Top + PreviewBlacklistButton.Height + padding * 2;
+                        DisplayElement(PreviewBlacklistTextBox);
+
+                        PreviewBlacklistTextBox.Text = "Checking...";
+                        var previewBody = string.Empty;
+
+                        var allBlacklistProcs = await Bootstrapper.Settings.Mining.GetAllBlacklistedProcesses();
+                        foreach (var proc in allBlacklistProcs)
+                        {
+                            previewBody += $"\"{proc.ItemName}\" - Running: {proc.IsRunning} \r";
+                        }
+
+                        previewBody = !String.IsNullOrEmpty(previewBody) ? previewBody : "No processes to show!";
+                        PreviewBlacklistTextBox.Text = previewBody;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.AddEntry(ex);
+                }
             }
 
             void SaveButton_Clicked()
@@ -467,12 +512,19 @@ namespace MiningApp.UI
 
             void DisplayCurrent()
             {
-                StatusTextBlock.Visibility = Visibility.Collapsed;
-                UrgencyTextBlock.Visibility = Visibility.Collapsed;
-                ReleaseNotesTextBox.Visibility = Visibility.Collapsed;
+                try
+                {
+                    StatusTextBlock.Visibility = Visibility.Collapsed;
+                    UrgencyTextBlock.Visibility = Visibility.Collapsed;
+                    ReleaseNotesTextBox.Visibility = Visibility.Collapsed;
 
-                VersionTextBlock.Text = $"Current Version: v{Bootstrapper.Settings.App.AppVersion.Number}";
-                ReleaseDateTextBlock.Text = $"Release Date: {Bootstrapper.Settings.App.AppVersion.ReleaseTimestamp.ToShortDateString()}";
+                    VersionTextBlock.Text = $"Current Version: v{Bootstrapper.Settings.App.AppVersion.Number}";
+                    ReleaseDateTextBlock.Text = $"Release Date: {Bootstrapper.Settings.App.AppVersion.ReleaseTimestamp.ToShortDateString()}";
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.AddEntry(ex);
+                }
             }
 
             void DisplayUpdate(VersionModel version)

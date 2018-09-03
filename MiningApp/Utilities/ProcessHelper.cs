@@ -10,6 +10,7 @@ using System.Management;
 using System.Windows.Threading;
 using LiteDB;
 using Newtonsoft.Json;
+using MiningApp.LoggingUtil;
 
 namespace MiningApp
 {
@@ -22,11 +23,11 @@ namespace MiningApp
 
         public bool BlacklistedProcsRunning { get; set; }
 
-        public List<BlacklistedItem> RunningProcesses { get; set; }
+        public List<BlacklistItem> RunningProcesses { get; set; }
 
         public string StatusMessage => GetProcessString();
 
-        public BlacklistedProcessArgs(List<BlacklistedItem> procs = null)
+        public BlacklistedProcessArgs(List<BlacklistItem> procs = null)
         {
             Timestamp = DateTime.Now;
             
@@ -47,10 +48,10 @@ namespace MiningApp
 
             if (BlacklistedProcsRunning)
             {
-                RunningProcesses.ForEach(x => body += $"{x.ItemName},");
+                RunningProcesses.ForEach(x => body += $"{x.ItemName}, ");
 
 
-                return "{ " + body.TrimEnd(',') + " }";
+                return "{ " + body.TrimEnd(new[] { ' ', ',' }) + " }";
             }
             else
             {
@@ -71,18 +72,6 @@ namespace MiningApp
 
         private void GetRunningMiners()
         {
-            /*
-            foreach (var miner in _allMiners)
-            {
-                var proc = miner.GetProcess();
-
-                if (proc != null)
-                {
-                    _minerProcesses.Add(proc);
-                }
-            }
-            */
-            //Testing
             _minerProcesses.ForEach(x => Console.WriteLine(x.ProcessName));
         }
 
@@ -115,22 +104,32 @@ namespace MiningApp
 
         public BlacklistedProcessDelegate BlacklistedProcsDelegate;
 
-        List<BlacklistedItem> _blacklistedProcesses { get; set; }
+        List<BlacklistItem> _blacklistedProcesses { get; set; } = new List<BlacklistItem>();
+
+        List<BlacklistItem> _excludeFromBlacklistItems { get; set; }
+
+        List<string> _excludeFromBlacklistPaths { get; set; }
 
         DispatcherTimer _timer { get; set; }
 
-        int _blacklistCheckInterval { get; set; } = 15;
+        int _blacklistCheckInterval { get; set; } = 5;
+
+        Task<List<BlacklistItem>> GetBlacklistedProcesses => Bootstrapper.Settings.Mining.GetAllBlacklistedProcesses();
 
         public ProcessWatcher()
         {
-            Instance = this;
-
             Initialize();
         }
 
         async void Initialize()
         {
-            _blacklistedProcesses = await GetAllBlacklistedProcesses();
+            ExceptionUtil.Delegate += HandleException;
+
+            Instance = this;
+
+            _excludeFromBlacklistItems = new List<BlacklistItem>();
+            _excludeFromBlacklistPaths = new List<string>();
+            //_blacklistedProcesses = await GetBlacklistedProcesses;
 
             _timer = new DispatcherTimer();
             _timer.Interval = new TimeSpan(0, 0, _blacklistCheckInterval);
@@ -138,34 +137,43 @@ namespace MiningApp
             _timer.Start();
         }
 
-        async Task<List<BlacklistedItem>> GetAllBlacklistedProcesses()
+        public void Dispose()
         {
-            var procs = new List<BlacklistedItem>();
-            var items = Bootstrapper.Settings.Mining.BlacklistedItems;
-
-            foreach (var item in items)
-            {
-                if (item.BlacklistType == BlacklistedItemType.Executable)
-                {
-                    procs.Add(item);
-                }
-                else if (item.BlacklistType == BlacklistedItemType.Directory)
-                {
-                    var paths = item.GetDirectoryExecutablePaths();
-                    paths.ForEach(x => procs.Add(new BlacklistedItem(BlacklistedItemType.Executable, x)));
-                }
-            }          
-
-            return procs;
+            Instance = null;
+            ExceptionUtil.Delegate -= HandleException;
         }
 
-        async Task<List<BlacklistedItem>> GetRunningBlacklistedProcesses()
+        void HandleException(ExceptionArgs args)
         {
-            var runningProcs = new List<BlacklistedItem>();
-            _blacklistedProcesses = await GetAllBlacklistedProcesses();
+            if (args.Type == ExceptionType.Blacklist)
+            {
+                // Remove this blacklist file / dir from the list to prevent repeated errors 
+                if (!string.IsNullOrEmpty(args.LocalPath))
+                {
+                    var item = _blacklistedProcesses.Find(x => x.FullPath == args.LocalPath);
+                    if (item != null)
+                    {
+                        _excludeFromBlacklistItems.Add(item);
+                    }
+                    
+                    if (!_excludeFromBlacklistPaths.Contains(args.LocalPath))
+                    {
+                        _excludeFromBlacklistPaths.Add(args.LocalPath);
+                    }
+                }
+            }
+        }
+
+        async Task<List<BlacklistItem>> GetRunningBlacklistedProcesses()
+        {
+            var runningProcs = new List<BlacklistItem>();
+            _blacklistedProcesses = await GetBlacklistedProcesses;
+            _blacklistedProcesses = _blacklistedProcesses.FindAll(x => !_excludeFromBlacklistPaths.Contains(x.FullPath));
 
             if (_blacklistedProcesses.Any())
             {
+                _blacklistedProcesses = _blacklistedProcesses.FindAll(x => !x.ExcludeFromBlacklist);
+
                 foreach (var proc in _blacklistedProcesses)
                 {
                     var running = Process.GetProcessesByName(proc.NameWithoutExtension);
@@ -188,14 +196,18 @@ namespace MiningApp
 
         void ProcessWatcherTimer_Tick()
         {
+            _timer.Stop();
+
             if (Bootstrapper.Settings.Mining.UseBlackList)
             {
                 CheckForBlacklistedProcesses();
             }
+
+            _timer.Start();
         }
     }
 
-    public class BlacklistedItem
+    public class BlacklistItem
     {
         public BlacklistedItemType BlacklistType { get; set; }
 
@@ -204,9 +216,15 @@ namespace MiningApp
         public string ItemName => GetItemName();
 
         [JsonIgnore]
+        public bool IsRunning => IsProcessRunning();
+
+        [JsonIgnore]
+        public bool ExcludeFromBlacklist { get; set; } = false;
+
+        [JsonIgnore]
         public string NameWithoutExtension => ProcessHelper.GetProcessNameFromFile(ItemName);
 
-        public BlacklistedItem(BlacklistedItemType type, string path)
+        public BlacklistItem(BlacklistedItemType type, string path)
         {
             BlacklistType = type;
             FullPath = path;
@@ -247,26 +265,47 @@ namespace MiningApp
             }
         }
 
-        public List<string> GetDirectoryExecutablePaths()
+        public async Task<List<string>> GetDirectoryExecutablePaths()
         {
-            if (BlacklistType == BlacklistedItemType.Executable)
-            {
-                return null;
-            }
-
             var exePaths = new List<string>();
 
-            var allFiles = FileHelper.GetAllDirectoryFiles(FullPath);
-            foreach (var file in allFiles)
+            if (BlacklistType != BlacklistedItemType.Directory)
             {
-                var fileInfo = new FileInfo(file);
-                if (fileInfo.Extension.Contains("exe"))
-                {
-                    exePaths.Add(fileInfo.FullName);
-                }
-            }            
+                return exePaths;
+            }
 
-            return exePaths;
+            try
+            {
+                var allFiles = FileHelper.GetAllDirectoryFiles(FullPath);
+                foreach (var file in allFiles)
+                {
+                    if (file.Extension.Contains("exe"))
+                    {
+                        exePaths.Add(file.FullName);
+                    }
+                }
+            }
+            catch (Exception ex) { ExceptionUtil.Handle(ex); }
+
+            return exePaths;           
+        }
+
+        bool IsProcessRunning()
+        {
+            if (BlacklistType == BlacklistedItemType.Directory)
+            {
+                return false;
+            }
+
+            var procs = Process.GetProcessesByName(NameWithoutExtension);
+            if (procs.Any())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
