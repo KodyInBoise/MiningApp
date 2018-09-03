@@ -102,6 +102,8 @@ namespace MiningApp
     {
         public static ProcessWatcher Instance { get; set; }
 
+        public TimerModel Timer { get; set; }
+
         public BlacklistedProcessDelegate BlacklistedProcsDelegate;
 
         List<BlacklistItem> _blacklistedProcesses { get; set; } = new List<BlacklistItem>();
@@ -121,7 +123,7 @@ namespace MiningApp
             Initialize();
         }
 
-        async void Initialize()
+        void Initialize()
         {
             ExceptionUtil.Delegate += HandleException;
 
@@ -129,12 +131,6 @@ namespace MiningApp
 
             _excludeFromBlacklistItems = new List<BlacklistItem>();
             _excludeFromBlacklistPaths = new List<string>();
-            //_blacklistedProcesses = await GetBlacklistedProcesses;
-
-            _timer = new DispatcherTimer();
-            _timer.Interval = new TimeSpan(0, 0, _blacklistCheckInterval);
-            _timer.Tick += (s, e) => ProcessWatcherTimer_Tick();
-            _timer.Start();
         }
 
         public void Dispose()
@@ -187,23 +183,16 @@ namespace MiningApp
             return runningProcs;
         }
 
+        public static async Task RunBlacklistCheck()
+        {
+            Instance.CheckForBlacklistedProcesses();
+        }
+
         async void CheckForBlacklistedProcesses()
         {
             var runningProcs = await GetRunningBlacklistedProcesses();
 
             BlacklistedProcsDelegate?.Invoke(new BlacklistedProcessArgs(runningProcs));
-        }
-
-        void ProcessWatcherTimer_Tick()
-        {
-            _timer.Stop();
-
-            if (Bootstrapper.Settings.Mining.UseBlackList)
-            {
-                CheckForBlacklistedProcesses();
-            }
-
-            _timer.Start();
         }
     }
 
