@@ -9,16 +9,11 @@ using System.Threading.Tasks;
 
 namespace MiningApp
 {
-    public enum MinerStatus
-    {
-        Inactive,
-        Stopped,
-        Running
-    }
-
     public class SessionConfigModel
     {
         public int ID { get; set; }
+
+        public SessionType Type { get; set; }
 
         public int MinerID { get; set; }
 
@@ -38,7 +33,7 @@ namespace MiningApp
 
         public double StaleOutputThreshold { get; set; }
 
-        public MinerType MinerType { get; set; }
+        public MinerType InternalMinerType { get; set; }
 
 
         [BsonIgnore]
@@ -56,7 +51,7 @@ namespace MiningApp
 
         public async Task SaveMinerSettings()
         {
-            switch (MinerType)
+            switch (InternalMinerType)
             {
                 case MinerType.CCMiner:
                     await MinerSettings.CCMiner.SaveParams(Pool.Address, Wallet.Address);
