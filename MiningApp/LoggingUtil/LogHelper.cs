@@ -53,6 +53,11 @@ namespace MiningApp.LoggingUtil
             AppData = DataHelper.Instance ?? new DataHelper();
         }
 
+        public static void AddEntry(string message)
+        {
+            AddEntry(LogType.General, message);
+        }
+
         public static void AddEntry(LogType type, string message)
         {
             try
@@ -71,8 +76,9 @@ namespace MiningApp.LoggingUtil
             }
         }
 
-        public static void AddEntry(Exception ex)
+        public static void AddEntry(Exception ex, string message = "")
         {
+            message = !String.IsNullOrEmpty(message) ? $"{message} - {ex.Message}" : ex.Message;
             AddEntry(LogType.Error, ex.Message);
         }
 

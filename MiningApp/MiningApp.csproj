@@ -127,6 +127,7 @@
     <Compile Include="Models\MinerConfigModel.cs" />
     <Compile Include="Models\SessionModel.cs" />
     <Compile Include="Models\PoolConfigModel.cs" />
+    <Compile Include="Utilities\ExceptionManagementUtil.cs" />
     <Compile Include="Utilities\FTPClient.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\UserModel.cs" />

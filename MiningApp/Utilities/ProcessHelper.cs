@@ -10,6 +10,7 @@ using System.Management;
 using System.Windows.Threading;
 using LiteDB;
 using Newtonsoft.Json;
+using MiningApp.LoggingUtil;
 
 namespace MiningApp
 {
@@ -47,10 +48,10 @@ namespace MiningApp
 
             if (BlacklistedProcsRunning)
             {
-                RunningProcesses.ForEach(x => body += $"{x.ItemName},");
+                RunningProcesses.ForEach(x => body += $"{x.ItemName}, ");
 
 
-                return "{ " + body.TrimEnd(',') + " }";
+                return "{ " + body.TrimEnd(new[] { ' ', ',' }) + " }";
             }
             else
             {
@@ -121,6 +122,8 @@ namespace MiningApp
 
         int _blacklistCheckInterval { get; set; } = 15;
 
+        Task<List<BlacklistedItem>> GetBlacklistedProcesses => Bootstrapper.Settings.Mining.GetAllBlacklistedProcesses();
+
         public ProcessWatcher()
         {
             Instance = this;
@@ -130,7 +133,7 @@ namespace MiningApp
 
         async void Initialize()
         {
-            _blacklistedProcesses = await GetAllBlacklistedProcesses();
+            _blacklistedProcesses = await GetBlacklistedProcesses;
 
             _timer = new DispatcherTimer();
             _timer.Interval = new TimeSpan(0, 0, _blacklistCheckInterval);
@@ -138,34 +141,15 @@ namespace MiningApp
             _timer.Start();
         }
 
-        async Task<List<BlacklistedItem>> GetAllBlacklistedProcesses()
-        {
-            var procs = new List<BlacklistedItem>();
-            var items = Bootstrapper.Settings.Mining.BlacklistedItems;
-
-            foreach (var item in items)
-            {
-                if (item.BlacklistType == BlacklistedItemType.Executable)
-                {
-                    procs.Add(item);
-                }
-                else if (item.BlacklistType == BlacklistedItemType.Directory)
-                {
-                    var paths = item.GetDirectoryExecutablePaths();
-                    paths.ForEach(x => procs.Add(new BlacklistedItem(BlacklistedItemType.Executable, x)));
-                }
-            }          
-
-            return procs;
-        }
-
         async Task<List<BlacklistedItem>> GetRunningBlacklistedProcesses()
         {
             var runningProcs = new List<BlacklistedItem>();
-            _blacklistedProcesses = await GetAllBlacklistedProcesses();
+            _blacklistedProcesses = await GetBlacklistedProcesses;
 
             if (_blacklistedProcesses.Any())
             {
+                _blacklistedProcesses = _blacklistedProcesses.FindAll(x => !x.ExcludeFromBlacklist);
+
                 foreach (var proc in _blacklistedProcesses)
                 {
                     var running = Process.GetProcessesByName(proc.NameWithoutExtension);
@@ -202,6 +186,12 @@ namespace MiningApp
         public string FullPath { get; set; }
 
         public string ItemName => GetItemName();
+
+        [JsonIgnore]
+        public bool IsRunning => IsProcessRunning();
+
+        [JsonIgnore]
+        public bool ExcludeFromBlacklist { get; set; } = false;
 
         [JsonIgnore]
         public string NameWithoutExtension => ProcessHelper.GetProcessNameFromFile(ItemName);
@@ -249,24 +239,58 @@ namespace MiningApp
 
         public List<string> GetDirectoryExecutablePaths()
         {
-            if (BlacklistType == BlacklistedItemType.Executable)
-            {
-                return null;
-            }
-
             var exePaths = new List<string>();
 
-            var allFiles = FileHelper.GetAllDirectoryFiles(FullPath);
-            foreach (var file in allFiles)
+            try
             {
-                var fileInfo = new FileInfo(file);
-                if (fileInfo.Extension.Contains("exe"))
+                if (BlacklistType == BlacklistedItemType.Executable)
                 {
-                    exePaths.Add(fileInfo.FullName);
+                    return null;
                 }
-            }            
 
-            return exePaths;
+                var allFiles = FileHelper.GetAllDirectoryFiles(FullPath);
+                foreach (var file in allFiles)
+                {
+                    var fileInfo = new FileInfo(file);
+                    if (fileInfo.Extension.Contains("exe"))
+                    {
+                        exePaths.Add(fileInfo.FullName);
+                    }
+                }
+
+                return exePaths;
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                ExcludeFromBlacklist = true;
+                LogHelper.AddEntry($"Removed \"{ItemName}\" from Blacklist due to permission issues.");
+
+                return exePaths; 
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddEntry(ex);
+
+                return exePaths;
+            }
+        }
+
+        bool IsProcessRunning()
+        {
+            if (BlacklistType == BlacklistedItemType.Directory)
+            {
+                return false;
+            }
+
+            var procs = Process.GetProcessesByName(NameWithoutExtension);
+            if (procs.Any())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

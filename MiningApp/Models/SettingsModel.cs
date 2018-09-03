@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LiteDB;
+using Newtonsoft.Json;
 
 namespace MiningApp
 {
@@ -41,6 +42,27 @@ namespace MiningApp
         {
             public bool UseBlackList { get; set; } = true;
             public List<BlacklistedItem> BlacklistedItems { get; set; } = new List<BlacklistedItem>();
+
+            public async Task<List<BlacklistedItem>> GetAllBlacklistedProcesses()
+            {
+                var procs = new List<BlacklistedItem>();
+                var items = BlacklistedItems;
+
+                foreach (var item in items)
+                {
+                    if (item.BlacklistType == BlacklistedItemType.Executable)
+                    {
+                        procs.Add(item);
+                    }
+                    else if (item.BlacklistType == BlacklistedItemType.Directory)
+                    {
+                        var paths = item.GetDirectoryExecutablePaths();
+                        paths.ForEach(x => procs.Add(new BlacklistedItem(BlacklistedItemType.Executable, x)));
+                    }
+                }
+
+                return procs;
+            }
         }
     }    
 }

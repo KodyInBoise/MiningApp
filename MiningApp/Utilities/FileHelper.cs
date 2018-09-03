@@ -36,20 +36,23 @@ namespace MiningApp
         {
             List<string> files = new List<string>();
 
-            try
+            var dirInfo = new DirectoryInfo(dir);
+            var lvl = dirInfo.GetAccessControl();
+            foreach (var f in Directory.GetFiles(dir))
             {
-                foreach (var f in Directory.GetFiles(dir))
+                try
                 {
                     files.Add(f);
                 }
-                foreach (var d in Directory.GetDirectories(dir))
+                catch (Exception ex) { LogHelper.AddEntry(ex); }
+            }
+            foreach (var d in Directory.GetDirectories(dir))
+            {
+                try
                 {
                     files.AddRange(GetAllDirectoryFiles(d));
                 }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.AddEntry(ex);
+                catch (Exception ex) { LogHelper.AddEntry(ex); }
             }
 
             return files;
