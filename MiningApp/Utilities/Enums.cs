@@ -52,5 +52,6 @@ namespace MiningApp
     {
         Executable = 0,
         Directory = 1,
+        Exclude = 2,
     }
 }

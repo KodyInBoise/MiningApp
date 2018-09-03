@@ -1,5 +1,6 @@
 ﻿using IWshRuntimeLibrary;
 using MiningApp.LoggingUtil;
+using MiningApp.UI;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -28,17 +29,48 @@ namespace MiningApp
 
         public static string AppTempPath => Path.Combine(RootPath(), "Temp");
 
+
         public Bootstrapper()
         {
             Instance = this;
 
-            HeartbeatTimer = new TimerModel(Application.Current);
+            HeartbeatTimer = new TimerModel(Application.Current, Heartbeat_Tick);
             Settings = GetLocalSettings();
         }
 
         public static async void Startup()
         {
             Instance = new Bootstrapper();
+        }
+        
+        void Heartbeat_Tick()
+        {
+            Task.Run(Blacklist_Heartbeat);
+        }
+
+        int _blacklistCounter = 0;
+        bool _blacklistBusy = false;
+        async Task Blacklist_Heartbeat()
+        {
+            if (!Settings.Mining.UseBlackList || _blacklistBusy)
+            {
+                return;
+            }
+
+            _blacklistBusy = true;
+
+            if (_blacklistCounter >= Settings.Mining.BlacklistCheckInterval)
+            {
+                await Task.Run(ProcessWatcher.RunBlacklistCheck);
+
+                _blacklistCounter = 0;
+            }
+            else
+            {
+                _blacklistCounter++;
+            }
+
+            _blacklistBusy = false;
         }
 
         public static string RootPath()

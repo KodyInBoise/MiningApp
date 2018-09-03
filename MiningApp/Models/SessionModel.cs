@@ -113,7 +113,7 @@ namespace MiningApp
 
         bool _redirectOutput { get; set; } = true;
 
-        public SessionModel(SessionConfigModel config)
+        public SessionModel(SessionConfigModel config, bool start = false)
         {
             Timer = new TimerModel(this);
             Timer.Delegate += SessionTimer_Ticked;

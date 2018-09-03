@@ -41,6 +41,7 @@ namespace MiningApp
         public class MiningSettings
         {
             public bool UseBlackList { get; set; } = true;
+            public int BlacklistCheckInterval { get; set; } = 10;
             public List<BlacklistItem> BlacklistedItems { get; set; } = new List<BlacklistItem>();
 
             [JsonIgnore]

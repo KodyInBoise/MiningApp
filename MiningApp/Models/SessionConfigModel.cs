@@ -69,8 +69,9 @@ namespace MiningApp
 
         public void StartSession()
         {
-            Session = new SessionModel(this);
+            var session = WindowController.MiningSessions.Find(x => x.Config.ID == ID);
 
+            Session = session ?? new SessionModel(this);
             WindowController.MiningSessions.Add(Session);
 
             Session.ToggleStatus(SessionStatusEnum.Running);
