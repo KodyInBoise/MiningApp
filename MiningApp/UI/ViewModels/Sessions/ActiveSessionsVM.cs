@@ -173,11 +173,14 @@ namespace MiningApp.UI
 
         async Task UpdateSessionUptime()
         {
-            var uptime = _activeSession != null ? await _activeSession.GetUptimeString() : string.Empty;
+            if (_activeSession != null)
+            {
+                var uptime = _activeSession.GetUptimeString() ?? string.Empty;
 
-            WindowController.InvokeOnMainThread(new Action(() => {
-                UptimeTextBlock.Text = $"Uptime: {uptime}";
-            }));
+                WindowController.InvokeOnMainThread(new Action(() => {
+                    UptimeTextBlock.Text = $"Uptime: {uptime}";
+                }));
+            }
         }
 
         void ActiveSessionTimer_Tick()

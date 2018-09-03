@@ -81,86 +81,10 @@ namespace MiningApp
             }
         }
 
-        public class UptimeHelperModel
-        {
-            public DispatcherTimer GetTimer() => _timer;
-
-            SessionModel _session { get; set; }
-
-            DispatcherTimer _timer { get; set; }
-
-
-            int _seconds = 0;
-            int _minutes = 0;
-            int _hours = 0;
-            int _days = 0;
-
-            public UptimeHelperModel(SessionModel session)
-            {
-                _session = session;
-
-                _timer = new DispatcherTimer();
-                _timer.Interval = new TimeSpan(0, 0, 1);
-                _timer.Tick += (s, e) => Timer_Tick();
-
-                _timer.Start();
-            }
-
-            void Timer_Tick()
-            {
-                _seconds++;
-            }
-
-            public string GetFriendlyUptimeString()
-            {
-                if (_seconds > 60)
-                {
-                    _minutes++;
-                    _seconds -= 60;
-                }
-                if (_minutes > 60)
-                {
-                    _hours++;
-                    _minutes -= 60;
-                }
-                if (_hours > 24)
-                {
-                    _days++;
-                    _hours -= 24;
-                }
-
-                if (_days > 0)
-                {
-                    return $"{_days}D {_hours}H {_minutes}M {_seconds}S";
-                }
-                else if (_hours > 0)
-                {
-                    return $"{_hours}H {_minutes}M {_seconds}S"; 
-                }
-                else if (_minutes > 0)
-                {
-                    return $"{_minutes}M {_seconds}S"; 
-                }
-                else
-                {
-                    return $"{_seconds} S";
-                }
-            }
-
-            public void Stop()
-            {
-                _timer.Stop();
-            }
-        }
-
 
         public string SessionID { get; set; }
 
         public OutputHelperModel OutputHelper { get; set; }
-
-        public UptimeHelperModel UptimeHelper { get; set; }
-
-        public DispatcherTimer GetUptimeTimer() => UptimeHelper.GetTimer();
 
         public SessionConfigModel Config { get; set; }
 
@@ -172,8 +96,6 @@ namespace MiningApp
 
         public Process MinerProcess { get; set; }
 
-        public DateTime StartTime { get; set; }
-
         public DateTime LastOutputTimestamp { get; set; }
 
         public event SessionStatusToggledDelegate StatusToggled;
@@ -182,18 +104,29 @@ namespace MiningApp
 
         public SessionStatusEnum CurrentStatus { get; set; } = SessionStatusEnum.Stopped;
 
+        public TimerModel Timer { get; set; }
+
+        public TimeSpan Uptime { get; set; }
+
+        public string UptimeString => GetUptimeString();
+
 
         bool _redirectOutput { get; set; } = true;
 
         public SessionModel(SessionConfigModel config)
         {
+            Timer = new TimerModel(this);
+            Timer.Delegate += SessionTimer_Ticked;
+
             OutputHelper = new OutputHelperModel(this);
-            UptimeHelper = new UptimeHelperModel(this);
 
-            StartTime = DateTime.Now;
             Config = config;
-
             SessionID = Guid.NewGuid().ToString().Substring(0, 8);
+        }
+
+        void SessionTimer_Ticked(TimerTickedArgs args)
+        {
+            Uptime = args.Uptime;
         }
 
         public async void ToggleStatus(SessionStatusEnum newStatus, string message = "")
@@ -294,7 +227,7 @@ namespace MiningApp
             {
                 if (clearSession)
                 {
-                    UptimeHelper.Stop();
+                    Timer.ToggleStatus(TimerAction.Stop);
                     WindowController.MiningSessions.Remove(this);
                 }
 
@@ -340,7 +273,7 @@ namespace MiningApp
 
         public DispatcherTimer GetTimer()
         {
-            return null; //_sessionTimer.GetTimer();
+            return Timer.GetTimer;
         }
 
         bool OutputIsStale()
@@ -380,9 +313,26 @@ namespace MiningApp
             LogHelper.AddEntry(LogType.Session, $"Restarted session: Config = \"{Config.Name}\"");
         }
 
-        public async Task<string> GetUptimeString()
+        public string GetUptimeString()
         {
-            return UptimeHelper.GetFriendlyUptimeString();
+            if (Uptime.Days > 0)
+            {
+                return $"{Uptime.Days} Days {Uptime.Hours} Hours {Uptime.Minutes} Minutes {Uptime.Seconds}Seconds";
+            }
+            else if (Uptime.Hours > 0)
+            {
+                return $"{Uptime.Hours} Hours {Uptime.Minutes} Minutes {Uptime.Seconds} Seconds";
+            }
+            else if (Uptime.Minutes > 0)
+            {
+                return $"{Uptime.Minutes} Minutes {Uptime.Seconds} Seconds";
+            }
+            else if (Uptime.Seconds > 0)
+            {
+                return $"{Uptime.Seconds} Seconds";
+            }
+
+            return string.Empty;
         }
     }
 }

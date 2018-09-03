@@ -18,6 +18,7 @@ namespace MiningApp
         TimeSpan GetUptime()
         {
             return Timestamp.Subtract(Started);
+            //return Timestamp.Subtract(Started);
         }
     }
 
@@ -33,17 +34,21 @@ namespace MiningApp
 
     public class TimerModel
     {
+        public object Owner { get; set; }
+
         public DateTime Started { get; private set; }
 
         public DateTime LastPause { get; private set; }
 
-        public TimerTickDelegate Delegate { get; private set; }
+        public TimerTickDelegate Delegate { get; set; }
 
         public Dictionary<DateTime, TimerAction> HistoryDictionary { get; private set; }
 
         public DateTime LastTick { get; private set; }
 
         public int Interval { get; private set; }
+
+        public DispatcherTimer GetTimer => _timer;
 
         
         Action _eventAction { get; set; }
@@ -53,10 +58,12 @@ namespace MiningApp
         bool _pauseBetweenTicks { get; set; }
 
 
-        public TimerModel(Action action, int interval = -1, bool start = false, bool pauseBetweenTicks = false)
+        public TimerModel(object owner, Action action = null, int interval = -1, bool start = true, bool pauseBetweenTicks = false)
         {
-            Interval = interval > 0 ? interval : 1;
+            Owner = owner;
             _eventAction = action;
+
+            Interval = interval > 0 ? interval : 1;
             _pauseBetweenTicks = pauseBetweenTicks;
 
             Initialize(start);
@@ -64,50 +71,63 @@ namespace MiningApp
 
         void Initialize(bool start)
         {
+            HistoryDictionary = new Dictionary<DateTime, TimerAction>();
+
             _timer = new DispatcherTimer();
             _timer.Interval = new TimeSpan(0, 0, Interval);
             _timer.Tick += (s, e) => Timer_Ticked();
 
-            HistoryDictionary = new Dictionary<DateTime, TimerAction>();
-            HistoryDictionary.Add(DateTime.Now, TimerAction.Create);
-
             if (start)
             {
-                ToggleStatus(TimerAction.Start);
+                ToggleStatus(TimerAction.Create);
             }
         }
 
         async void Timer_Ticked()
         {
-            LastTick = DateTime.Now;
+            try
+            {
+                LastTick = DateTime.Now;
+                Delegate?.Invoke(new TimerTickedArgs
+                {
+                    Timestamp = LastTick,
+                    Started = Started,
+                });
 
-            if (_pauseBetweenTicks)
-            {
-                _timer.Stop();
-                await Task.Run(_eventAction);
-                _timer.Start();
-            }
-            else
-            {
-                Task.Run(_eventAction);
-            }
+                if (_eventAction == null)
+                {
+                    return;
+                }
 
-            Delegate?.Invoke(new TimerTickedArgs
+                if (_pauseBetweenTicks)
+                {
+                    _timer.Stop();
+                    await Task.Run(_eventAction);
+                    _timer.Start();
+                }
+                else
+                {
+                    Task.Run(_eventAction);
+                }
+            }
+            catch (Exception ex)
             {
-                Timestamp = LastTick,
-                Started = Started,
-            });
+                ExceptionUtil.Handle(ex);
+            }
         }
 
-        void ToggleStatus(TimerAction action)
+        public void ToggleStatus(TimerAction action)
         {
             var timestamp = DateTime.Now;
 
             switch (action)
             {
+                case TimerAction.Create:
+                    Started = timestamp;
+                    _timer.Start();
+                    break;
                 case TimerAction.Start:
                     _timer.Start();
-                    Started = Started == null ? timestamp : Started;
                     break;
                 case TimerAction.Pause:
                     _timer.Stop();
