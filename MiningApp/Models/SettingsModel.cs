@@ -43,6 +43,9 @@ namespace MiningApp
             public bool UseBlackList { get; set; } = true;
             public List<BlacklistItem> BlacklistedItems { get; set; } = new List<BlacklistItem>();
 
+            [JsonIgnore]
+            public List<string> ExcludeFromBlacklistPaths { get; set; } = new List<string>();
+
             public async Task<List<BlacklistItem>> GetAllBlacklistedProcesses()
             {
                 var procs = new List<BlacklistItem>();
@@ -50,13 +53,13 @@ namespace MiningApp
 
                 foreach (var item in items)
                 {
-                    if (item.BlacklistType == BlacklistedItemType.Executable)
+                    if (item.BlacklistType == BlacklistedItemType.Executable && !ExcludeFromBlacklistPaths.Contains(item.FullPath))
                     {
                         procs.Add(item);
                     }
-                    else if (item.BlacklistType == BlacklistedItemType.Directory)
+                    else if (item.BlacklistType == BlacklistedItemType.Directory && !ExcludeFromBlacklistPaths.Contains(item.FullPath))
                     {
-                        var paths = item.GetDirectoryExecutablePaths();
+                        var paths = await Task.Run(item.GetDirectoryExecutablePaths);
                         paths.ForEach(x => procs.Add(new BlacklistItem(BlacklistedItemType.Executable, x)));
                     }
                 }

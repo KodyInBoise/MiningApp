@@ -72,18 +72,6 @@ namespace MiningApp
 
         private void GetRunningMiners()
         {
-            /*
-            foreach (var miner in _allMiners)
-            {
-                var proc = miner.GetProcess();
-
-                if (proc != null)
-                {
-                    _minerProcesses.Add(proc);
-                }
-            }
-            */
-            //Testing
             _minerProcesses.ForEach(x => Console.WriteLine(x.ProcessName));
         }
 
@@ -116,7 +104,7 @@ namespace MiningApp
 
         public BlacklistedProcessDelegate BlacklistedProcsDelegate;
 
-        List<BlacklistItem> _blacklistedProcesses { get; set; }
+        List<BlacklistItem> _blacklistedProcesses { get; set; } = new List<BlacklistItem>();
 
         List<BlacklistItem> _excludeFromBlacklistItems { get; set; }
 
@@ -141,7 +129,7 @@ namespace MiningApp
 
             _excludeFromBlacklistItems = new List<BlacklistItem>();
             _excludeFromBlacklistPaths = new List<string>();
-            _blacklistedProcesses = await GetBlacklistedProcesses;
+            //_blacklistedProcesses = await GetBlacklistedProcesses;
 
             _timer = new DispatcherTimer();
             _timer.Interval = new TimeSpan(0, 0, _blacklistCheckInterval);
@@ -168,7 +156,7 @@ namespace MiningApp
                         _excludeFromBlacklistItems.Add(item);
                     }
                     
-                    if (_excludeFromBlacklistPaths.Contains(args.LocalPath))
+                    if (!_excludeFromBlacklistPaths.Contains(args.LocalPath))
                     {
                         _excludeFromBlacklistPaths.Add(args.LocalPath);
                     }
@@ -180,6 +168,7 @@ namespace MiningApp
         {
             var runningProcs = new List<BlacklistItem>();
             _blacklistedProcesses = await GetBlacklistedProcesses;
+            _blacklistedProcesses = _blacklistedProcesses.FindAll(x => !_excludeFromBlacklistPaths.Contains(x.FullPath));
 
             if (_blacklistedProcesses.Any())
             {
@@ -276,17 +265,17 @@ namespace MiningApp
             }
         }
 
-        public List<string> GetDirectoryExecutablePaths()
+        public async Task<List<string>> GetDirectoryExecutablePaths()
         {
             var exePaths = new List<string>();
 
+            if (BlacklistType != BlacklistedItemType.Directory)
+            {
+                return exePaths;
+            }
+
             try
             {
-                if (BlacklistType == BlacklistedItemType.Executable)
-                {
-                    return null;
-                }
-
                 var allFiles = FileHelper.GetAllDirectoryFiles(FullPath);
                 foreach (var file in allFiles)
                 {
@@ -296,9 +285,9 @@ namespace MiningApp
                     }
                 }
             }
-            catch (Exception ex) { ExceptionUtil.Handle(ex, ExceptionType.Blacklist, path: FullPath); }
+            catch (Exception ex) { ExceptionUtil.Handle(ex); }
 
-            return exePaths;
+            return exePaths;           
         }
 
         bool IsProcessRunning()
