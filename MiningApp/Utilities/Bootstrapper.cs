@@ -20,6 +20,8 @@ namespace MiningApp
 
         public static Bootstrapper Instance { get; set; }
 
+        public TimerModel HeartbeatTimer { get; set; }
+
         public static SettingsModel Settings { get; set; }
 
         public static string SettingsFilePath => Path.Combine(RootPath(), $"simplemining.settings");
@@ -30,32 +32,13 @@ namespace MiningApp
         {
             Instance = this;
 
+            HeartbeatTimer = new TimerModel(Application.Current);
             Settings = GetLocalSettings();
         }
 
         public static async void Startup()
         {
             Instance = new Bootstrapper();
-
-            await KillExistingProcesses();
-        }
-        
-        static async Task KillExistingProcesses()
-        {
-            /*
-            var procs = Process.GetProcessesByName(AppSettings.AppName).ToList();
-
-            var currentProcess = Process.GetProcessById(AppSettings.CurrentProcessID);
-            procs.Remove(currentProcess);
-
-            foreach (var proc in procs)
-            {
-                if (proc.Id != AppSettings.CurrentProcessID)
-                {
-                    proc.Kill();
-                }
-            }
-            */
         }
 
         public static string RootPath()

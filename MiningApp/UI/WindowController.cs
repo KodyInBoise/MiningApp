@@ -77,14 +77,6 @@ namespace MiningApp.UI
             _processWatcher = new ProcessWatcher();
 
             _processWatcher.BlacklistedProcsDelegate += BlacklistedProcsDelegate_Invoked;
-
-            //TESTING
-            var randoTimer = new TimerModel(new Action(() => ExceptionManager_Invoked()), start: true);
-        }
-
-        void ExceptionManager_Invoked()
-        {
-
         }
 
         private void DisplayViewModel(ViewModelType viewType, DisplayGrid display = DisplayGrid.Primary,

@@ -83,6 +83,7 @@ namespace MiningApp
             }
         }
 
+        int timerTickErrors = 0;
         async void Timer_Ticked()
         {
             try
@@ -112,7 +113,19 @@ namespace MiningApp
             }
             catch (Exception ex)
             {
-                ExceptionUtil.Handle(ex);
+                var message = $"An error occured with the Timer for \"{nameof(Owner)}\".";
+
+                if (timerTickErrors >= 5)
+                {
+                    ToggleStatus(TimerAction.Stop);
+                    message += $" Timer has had {timerTickErrors} Errors as has been stopped!";
+                }
+                else
+                {
+                    timerTickErrors++;
+                }
+
+                ExceptionUtil.Handle(ex, message: message);
             }
         }
 
