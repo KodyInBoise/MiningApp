@@ -79,6 +79,10 @@ namespace MiningApp.UI
             _processWatcher.BlacklistedProcsDelegate += BlacklistedProcsDelegate_Invoked;
         }
 
+        void ExceptionManager_Invoked(ExceptionArgs args)
+        {
+
+        }
 
         private void DisplayViewModel(ViewModelType viewType, DisplayGrid display = DisplayGrid.Primary,
             SessionModel launchSession = null)

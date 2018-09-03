@@ -30,6 +30,8 @@ namespace MiningApp
 
         public WindowController Controller { get; set; }
 
+        public static ExceptionUtil ExceptionManager;
+
         
         private ElementHelper _elementHelper { get; set; }
 
@@ -45,7 +47,8 @@ namespace MiningApp
         private async void Startup()
         {
             Instance = this;
-
+            ExceptionManager = new ExceptionUtil();
+          
             _elementHelper = new ElementHelper();
 
             Controller = new WindowController();

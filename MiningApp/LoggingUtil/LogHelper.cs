@@ -55,6 +55,8 @@ namespace MiningApp.LoggingUtil
 
         public static void AddEntry(string message)
         {
+            Console.WriteLine(message);
+
             AddEntry(LogType.General, message);
         }
 

@@ -41,11 +41,11 @@ namespace MiningApp
         public class MiningSettings
         {
             public bool UseBlackList { get; set; } = true;
-            public List<BlacklistedItem> BlacklistedItems { get; set; } = new List<BlacklistedItem>();
+            public List<BlacklistItem> BlacklistedItems { get; set; } = new List<BlacklistItem>();
 
-            public async Task<List<BlacklistedItem>> GetAllBlacklistedProcesses()
+            public async Task<List<BlacklistItem>> GetAllBlacklistedProcesses()
             {
-                var procs = new List<BlacklistedItem>();
+                var procs = new List<BlacklistItem>();
                 var items = BlacklistedItems;
 
                 foreach (var item in items)
@@ -57,7 +57,7 @@ namespace MiningApp
                     else if (item.BlacklistType == BlacklistedItemType.Directory)
                     {
                         var paths = item.GetDirectoryExecutablePaths();
-                        paths.ForEach(x => procs.Add(new BlacklistedItem(BlacklistedItemType.Executable, x)));
+                        paths.ForEach(x => procs.Add(new BlacklistItem(BlacklistedItemType.Executable, x)));
                     }
                 }
 

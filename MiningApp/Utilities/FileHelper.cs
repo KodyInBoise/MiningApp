@@ -32,27 +32,35 @@ namespace MiningApp
             }
         }
 
-        public static List<string> GetAllDirectoryFiles(string dir)
+        public static List<FileInfo> GetAllDirectoryFiles(string path)
         {
-            List<string> files = new List<string>();
+            List<FileInfo> files = new List<FileInfo>();
 
-            var dirInfo = new DirectoryInfo(dir);
-            var lvl = dirInfo.GetAccessControl();
-            foreach (var f in Directory.GetFiles(dir))
+            try
             {
-                try
+                var rootDir = new DirectoryInfo(path);
+
+                foreach (var file in rootDir.GetFiles())
                 {
-                    files.Add(f);
+                    try
+                    {
+                        files.Add(file);
+                    }
+                    catch (Exception ex) { ExceptionUtil.Handle(ex, ExceptionType.Blacklist, path: file.FullName); }
                 }
-                catch (Exception ex) { LogHelper.AddEntry(ex); }
+
+                foreach (var subDir in rootDir.GetDirectories())
+                {
+                    try
+                    {
+                        files.AddRange(GetAllDirectoryFiles(subDir.FullName));
+                    }
+                    catch (Exception ex) { ExceptionUtil.Handle(ex, ExceptionType.Blacklist, path: subDir.FullName); }
+                }
             }
-            foreach (var d in Directory.GetDirectories(dir))
+            catch (Exception ex)
             {
-                try
-                {
-                    files.AddRange(GetAllDirectoryFiles(d));
-                }
-                catch (Exception ex) { LogHelper.AddEntry(ex); }
+                ExceptionUtil.Handle(ex, ExceptionType.Blacklist, path: path);
             }
 
             return files;

@@ -127,7 +127,7 @@
     <Compile Include="Models\MinerConfigModel.cs" />
     <Compile Include="Models\SessionModel.cs" />
     <Compile Include="Models\PoolConfigModel.cs" />
-    <Compile Include="Utilities\ExceptionManagementUtil.cs" />
+    <Compile Include="Utilities\ExceptionUtil.cs" />
     <Compile Include="Utilities\FTPClient.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -211,7 +211,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary">

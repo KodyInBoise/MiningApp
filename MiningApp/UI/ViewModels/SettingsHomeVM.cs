@@ -293,7 +293,7 @@ namespace MiningApp.UI
 
             private double padding = 15;
 
-            private List<BlacklistedItem> _blacklistedItems { get; set; } = Bootstrapper.Settings.Mining.BlacklistedItems.ToList();
+            private List<BlacklistItem> _blacklistedItems { get; set; } = Bootstrapper.Settings.Mining.BlacklistedItems.ToList();
 
 
             public MiningVM()
@@ -353,7 +353,7 @@ namespace MiningApp.UI
 
                 if (!String.IsNullOrEmpty(processPath))
                 {
-                    _blacklistedItems.Add(new BlacklistedItem(BlacklistedItemType.Executable, processPath));
+                    _blacklistedItems.Add(new BlacklistItem(BlacklistedItemType.Executable, processPath));
 
                     ProcessesListBox.Items.Refresh();
                 }
@@ -365,7 +365,7 @@ namespace MiningApp.UI
 
                 if (!String.IsNullOrEmpty(path))
                 {
-                    _blacklistedItems.Add(new BlacklistedItem(BlacklistedItemType.Directory, path));
+                    _blacklistedItems.Add(new BlacklistItem(BlacklistedItemType.Directory, path));
 
                     ProcessesListBox.Items.Refresh();
                 }
@@ -373,7 +373,7 @@ namespace MiningApp.UI
 
             void ProcessRemoveButton_Clicked()
             {
-                var blacklistedItem = (BlacklistedItem)ProcessesListBox.SelectedItem;
+                var blacklistedItem = (BlacklistItem)ProcessesListBox.SelectedItem;
                 _blacklistedItems.Remove(blacklistedItem);
 
                 ProcessesListBox.Items.Refresh();
