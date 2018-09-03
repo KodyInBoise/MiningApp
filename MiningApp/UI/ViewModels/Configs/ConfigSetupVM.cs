@@ -163,8 +163,7 @@ namespace MiningApp.UI
 
             Grid ViewGrid { get; set; } = Instance.SecondaryGrid;
 
-            List<FrameworkElement> ActiveElements { get; set; } = new List<FrameworkElement>();
-
+            ComboBox SessionTypeComboBox { get; set; } = ElementHelper.CreateComboBox("SessionType");
 
             TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("New Config", fontSize: 40, width: 400);
 
@@ -194,6 +193,7 @@ namespace MiningApp.UI
                 width: buttonWidth, style: ButtonStyleEnum.Finish);
 
 
+            Label TypeLabel { get; set; }
 
             Label NameLabel { get; set; }
 
@@ -253,6 +253,8 @@ namespace MiningApp.UI
 
                 nextLeft = 200;
                 nextTop = 250;
+                DisplayElement(SessionTypeComboBox);
+
                 DisplayElement(NameTextBox);
 
                 DisplayElement(MinersComboBox, topPadding: padding * 2);
@@ -266,6 +268,10 @@ namespace MiningApp.UI
 
                 DisplayElement(InactiveThresholdTextBox, leftPadding: 250, topPadding: padding * 4);
 
+                nextTop = SessionTypeComboBox.Margin.Top;
+                TypeLabel = ElementHelper.CreateLabel("Type", SessionTypeComboBox);
+                TypeLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
+                DisplayElement(TypeLabel, ignoreMargin: true);
 
                 nextTop = NameTextBox.Margin.Top;
                 NameLabel = ElementHelper.CreateLabel("Name", NameTextBox);
@@ -336,7 +342,6 @@ namespace MiningApp.UI
                 }
 
                 ViewGrid.Children.Add(element);
-                ActiveElements.Add(element);
 
                 nextTop = element.Margin.Top + element.Height + padding;
             }

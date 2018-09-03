@@ -11,10 +11,23 @@ namespace MiningApp
         VTC,
     }
 
+    public enum SessionType
+    {
+        Internal = 0,
+        External = 1,
+    }
+
     public enum MinerType
     {
         Empty,
         CCMiner,
+    }
+
+    public enum MinerStatus
+    {
+        Inactive,
+        Stopped,
+        Running
     }
 
     public enum MiningAlgorithm
