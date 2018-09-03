@@ -34,10 +34,9 @@
             </Grid>
         </StackPanel>
 
-
+        <Button x:Name="MinimizeButton" Content="-" HorizontalAlignment="Left" Margin="1140,10,0,0" VerticalAlignment="Top" Width="25" Height="25" FontSize="22" FontFamily="Verdana" FontWeight="Bold" Click="MinimizeButton_Click"/>
+        <Button x:Name="MoveButton" Content="M" HorizontalAlignment="Left" Margin="1175,10,0,0" VerticalAlignment="Top" Width="25" Height="25" FontSize="22" FontFamily="Verdana" FontWeight="Bold" PreviewMouseUp="MoveButton_PreviewMouseUp" PreviewMouseLeftButtonDown="MoveButton_Clicked"/>
         <Button x:Name="CloseButton" Content="X" HorizontalAlignment="Left" Margin="1210,10,0,0" VerticalAlignment="Top" Width="25" Height="25" FontSize="18" FontFamily="Verdana" FontWeight="Bold" Click="CloseButton_Click"/>
-        <Button x:Name="MinimizeButton" Content="-" HorizontalAlignment="Left" Margin="1175,10,0,0" VerticalAlignment="Top" Width="25" Height="25" FontSize="22" FontFamily="Verdana" FontWeight="Bold" Click="MinimizeButton_Click"/>
         <Button x:Name="TestButton" Content="Test" Visibility="Hidden" Style="{StaticResource RoundButtonTemplate}" HorizontalAlignment="Left" Margin="1077,760,0,0" VerticalAlignment="Top" Width="133" Height="53" FontFamily="Verdana" FontSize="20"/>
-
     </Grid>
 </Window>

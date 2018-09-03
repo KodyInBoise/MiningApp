@@ -46,7 +46,7 @@ namespace MiningApp
 
         public DateTime LastTick { get; private set; }
 
-        public int Interval { get; private set; }
+        public TimeSpan Interval { get; private set; }
 
         public DispatcherTimer GetTimer => _timer;
 
@@ -58,15 +58,22 @@ namespace MiningApp
         bool _pauseBetweenTicks { get; set; }
 
 
-        public TimerModel(object owner, Action action = null, int interval = -1, bool start = true, bool pauseBetweenTicks = false)
+        public TimerModel(object owner, TimeSpan interval, Action action = null, bool start = true, bool pauseBetweenTicks = false)
         {
             Owner = owner;
             _eventAction = action;
 
-            Interval = interval > 0 ? interval : 1;
+            Interval = interval;
             _pauseBetweenTicks = pauseBetweenTicks;
 
             Initialize(start);
+        }
+
+        public TimerModel(object owner, Action action = null, int interval = -1, bool start = true, bool pauseBetweenTicks = false)
+        {
+            var parsedInterval = interval > 0 ? new TimeSpan(0, 0, interval) : new TimeSpan(0, 0, 1);
+
+            new TimerModel(owner, parsedInterval, action, start, pauseBetweenTicks);
         }
 
         void Initialize(bool start)
@@ -74,7 +81,7 @@ namespace MiningApp
             HistoryDictionary = new Dictionary<DateTime, TimerAction>();
 
             _timer = new DispatcherTimer();
-            _timer.Interval = new TimeSpan(0, 0, Interval);
+            _timer.Interval = Interval;
             _timer.Tick += (s, e) => Timer_Ticked();
 
             if (start)

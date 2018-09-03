@@ -109,5 +109,30 @@ namespace MiningApp
         {
             WindowState = WindowState.Minimized;
         }
+
+        bool _moving = false;
+        TimerModel _movingTimer;
+        private void MoveButton_Clicked(object sender, MouseButtonEventArgs e)
+        {
+            _moving = true;
+
+            _movingTimer = new TimerModel(this, new TimeSpan(0, 0, 0, 0, 250), MoveWindow);
+        }
+
+        void MoveWindow()
+        {
+            WindowController.InvokeOnMainThread(new Action(() => {
+                var left = Instance.Left;
+                var top = Instance.Top;
+            }));
+        }
+
+        private void MoveButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (_moving)
+            {
+                _movingTimer.ToggleStatus(TimerAction.Stop);
+            }
+        }
     }
 }
