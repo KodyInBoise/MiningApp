@@ -164,12 +164,15 @@ namespace MiningApp
             var runningProcs = new List<BlacklistedItem>();
             _blacklistedProcesses = await GetAllBlacklistedProcesses();
 
-            foreach (var proc in _blacklistedProcesses)
+            if (_blacklistedProcesses.Any())
             {
-                var running = Process.GetProcessesByName(proc.NameWithoutExtension);
-                if (running.Any())
+                foreach (var proc in _blacklistedProcesses)
                 {
-                    runningProcs.Add(proc);
+                    var running = Process.GetProcessesByName(proc.NameWithoutExtension);
+                    if (running.Any())
+                    {
+                        runningProcs.Add(proc);
+                    }
                 }
             }
 

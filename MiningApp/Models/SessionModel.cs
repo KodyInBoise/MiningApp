@@ -288,16 +288,15 @@ namespace MiningApp
             }
         }
 
-        public async Task Stop(bool stopUptime = false)
+        public async Task Stop(bool clearSession = false)
         {
             try
             {
-                if (stopUptime)
+                if (clearSession)
                 {
                     UptimeHelper.Stop();
+                    WindowController.MiningSessions.Remove(this);
                 }
-
-                WindowController.MiningSessions.Remove(this);
 
                 MinerProcess.Kill();
             }

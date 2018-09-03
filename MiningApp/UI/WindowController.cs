@@ -255,7 +255,7 @@ namespace MiningApp.UI
         {
             if (MiningSessions.Any())
             {
-                foreach (var session in MiningSessions)
+                foreach (var session in MiningSessions.ToList())
                 {
                     switch (session.CurrentStatus)
                     {
