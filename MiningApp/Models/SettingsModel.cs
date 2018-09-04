@@ -13,9 +13,13 @@ namespace MiningApp
     {
         public AppSettings App { get; set; }
 
+        public UserSettings User { get; set; }
+
         public GeneralSettings General { get; set; }
 
         public MiningSettings Mining { get; set; }
+
+        public ServerSettings Server { get; set; }
 
 
         public SettingsModel()
@@ -36,6 +40,12 @@ namespace MiningApp
             public bool LaunchOnStartup { get; set; } = false;
             public int LaunchConfigID { get; set; } = -1;
             public bool CheckForUpdates { get; set; } = false;
+        }
+
+        public class UserSettings
+        {
+            public string UserID { get; set; }
+            public string EmailAddress { get; set; }
         }
 
         public class MiningSettings
@@ -67,6 +77,13 @@ namespace MiningApp
 
                 return procs;
             }
+        }
+
+        public class ServerSettings
+        {
+            public string LocalClientID { get; set; }
+            public string UserID => Bootstrapper.Settings.User.UserID;
+            public DateTime LastCheckin { get; set; }
         }
     }    
 }

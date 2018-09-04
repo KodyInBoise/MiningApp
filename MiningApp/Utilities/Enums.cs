@@ -20,6 +20,7 @@ namespace MiningApp
     public enum MinerType
     {
         Empty,
+        Internal,
         CCMiner,
     }
 
@@ -66,5 +67,18 @@ namespace MiningApp
         Executable = 0,
         Directory = 1,
         Exclude = 2,
+    }
+
+    public class Enums
+    {
+        public static MinerType GetTypeByName(string name)
+        {
+            if (name == MinerSettings.CCMiner.MinerName)
+            {
+                return MinerType.CCMiner;
+            }
+
+            return MinerType.Empty;
+        }
     }
 }

@@ -11,6 +11,18 @@ using static MiningApp.ServerHelper.VersionHelper;
 
 namespace MiningApp
 {
+    public class DatabaseHelper
+    {
+
+        string _user = "mining-client";
+        string _password = "db)T8WaDAJkWz7qtRodc@jbd";
+
+        private string GetConnectionString()
+        {
+            string s = $"Server=23.229.226.104; Database=testing_center; Uid={_user}; Pwd={_password};";
+            return s;
+        }
+    }
     public class ServerHelper
     {
         public static ServerHelper Instance { get; set; }

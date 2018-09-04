@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MiningApp"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:Controls="clr-namespace:Xceed.Wpf.AvalonDock.Themes.Controls;assembly=Xceed.Wpf.AvalonDock.Themes.Aero" x:Class="MiningApp.MainWindow"
+        x:Class="MiningApp.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="850" Width="1250" Visibility="Visible" Background="{StaticResource WindowColor}" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 

@@ -480,7 +480,7 @@ namespace MiningApp.UI
             {               
                 _miner.CreatedTimestamp = _miner.ID > 0 ? _miner.CreatedTimestamp : DateTime.Now;
                 _miner.Name = NameTextBox.Text;
-                _miner.Type = MinerNames.GetTypeByName(_miner.Name);
+                _miner.Type = Enums.GetTypeByName(_miner.Name);
                 _miner.Path = _minerPath;
                 _miner.Pools = PoolsListBox.Items.Cast<PoolConfigModel>().ToList();
                 _miner.Cryptos = CryptosListBox.Items.Cast<string>().ToList();
