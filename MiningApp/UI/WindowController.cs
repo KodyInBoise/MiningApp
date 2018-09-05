@@ -55,8 +55,6 @@ namespace MiningApp.UI
 
         private DataHelper _dataHelper { get; set; } = null;
 
-        private ServerHelper _serverHelper { get; set; } = null;
-
         private ProcessWatcher _processWatcher { get; set; } = null;
 
 
@@ -73,10 +71,12 @@ namespace MiningApp.UI
             _logHelper = new LogHelper();
             _cryptoHelper = new CryptoHelper();
             _dataHelper = new DataHelper();
-            _serverHelper = new ServerHelper();
             _processWatcher = new ProcessWatcher();
 
             _processWatcher.BlacklistedProcsDelegate += BlacklistedProcsDelegate_Invoked;
+
+            // TESTING
+            LocalClientModel.Test();
         }
 
         private void DisplayViewModel(ViewModelType viewType, DisplayGrid display = DisplayGrid.Primary,

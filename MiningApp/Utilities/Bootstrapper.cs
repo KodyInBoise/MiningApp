@@ -21,6 +21,10 @@ namespace MiningApp
 
         public static Bootstrapper Instance { get; set; }
 
+        public static LocalClientModel Client { get; set; }
+
+        public static ServerHelper ServerHelper { get; set; }
+
         public TimerModel HeartbeatTimer { get; set; }
 
         public static SettingsModel Settings { get; set; }
@@ -41,6 +45,8 @@ namespace MiningApp
         public static async void Startup()
         {
             Instance = new Bootstrapper();
+            ServerHelper = new ServerHelper();
+            Client = new LocalClientModel();
         }
         
         void Heartbeat_Tick()

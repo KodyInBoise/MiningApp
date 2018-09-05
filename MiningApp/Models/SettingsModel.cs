@@ -25,8 +25,10 @@ namespace MiningApp
         public SettingsModel()
         {
             App = new AppSettings();
+            User = new UserSettings();
             General = new GeneralSettings();
             Mining = new MiningSettings();
+            Server = new ServerSettings();
         }
 
         public class AppSettings
@@ -37,6 +39,7 @@ namespace MiningApp
 
         public class GeneralSettings
         {
+            public bool UseServer { get; set; } = true;
             public bool LaunchOnStartup { get; set; } = false;
             public int LaunchConfigID { get; set; } = -1;
             public bool CheckForUpdates { get; set; } = false;
@@ -45,7 +48,7 @@ namespace MiningApp
         public class UserSettings
         {
             public string UserID { get; set; }
-            public string EmailAddress { get; set; }
+            public string EmailAddress { get; set; }            
         }
 
         public class MiningSettings

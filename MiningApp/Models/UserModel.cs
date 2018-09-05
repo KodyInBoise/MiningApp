@@ -8,6 +8,8 @@ namespace MiningApp
 {
     public class UserModel
     {
+        public string ID { get; set; }
+
         public double? ControlBarLeft { get; set; }
 
         public double? ControlBarTop { get; set; }
@@ -17,6 +19,18 @@ namespace MiningApp
         public UserModel()
         {
             WatchingCryptos = new List<string>();
+            ID = Bootstrapper.Settings.User.UserID;
+
+            if (String.IsNullOrEmpty(ID))
+            {
+                Bootstrapper.Settings.User.UserID = CreateNewUserID();
+                Bootstrapper.Instance.SaveLocalSettings();
+            }
+        }
+
+        string CreateNewUserID()
+        {
+            return Guid.NewGuid().ToString();
         }
 
         public void AddToCryptoWatchList(CryptoModel crypto)

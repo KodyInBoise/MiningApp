@@ -8,28 +8,62 @@ using System.Threading.Tasks;
 using MiningApp.LoggingUtil;
 using Newtonsoft.Json;
 using static MiningApp.ServerHelper.VersionHelper;
+using MySql.Data.MySqlClient;
 
 namespace MiningApp
 {
     public class DatabaseHelper
     {
+        MySqlConnection _connection { get; set; }
 
         string _user = "mining-client";
         string _password = "db)T8WaDAJkWz7qtRodc@jbd";
 
+        public DatabaseHelper()
+        {
+            _connection = new MySqlConnection(GetConnectionString());
+        }
+
         private string GetConnectionString()
         {
-            string s = $"Server=23.229.226.104; Database=testing_center; Uid={_user}; Pwd={_password};";
+            string s = $"Server=23.229.226.104; Database=mining-app; Uid={_user}; Pwd={_password}; SslMode=none";
             return s;
+        }
+
+        public string GetNewClientID()
+        {
+            return Guid.NewGuid().ToString();
+        }
+
+        public bool VerifyNewID(string id)
+        {
+            return true;
+        }
+
+        public async Task UpdateClient()
+        {
+            var cmd = PreparedStatements.UpdateClient.GetCommand(Bootstrapper.Settings.Server.LocalClientID, Bootstrapper.Settings.User.UserID, DateTime.Now);
+
+            await _connection.OpenAsync();
+            await cmd.ExecuteNonQueryAsync();
+            await _connection.CloseAsync();
+        }
+
+        public MySqlConnection GetConnection()
+        {
+            return _connection;
         }
     }
     public class ServerHelper
     {
         public static ServerHelper Instance { get; set; }
 
+        public MySqlConnection GetDatabaseConnection => _databaseHelper.GetConnection();
+        public string NewClientID => _databaseHelper.GetNewClientID();
+        public Task UpdateClient => _databaseHelper.UpdateClient();
 
+        DatabaseHelper _databaseHelper { get; set; }
         FTPHelper _ftpHelper { get; set; }
-
         VersionHelper _versionHelper { get; set; }
 
         List<MinerConfigModel> _allMiners { get; set; } = new List<MinerConfigModel>();
@@ -37,11 +71,11 @@ namespace MiningApp
         string _minersJsonPath { get; set; } = Path.Combine(DataHelper.RootPath(), "Miners", "allminers.json");
 
 
-
         public ServerHelper()
         {
             Instance = this;
 
+            _databaseHelper = new DatabaseHelper();            
             _ftpHelper = new FTPHelper();
             _versionHelper = new VersionHelper();
 

@@ -116,12 +116,14 @@
     <Compile Include="LoggingUtil\ViewLogsWindow.xaml.cs">
       <DependentUpon>ViewLogsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\LocalClientModel.cs" />
     <Compile Include="Models\CryptoModel.cs" />
     <Compile Include="Models\SessionConfigModel.cs" />
     <Compile Include="Models\MinerConfigModel.cs" />
     <Compile Include="Models\SessionModel.cs" />
     <Compile Include="Models\PoolConfigModel.cs" />
     <Compile Include="Models\TimerModel.cs" />
+    <Compile Include="Server\PreparedStatements.cs" />
     <Compile Include="Utilities\ExceptionUtil.cs" />
     <Compile Include="Utilities\FTPClient.cs" />
     <Compile Include="Models\SettingsModel.cs" />
@@ -225,7 +227,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
-    <Folder Include="Server\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
