@@ -71,6 +71,41 @@ namespace MiningApp
             return client;
         }
 
+        UserModel _cachedLocalUser { get; set; }
+        public async Task<UserModel> GetUser(string email, bool refresh = false)
+        {
+            if (!refresh)
+            {
+                if (_cachedLocalUser != null && _cachedLocalUser.Email == email)
+                {
+                    return _cachedLocalUser;
+                }
+            }
+
+            var cmd = PreparedStatements.GetUser.GetCommand(email);
+            var user = new UserModel();
+
+            using (_connection)
+            {
+                await _connection.OpenAsync();
+
+                using (var rdr = await cmd.ExecuteReaderAsync())
+                {
+                    while (await rdr.ReadAsync())
+                    {
+                        user.ID = rdr.GetString(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.UserID));
+                        user.Email = rdr.GetString(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.Email));
+                        user.Password = rdr.GetString(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.Password));
+                        user.LastServerLogin = rdr.GetDateTime(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.LastLogin));
+                    }
+                }
+            }
+
+            _cachedLocalUser = user;
+
+            return user;
+        }
+
         public async Task UpdateUser(UserModel user)
         {
             var cmd = PreparedStatements.UpdateUser.GetCommand(user);
@@ -80,6 +115,25 @@ namespace MiningApp
                 await _connection.OpenAsync();
                 await cmd.ExecuteNonQueryAsync();
                 await _connection.CloseAsync();
+            }
+        }
+
+        public async Task<bool> AuthenticateUser(string email, string password)
+        {
+            var user = await GetUser(email);
+
+            if (user == null || user.Email != email)
+            {
+                return false;
+            }
+
+            if (user.Password == password)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

@@ -31,7 +31,8 @@ namespace MiningApp
             var user = new UserModel()
             {
                 ID = ElementHelper.GetNewGuid(8),
-                Email = "kody.kriner@gmail.com",               
+                Email = "kody.kriner@gmail.com",
+                Password = "password",
             };
 
             await ServerHelper.Instance.UpdateUser(user);

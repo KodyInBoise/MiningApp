@@ -220,6 +220,20 @@ namespace MiningApp
             };
         }
 
+        public static PasswordBox CreatePasswordBox(string name, int width = -1, int height = -1)
+        {
+            return new PasswordBox
+            {
+                Name = $"{name}PasswordBox",
+                Width = width > 0 ? width : ElementValues.TextBoxs.Width,
+                Height = height > 0 ? height : ElementValues.TextBoxs.Height,
+
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalContentAlignment = VerticalAlignment.Center
+            };
+        }
+
         public static string TrimPath(string path, int length = -1)
         {
             try

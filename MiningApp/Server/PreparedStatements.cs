@@ -39,15 +39,30 @@ namespace MiningApp
             }
         }
 
+        public class GetUser
+        {
+            public static MySqlCommand GetCommand(string userEmail)
+            {
+                string sql = $"SELECT * FROM Users WHERE {ColumnnNames.Users.Email} = @email";
+
+                var cmd = new MySqlCommand(sql, _connection);
+                AddParameter(cmd, "@email", userEmail);
+
+                return cmd;
+            }
+        }
+
         public class UpdateUser
         {
             public static MySqlCommand GetCommand(UserModel user)
             {
-                string sql = $"INSERT INTO Users ({ColumnnNames.Users.UserID}, {ColumnnNames.Users.Email}, {ColumnnNames.Users.Created}, {ColumnnNames.Users.LastLogin}) " +
-                    $"VALUES (?userID, ?email, ?created, ?lastlogin) ON DUPLICATE KEY UPDATE {ColumnnNames.Users.Email}=?email, {ColumnnNames.Users.LastLogin}=?lastlogin";
+                string sql = $"INSERT INTO Users ({ColumnnNames.Users.UserID}, {ColumnnNames.Users.Email}, {ColumnnNames.Users.Password}, {ColumnnNames.Users.Created}, " +
+                    $"{ColumnnNames.Users.LastLogin}) VALUES (?userID, ?email, ?password, ?created, ?lastlogin) ON DUPLICATE KEY UPDATE {ColumnnNames.Users.Email}=?email, " +
+                    $"{ColumnnNames.Users.LastLogin}=?lastlogin";
 
                 var cmd = new MySqlCommand(sql, _connection);
                 AddParameter(cmd, "?userID", user.ID);
+                AddParameter(cmd, "?password", user.Password);
                 AddParameter(cmd, "?email", user.Email);
                 AddParameter(cmd, "?created", DateTime.Now);
                 AddParameter(cmd, "?lastlogin", DateTime.Now);

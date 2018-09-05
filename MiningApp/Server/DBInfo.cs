@@ -8,83 +8,83 @@ namespace MiningApp
 {
     public class DBInfo
     {
-        public class Tables
+        public class Clients
         {
-            public class Clients
+            public enum Columns
             {
-                public enum Columns
-                {
-                    ClientID = 0,
-                    UserID = 1,
-                    LastCheckin = 2,
-                }
+                ClientID = 0,
+                UserID = 1,
+                LastCheckin = 2,
+            }
 
-                public static string GetColumnName(Columns column)
+            public static string GetColumnName(Columns column)
+            {
+                switch (column)
                 {
-                    switch (column)
-                    {
-                        case Columns.ClientID:
-                            return ColumnnNames.Clients.ClientID;
-                        case Columns.UserID:
-                            return ColumnnNames.Clients.UserID;
-                        case Columns.LastCheckin:
-                            return ColumnnNames.Clients.LastCheckin;
-                        default:
-                            return string.Empty;
-                    }
-                }
-
-                public static string GetColumnName(int index)
-                {
-                    var columnEnum = (Columns)index;
-
-                    return GetColumnName(columnEnum);
-                }
-
-                public static int GetColumnIndex(Columns column)
-                {
-                    return (int)column;
+                    case Columns.ClientID:
+                        return ColumnnNames.Clients.ClientID;
+                    case Columns.UserID:
+                        return ColumnnNames.Clients.UserID;
+                    case Columns.LastCheckin:
+                        return ColumnnNames.Clients.LastCheckin;
+                    default:
+                        return string.Empty;
                 }
             }
 
-            public class Users
+            public static string GetColumnName(int index)
             {
-                public enum Columns
-                {
-                    UserID = 0,
-                    Email = 1,
-                    Created = 2,
-                    LastLogin = 3,
-                }
+                var columnEnum = (Columns)index;
 
-                public static string GetColumnName(Columns column)
-                {
-                    switch (column)
-                    {
-                        case Columns.UserID:
-                            return ColumnnNames.Users.UserID;
-                        case Columns.Email:
-                            return ColumnnNames.Users.Email;
-                        case Columns.Created:
-                            return ColumnnNames.Users.Created;
-                        case Columns.LastLogin:
-                            return ColumnnNames.Users.LastLogin;
-                        default:
-                            return string.Empty;
-                    }
-                }
+                return GetColumnName(columnEnum);
+            }
 
-                public static string GetColumnName(int index)
-                {
-                    var columnEnum = (Columns)index;
+            public static int GetColumnIndex(Columns column)
+            {
+                return (int)column;
+            }
+        }
 
-                    return GetColumnName(columnEnum);
-                }
+        public class Users
+        {
+            public enum Columns
+            {
+                UserID = 0,
+                Email = 1,
+                Password = 2,
+                Created = 3,
+                LastLogin = 4,
+            }
 
-                public static int GetColumnIndex(Columns column)
+            public static string GetColumnName(Columns column)
+            {
+                switch (column)
                 {
-                    return (int)column;
+                    case Columns.UserID:
+                        return ColumnnNames.Users.UserID;
+                    case Columns.Email:
+                        return ColumnnNames.Users.Email;
+                    case Columns.Password:
+                        return ColumnnNames.Users.Password;
+                    case Columns.Created:
+                        return ColumnnNames.Users.Created;
+                    case Columns.LastLogin:
+                        return ColumnnNames.Users.LastLogin;
+                    default:
+                        return string.Empty;
                 }
+            }
+
+            public static string GetColumnName(int index)
+            {
+                var columnEnum = (Columns)index;
+
+                return GetColumnName(columnEnum);
+            }
+
+            public static int GetColumnIndex(Columns column)
+            {
+                return (int)column;
             }
         }
     }
@@ -102,6 +102,7 @@ namespace MiningApp
         {
             public static string UserID = "UserID";
             public static string Email = "Email";
+            public static string Password = "Password";
             public static string Created = "Created";
             public static string LastLogin = "LastLogin";
         }

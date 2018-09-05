@@ -10,13 +10,19 @@ namespace MiningApp.UI
 {
     public class LoginVM
     {
-        TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Login", 40);
-
         Grid ViewGrid { get; set; } = MainWindow.Instance.PrimaryGrid;
 
+        TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Login", 40);
 
-        ActiveSessionsVM _activeSessionsVM { get; set; }
+        TextBox EmailTextBox { get; set; } = ElementHelper.CreateTextBox("Email");
 
+        PasswordBox PasswordBox { get; set; } = ElementHelper.CreatePasswordBox("Password");
+
+        Button LoginButton { get; set; } = ElementHelper.CreateButton("Login", style:ButtonStyleEnum.New, height: 50, width: 150);
+
+        Label EmailLabel { get; set; }
+
+        Label PasswordLabel { get; set; }
 
 
         double nextLeft = 10;
@@ -24,6 +30,10 @@ namespace MiningApp.UI
         double nextTop = 10;
 
         double padding = 15;
+
+        double labelRight = 750;
+
+        double labelOffset = -5;
 
 
         public LoginVM()
@@ -35,7 +45,25 @@ namespace MiningApp.UI
         {
             DisplayElement(TitleTextBlock);
 
-            //_activeSessionsVM = new ActiveSessionsVM(ViewGrid);
+            nextLeft += padding * 20;
+            nextTop += padding * 15;
+            DisplayElement(EmailTextBox);
+
+            DisplayElement(PasswordBox, topPadding: 5);
+
+            nextLeft = PasswordBox.Margin.Left + PasswordBox.Width - LoginButton.Width;
+            DisplayElement(LoginButton);
+            LoginButton.Click += (s, e) => LoginButton_Clicked();
+
+            nextTop = EmailTextBox.Margin.Top;
+            EmailLabel = ElementHelper.CreateLabel("Email", EmailTextBox);
+            EmailLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
+            DisplayElement(EmailLabel, ignoreMargin: true);
+
+            nextTop = PasswordBox.Margin.Top;
+            PasswordLabel = ElementHelper.CreateLabel("Password", PasswordBox);
+            PasswordLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
+            DisplayElement(PasswordLabel, ignoreMargin: true);
         }
 
         public void Dispose()
@@ -43,13 +71,27 @@ namespace MiningApp.UI
             WindowController.Instance.LoginView = null;
         }
 
-        private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
+
+        private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0, bool ignoreMargin = false)
         {
-            element.Margin = new Thickness((nextLeft + leftPadding), nextTop + topPadding, 0, 0);
+            if (!ignoreMargin)
+            {
+                element.Margin = new Thickness((nextLeft + leftPadding), nextTop + topPadding, 0, 0);
+            }
 
             ViewGrid.Children.Add(element);
 
             nextTop = element.Margin.Top + element.Height + padding;
+        }
+
+        async void LoginButton_Clicked()
+        {
+            var userAuthenticated = await ServerHelper.Instance.AuthenticateUser(EmailTextBox.Text, PasswordBox.Password);
+
+            if (!userAuthenticated)
+            {
+                MessageBox.Show("Authentication failed!");
+            }
         }
     }
 }

@@ -12,6 +12,8 @@ namespace MiningApp
 
         public string Email { get; set; }
 
+        public string Password { get; set; }
+
         public DateTime LastServerLogin { get; set; }
 
         public List<string> WatchingCryptos { get; set; }

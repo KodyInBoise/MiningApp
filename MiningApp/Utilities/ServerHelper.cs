@@ -21,6 +21,7 @@ namespace MiningApp
         public Task UpdateClient => _databaseHelper.UpdateClient();
         public Task<LocalClientModel> GetLocalClientInfo(string clientID) => _databaseHelper.GetClientInfo(clientID);
         public Task UpdateUser(UserModel user) => _databaseHelper.UpdateUser(user);
+        public Task<bool> AuthenticateUser(string email, string password) => _databaseHelper.AuthenticateUser(email, password);
         
 
         DatabaseHelper _databaseHelper { get; set; }
