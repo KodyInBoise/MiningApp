@@ -48,7 +48,8 @@ namespace MiningApp
         public class UserSettings
         {
             public string UserID { get; set; }
-            public string EmailAddress { get; set; }            
+            public string EmailAddress { get; set; }
+            public bool RequiresLogin { get; set; } = true;
         }
 
         public class MiningSettings
@@ -86,6 +87,7 @@ namespace MiningApp
         {
             public string LocalClientID { get; set; }
             public string UserID => Bootstrapper.Settings.User.UserID;
+            public bool UserAuthenticated { get; set; } = false;
             public DateTime LastCheckin { get; set; }
         }
     }    

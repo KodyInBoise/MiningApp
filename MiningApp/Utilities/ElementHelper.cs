@@ -366,6 +366,7 @@ namespace MiningApp
     {
         Empty,
         Nav,
+        Login,
         Home,
         ConfigsHome,
         MinersHome,

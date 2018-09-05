@@ -24,6 +24,8 @@ namespace MiningApp.UI
 
         public HomeVM HomeView { get; set; } = null;
 
+        public LoginVM LoginView { get; set; } = null;
+
         public ConfigsHomeVM ConfigsHomeView { get; set; } = null;
 
         public MinersHomeVM MinersHomeView { get; set; } = null;
@@ -113,6 +115,10 @@ namespace MiningApp.UI
             
             switch (viewType)
             {
+                case ViewModelType.Login:
+                    LoginView?.Dispose();
+                    LoginView = new LoginVM();
+                    break;
                 case ViewModelType.Home:
                     HomeView?.Dispose();
                     HomeView = new HomeVM(launchSession);
@@ -168,9 +174,21 @@ namespace MiningApp.UI
             }
         }
 
+        public void ShowLogin()
+        {
+            DisplayViewModel(ViewModelType.Login, DisplayGrid.Primary);
+        }
+
         public void ShowHome(SessionModel launchSession = null)
         {
-            DisplayViewModel(ViewModelType.Home, DisplayGrid.Primary, launchSession);
+            if (Bootstrapper.Settings.User.RequiresLogin && !Bootstrapper.Settings.Server.UserAuthenticated)
+            {
+                DisplayViewModel(ViewModelType.Login, DisplayGrid.Primary);
+            }
+            else
+            {
+                DisplayViewModel(ViewModelType.Home, DisplayGrid.Primary, launchSession);
+            }
         }
 
         public void ShowConfigurationsHome()
