@@ -76,7 +76,7 @@ namespace MiningApp.UI
             _processWatcher.BlacklistedProcsDelegate += BlacklistedProcsDelegate_Invoked;
 
             // TESTING
-            LocalClientModel.Test();
+            //LocalClientModel.Test();
         }
 
         private void DisplayViewModel(ViewModelType viewType, DisplayGrid display = DisplayGrid.Primary,

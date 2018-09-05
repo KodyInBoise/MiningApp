@@ -10,9 +10,9 @@ namespace MiningApp
     {
         public string ID { get; set; }
 
-        public double? ControlBarLeft { get; set; }
+        public string Email { get; set; }
 
-        public double? ControlBarTop { get; set; }
+        public DateTime LastServerLogin { get; set; }
 
         public List<string> WatchingCryptos { get; set; }
 
@@ -45,15 +45,7 @@ namespace MiningApp
 
         public void SaveSettings()
         {
-            GetWindowLocation();
-
             DataHelper.SaveUserSettings(this);
-        }
-
-        private void GetWindowLocation()
-        {
-            //ontrolBarLeft = OldWindowController.Instance.ControlBarWin.Left;
-            //ControlBarTop = OldWindowController.Instance.ControlBarWin.Top;
         }
     }
 }

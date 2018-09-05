@@ -9,7 +9,7 @@ namespace MiningApp
 {
     public class PreparedStatements
     {
-        static MySqlConnection _connection => ServerHelper.Instance.GetDatabaseConnection;
+        static MySqlConnection _connection => ServerHelper.Instance.GetDatabaseConnection();
 
         public class UpdateClient
         {
@@ -20,7 +20,7 @@ namespace MiningApp
                 var cmd = new MySqlCommand(sql, _connection);
                 AddParameter(cmd, "?id", id);
                 AddParameter(cmd, "?userID", userID);
-                AddParameter(cmd, "?timestamp", timestamp.ToString());
+                AddParameter(cmd, "?timestamp", timestamp);
 
                 return cmd;
             }
@@ -34,6 +34,23 @@ namespace MiningApp
 
                 var cmd = new MySqlCommand(sql, _connection);
                 AddParameter(cmd, "@clientID", clientID);
+
+                return cmd;
+            }
+        }
+
+        public class UpdateUser
+        {
+            public static MySqlCommand GetCommand(UserModel user)
+            {
+                string sql = $"INSERT INTO Users ({ColumnnNames.Users.UserID}, {ColumnnNames.Users.Email}, {ColumnnNames.Users.Created}, {ColumnnNames.Users.LastLogin}) " +
+                    $"VALUES (?userID, ?email, ?created, ?lastlogin) ON DUPLICATE KEY UPDATE {ColumnnNames.Users.Email}=?email, {ColumnnNames.Users.LastLogin}=?lastlogin";
+
+                var cmd = new MySqlCommand(sql, _connection);
+                AddParameter(cmd, "?userID", user.ID);
+                AddParameter(cmd, "?email", user.Email);
+                AddParameter(cmd, "?created", DateTime.Now);
+                AddParameter(cmd, "?lastlogin", DateTime.Now);
 
                 return cmd;
             }

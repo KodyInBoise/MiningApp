@@ -28,7 +28,13 @@ namespace MiningApp
 
         public static async void Test()
         {
-            await ServerHelper.Instance.UpdateClient;
+            var user = new UserModel()
+            {
+                ID = ElementHelper.GetNewGuid(8),
+                Email = "kody.kriner@gmail.com",               
+            };
+
+            await ServerHelper.Instance.UpdateUser(user);
         }
     }
 }
