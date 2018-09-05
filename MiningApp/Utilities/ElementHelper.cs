@@ -21,6 +21,13 @@ namespace MiningApp
             Instance = this;
         }
 
+        public static string GetNewGuid(int length = -1)
+        {
+            var guid = Guid.NewGuid().ToString();
+
+            return length > 0 ? guid.Substring(0, length) : guid;
+        }
+
         public static Button CreateButton(string content, string name = "", ButtonStyleEnum style = ButtonStyleEnum.Normal, int fontSize = -1,
             int height = -1, int width = -1)
         {

@@ -15,12 +15,25 @@ namespace MiningApp
         {
             public static MySqlCommand GetCommand(string id, string userID, DateTime timestamp)
             {
-                string sql = "INSERT INTO Clients (@id, @userID, @timestamp) ON DEUPLICATE KEY UPDATE ClientID=@id, timestamp=@timestamp";
+                string sql = "INSERT INTO Clients (ClientID, UserID, LastCheckin) VALUES (?id, ?userID, ?timestamp) ON DUPLICATE KEY UPDATE UserID=?userID, LastCheckin=?timestamp";
 
                 var cmd = new MySqlCommand(sql, _connection);
-                AddParameter(cmd, "@id", id);
-                AddParameter(cmd, "@userID", userID);
-                AddParameter(cmd, "@timestamp", timestamp);
+                AddParameter(cmd, "?id", id);
+                AddParameter(cmd, "?userID", userID);
+                AddParameter(cmd, "?timestamp", timestamp.ToString());
+
+                return cmd;
+            }
+        }
+
+        public class GetClient
+        {
+            public static MySqlCommand GetCommand(string clientID)
+            {
+                string sql = "SELECT * FROM Clients WHERE ClientID = @clientID";
+
+                var cmd = new MySqlCommand(sql, _connection);
+                AddParameter(cmd, "@clientID", clientID);
 
                 return cmd;
             }

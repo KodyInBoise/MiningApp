@@ -24,6 +24,11 @@ namespace MiningApp
             _connection = new MySqlConnection(GetConnectionString());
         }
 
+        public MySqlConnection GetConnection()
+        {
+            return _connection;
+        }
+
         private string GetConnectionString()
         {
             string s = $"Server=23.229.226.104; Database=mining-app; Uid={_user}; Pwd={_password}; SslMode=none";
@@ -49,11 +54,29 @@ namespace MiningApp
             await _connection.CloseAsync();
         }
 
-        public MySqlConnection GetConnection()
+        public async Task<LocalClientModel> GetClientInfo(string clientID)
         {
-            return _connection;
+            var client = new LocalClientModel();
+            var cmd = PreparedStatements.GetClient.GetCommand(clientID);
+
+            using (_connection)
+            {
+                await _connection.OpenAsync();
+
+                using (var rdr = await cmd.ExecuteReaderAsync())
+                {
+                    while (await rdr.ReadAsync())
+                    {
+                        client.ID = rdr.GetString(Indexes.Clients.ClientID);
+                        client.LastCheckin = rdr.GetDateTime(Indexes.Clients.LastCheckin);
+                    }
+                }
+            }
+
+            return client;
         }
     }
+
     public class ServerHelper
     {
         public static ServerHelper Instance { get; set; }
@@ -61,6 +84,7 @@ namespace MiningApp
         public MySqlConnection GetDatabaseConnection => _databaseHelper.GetConnection();
         public string NewClientID => _databaseHelper.GetNewClientID();
         public Task UpdateClient => _databaseHelper.UpdateClient();
+        public Task<LocalClientModel> GetLocalClientInfo(string clientID) => _databaseHelper.GetClientInfo(clientID);
 
         DatabaseHelper _databaseHelper { get; set; }
         FTPHelper _ftpHelper { get; set; }

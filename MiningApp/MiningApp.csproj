@@ -123,6 +123,7 @@
     <Compile Include="Models\SessionModel.cs" />
     <Compile Include="Models\PoolConfigModel.cs" />
     <Compile Include="Models\TimerModel.cs" />
+    <Compile Include="Server\Indexes.cs" />
     <Compile Include="Server\PreparedStatements.cs" />
     <Compile Include="Utilities\ExceptionUtil.cs" />
     <Compile Include="Utilities\FTPClient.cs" />

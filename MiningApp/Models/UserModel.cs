@@ -23,7 +23,7 @@ namespace MiningApp
 
             if (String.IsNullOrEmpty(ID))
             {
-                Bootstrapper.Settings.User.UserID = CreateNewUserID();
+                Bootstrapper.Settings.User.UserID = ElementHelper.GetNewGuid(8);
                 Bootstrapper.Instance.SaveLocalSettings();
             }
         }
