@@ -86,11 +86,15 @@ namespace MiningApp.UI
 
         async void LoginButton_Clicked()
         {
-            var userAuthenticated = await ServerHelper.Instance.AuthenticateUser(EmailTextBox.Text, PasswordBox.Password);
+            Bootstrapper.Settings.Server.UserAuthenticated = await ServerHelper.Instance.AuthenticateUser(EmailTextBox.Text, PasswordBox.Password);
 
-            if (!userAuthenticated)
+            if (!Bootstrapper.Settings.Server.UserAuthenticated)
             {
                 MessageBox.Show("Authentication failed!");
+            }
+            else
+            {
+                WindowController.Instance.ShowHome();
             }
         }
     }
