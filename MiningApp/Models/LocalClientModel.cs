@@ -12,7 +12,7 @@ namespace MiningApp
 
         public DateTime LastCheckin { get; set; }
 
-        bool _useServer => Bootstrapper.Settings.General.UseServer;
+        bool _useServer => Bootstrapper.Settings.Server.UseServer;
 
 
         public LocalClientModel()
@@ -20,7 +20,7 @@ namespace MiningApp
             if (String.IsNullOrEmpty(Bootstrapper.Settings.Server.LocalClientID))
             {
                 Bootstrapper.Settings.Server.LocalClientID = ElementHelper.GetNewGuid(8);
-                Bootstrapper.Instance.SaveLocalSettings();
+                Bootstrapper.SaveLocalSettings();
             }
 
             ID = Bootstrapper.Settings.Server.LocalClientID;
@@ -35,7 +35,7 @@ namespace MiningApp
                 Password = "password",
             };
 
-            await ServerHelper.Instance.UpdateUser(user);
+            await ServerHelper.UpdateUser(user);
         }
     }
 }

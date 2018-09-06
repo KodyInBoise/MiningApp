@@ -54,6 +54,7 @@ namespace MiningApp
                 Password = 2,
                 Created = 3,
                 LastLogin = 4,
+                RequiresLogin = 5,
             }
 
             public static string GetColumnName(Columns column)
@@ -70,6 +71,8 @@ namespace MiningApp
                         return ColumnnNames.Users.Created;
                     case Columns.LastLogin:
                         return ColumnnNames.Users.LastLogin;
+                    case Columns.RequiresLogin:
+                        return ColumnnNames.Users.RequiresLogin;
                     default:
                         return string.Empty;
                 }
@@ -105,6 +108,7 @@ namespace MiningApp
             public static string Password = "Password";
             public static string Created = "Created";
             public static string LastLogin = "LastLogin";
+            public static string RequiresLogin = "RequiresLogin";
         }
     }
 }

@@ -290,22 +290,29 @@ namespace MiningApp
 
         public void InsertLogEntry(LogEntry entry)
         {
-            using (_database)
+            try
             {
-                switch (entry.Type)
+                using (_database)
                 {
-                    case LogType.General:
-                        _generalLogCollection.Insert(entry);
-                        break;
-                    case LogType.Error:
-                        _errorLogCollection.Insert(entry);
-                        break;
-                    case LogType.Session:
-                        _sessionLogCollection.Insert(entry);
-                        break;
-                    default:
-                        break;
+                    switch (entry.Type)
+                    {
+                        case LogType.General:
+                            _generalLogCollection.Insert(entry);
+                            break;
+                        case LogType.Error:
+                            _errorLogCollection.Insert(entry);
+                            break;
+                        case LogType.Session:
+                            _sessionLogCollection.Insert(entry);
+                            break;
+                        default:
+                            break;
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                ExceptionUtil.Handle(ex);
             }
         }
 

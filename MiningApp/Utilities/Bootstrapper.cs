@@ -14,6 +14,26 @@ using static MiningApp.SettingsModel;
 
 namespace MiningApp
 {
+    public delegate void UserAuthenticationChangedDelegate(UserAuthenticationChangedArgs args);
+
+    public enum UserAuthenticationStatus
+    {
+        Disconnected = 0,
+        Connected = 1,
+    }
+
+    public class UserAuthenticationChangedArgs
+    {
+        public DateTime Timestamp { get; private set; }
+        public UserAuthenticationStatus Status { get; private set; }
+
+        public UserAuthenticationChangedArgs(UserAuthenticationStatus status)
+        {
+            Timestamp = DateTime.Now;
+            Status = status;
+        }
+    }
+
     public class Bootstrapper
     {
         public const char ARGUMENT_IDENTIFIER = '-';
@@ -21,7 +41,9 @@ namespace MiningApp
 
         public static Bootstrapper Instance { get; set; }
 
-        public static UserModel User { get; set; }
+        public static UserModel User => Instance._localUser;
+
+        public static UserAuthenticationChangedDelegate UserAuthenticationDelegate { get; set; }
 
         public static LocalClientModel Client { get; set; }
 
@@ -35,6 +57,11 @@ namespace MiningApp
 
         public static string AppTempPath => Path.Combine(RootPath(), "Temp");
 
+        public void SetUser(UserModel user, bool authenticated = false) => SetLocalUser(user, authenticated);
+
+        
+        UserModel _localUser { get; set; }
+
 
         public Bootstrapper()
         {
@@ -42,13 +69,32 @@ namespace MiningApp
 
             HeartbeatTimer = new TimerModel(Application.Current, Heartbeat_Tick);
             Settings = GetLocalSettings();
+
+            ServerHelper = new ServerHelper();
+            ServerHelper = new ServerHelper();
+            Client = new LocalClientModel();
+
+            SetLocalUser();
+
+            UserAuthenticationDelegate += UserAuthenticationDelegate_Invoked;
         }
 
         public static async void Startup()
         {
             Instance = new Bootstrapper();
-            ServerHelper = new ServerHelper();
-            Client = new LocalClientModel();
+        }
+
+        void UserAuthenticationDelegate_Invoked(UserAuthenticationChangedArgs args)
+        {
+            if (args.Status == UserAuthenticationStatus.Connected)
+            {
+                Settings.Server.UserAuthenticated = true;
+                User.LastServerLogin = args.Timestamp;
+            }
+            else
+            {
+                Settings.Server.UserAuthenticated = false;
+            }
         }
         
         void Heartbeat_Tick()
@@ -112,7 +158,7 @@ namespace MiningApp
             }
         }
 
-        public void SaveLocalSettings(SettingsModel settings = null)
+        public static void SaveLocalSettings(SettingsModel settings = null)
         {
             try
             {
@@ -130,7 +176,7 @@ namespace MiningApp
             }
         }
 
-        void EnforceSettings()
+        static void EnforceSettings()
         {
             try
             {
@@ -154,12 +200,60 @@ namespace MiningApp
             }
         }
 
-        string GetStartupPath()
+        async void SetLocalUser(UserModel setUser = null, bool authenticated = false)
+        {
+            // NEED TO CHECK AGAINST CLIENT LIST AND IF THIS IS A NEW CLIENT, NOT AUTHENTICATE USER
+
+            try
+            {
+                if (setUser != null)
+                {
+                    if (authenticated || Settings.Server.UserAuthenticated)
+                    {
+                        _localUser = setUser;
+
+                        Settings.User.UserID = User.ID;
+                        Settings.User.Email = User.Email;
+
+                        SaveLocalSettings();
+                    }
+                }
+                else if (!String.IsNullOrEmpty(Settings.User.Email))
+                {
+                    var user = await ServerHelper.GetUserByEmail(Settings.User.Email);
+
+                    if (user.RequiresLogin)
+                    {
+                        Settings.Server.UserAuthenticated = false;
+                    }
+                    else
+                    {
+                        Settings.Server.UserAuthenticated = true;
+
+                        _localUser = user;
+                        Settings.User.UserID = User.ID;
+                        Settings.User.Email = User.Email;
+                    }
+                }
+                else
+                {
+                    Settings.Server.UserAuthenticated = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _localUser = null;
+
+                ExceptionUtil.Handle(ex);
+            }
+        }
+
+        static string GetStartupPath()
         {
             return Environment.GetFolderPath(Environment.SpecialFolder.Startup);
         }
 
-        void CreateShortcut(string path)
+        static void CreateShortcut(string path)
         {
             try
             {

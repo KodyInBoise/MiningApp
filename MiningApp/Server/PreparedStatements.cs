@@ -57,8 +57,8 @@ namespace MiningApp
             public static MySqlCommand GetCommand(UserModel user)
             {
                 string sql = $"INSERT INTO Users ({ColumnnNames.Users.UserID}, {ColumnnNames.Users.Email}, {ColumnnNames.Users.Password}, {ColumnnNames.Users.Created}, " +
-                    $"{ColumnnNames.Users.LastLogin}) VALUES (?userID, ?email, ?password, ?created, ?lastlogin) ON DUPLICATE KEY UPDATE {ColumnnNames.Users.Email}=?email, " +
-                    $"{ColumnnNames.Users.LastLogin}=?lastlogin";
+                    $"{ColumnnNames.Users.LastLogin}, {ColumnnNames.Users.RequiresLogin}) VALUES (?userID, ?email, ?password, ?created, ?lastlogin, ?requiresLogin) " +
+                    $"ON DUPLICATE KEY UPDATE {ColumnnNames.Users.Email}=?email, {ColumnnNames.Users.LastLogin}=?lastlogin, {ColumnnNames.Users.RequiresLogin}=?requiresLogin";
 
                 var cmd = new MySqlCommand(sql, _connection);
                 AddParameter(cmd, "?userID", user.ID);
@@ -66,6 +66,7 @@ namespace MiningApp
                 AddParameter(cmd, "?email", user.Email);
                 AddParameter(cmd, "?created", DateTime.Now);
                 AddParameter(cmd, "?lastlogin", DateTime.Now);
+                AddParameter(cmd, "?requiresLogin", user.RequiresLogin);
 
                 return cmd;
             }

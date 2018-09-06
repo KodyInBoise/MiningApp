@@ -97,6 +97,7 @@ namespace MiningApp
                         user.Email = rdr.GetString(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.Email));
                         user.Password = rdr.GetString(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.Password));
                         user.LastServerLogin = rdr.GetDateTime(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.LastLogin));
+                        user.RequiresLogin = rdr.GetBoolean(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.RequiresLogin));
                     }
                 }
             }
@@ -124,15 +125,22 @@ namespace MiningApp
 
             if (user == null || user.Email != email)
             {
+                Bootstrapper.UserAuthenticationDelegate?.Invoke(new UserAuthenticationChangedArgs(UserAuthenticationStatus.Disconnected));
+
                 return false;
             }
 
             if (user.Password == password)
             {
+                Bootstrapper.Instance.SetUser(user, true);
+                Bootstrapper.UserAuthenticationDelegate?.Invoke(new UserAuthenticationChangedArgs(UserAuthenticationStatus.Connected));
+
                 return true;
             }
             else
             {
+                Bootstrapper.UserAuthenticationDelegate?.Invoke(new UserAuthenticationChangedArgs(UserAuthenticationStatus.Disconnected));
+
                 return false;
             }
         }

@@ -40,14 +40,16 @@ namespace MiningApp.UI
 
         double padding = 25;
 
+        UserAuthenticationChangedDelegate _userAuthenticationDelegate { get; set; }
+
 
         public NavBarVM()
         {
             Instance = this;
 
-            Show();
+            Bootstrapper.UserAuthenticationDelegate += UserAuthenticationDelegate_Invoked;
 
-            WindowController.Instance.ShowHome();
+            Show();
         }
 
         private void Show()
@@ -72,6 +74,11 @@ namespace MiningApp.UI
 
             DisplayElement(SettingsButton, topPadding: padding * 2);
             SettingsButton.Click += (s, e) => SettingsButton_Clicked();
+
+            if (!Bootstrapper.Settings.Server.UserAuthenticated)
+            {
+                HideButtons();
+            }
         }
 
         private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
@@ -117,6 +124,41 @@ namespace MiningApp.UI
         private void SettingsButton_Clicked()
         {
             WindowController.Instance.ShowSettingsHome();
+        }
+
+        void UserAuthenticationDelegate_Invoked(UserAuthenticationChangedArgs args)
+        {
+            WindowController.InvokeOnMainThread(() =>
+            {
+                if (args.Status == UserAuthenticationStatus.Connected)
+                {
+                    ShowButtons();
+                }
+                else
+                {
+                    HideButtons();
+                }
+            });
+        }
+
+        void ShowButtons()
+        {
+            ConfigurationsButton.Visibility = Visibility.Visible;
+            MinersButton.Visibility = Visibility.Visible;
+            WalletsButton.Visibility = Visibility.Visible;
+            PoolsButton.Visibility = Visibility.Visible;
+            LogsButton.Visibility = Visibility.Visible;
+            SettingsButton.Visibility = Visibility.Visible;
+        }
+
+        void HideButtons()
+        {
+            ConfigurationsButton.Visibility = Visibility.Collapsed;
+            MinersButton.Visibility = Visibility.Collapsed;
+            WalletsButton.Visibility = Visibility.Collapsed;
+            PoolsButton.Visibility = Visibility.Collapsed;
+            LogsButton.Visibility = Visibility.Collapsed;
+            SettingsButton.Visibility = Visibility.Collapsed;
         }
     }
 }

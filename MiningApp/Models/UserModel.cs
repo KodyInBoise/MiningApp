@@ -14,6 +14,8 @@ namespace MiningApp
 
         public string Password { get; set; }
 
+        public bool RequiresLogin { get; set; }
+
         public DateTime LastServerLogin { get; set; }
 
         public List<string> WatchingCryptos { get; set; }
@@ -22,12 +24,6 @@ namespace MiningApp
         {
             WatchingCryptos = new List<string>();
             ID = Bootstrapper.Settings.User.UserID;
-
-            if (String.IsNullOrEmpty(ID))
-            {
-                Bootstrapper.Settings.User.UserID = ElementHelper.GetNewGuid(8);
-                Bootstrapper.Instance.SaveLocalSettings();
-            }
         }
 
         string CreateNewUserID()

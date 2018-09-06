@@ -15,6 +15,7 @@ namespace MiningApp.UI
     {
         General,
         Mining,
+        Server,
         Updates,
     }
 
@@ -34,6 +35,8 @@ namespace MiningApp.UI
         private GeneralVM _generalVM { get; set; }
 
         private MiningVM _miningVM { get; set; }
+
+        private ServerVM _serverVM { get; set; }
 
         private UpdatesVM _updatesVM { get; set; }
 
@@ -78,6 +81,9 @@ namespace MiningApp.UI
                 case SettingType.Mining:
                     _miningVM = new MiningVM();
                     break;
+                case SettingType.Server:
+                    _serverVM = new ServerVM();
+                    break;
                 case SettingType.Updates:
                     _updatesVM = new UpdatesVM();
                     break;
@@ -97,6 +103,8 @@ namespace MiningApp.UI
             Button GeneralButton { get; set; } = ElementHelper.CreateButton("General", height: buttonHeight);
 
             Button MiningButton { get; set; } = ElementHelper.CreateButton("Mining", height: buttonHeight);
+
+            Button ServerButton { get; set; } = ElementHelper.CreateButton("Server", height: buttonHeight);
 
             Button UpdatesButton { get; set; } = ElementHelper.CreateButton("Updates", height: buttonHeight);
 
@@ -126,6 +134,9 @@ namespace MiningApp.UI
                 DisplayElement(MiningButton);
                 MiningButton.Click += (s, e) => MiningButton_Clicked();
 
+                DisplayElement(ServerButton);
+                ServerButton.Click += (s, e) => ServerButton_Clicked();
+
                 DisplayElement(UpdatesButton);
                 UpdatesButton.Click += (s, e) => UpdatesButton_Clicked();
             }
@@ -147,6 +158,11 @@ namespace MiningApp.UI
             void MiningButton_Clicked()
             {
                 View.DisplaySecondary(SettingType.Mining);
+            }
+
+            void ServerButton_Clicked()
+            {
+                View.DisplaySecondary(SettingType.Server);
             }
 
             void UpdatesButton_Clicked()
@@ -250,7 +266,7 @@ namespace MiningApp.UI
                     Bootstrapper.Settings.General.LaunchConfigID = -1;
                 }
 
-                Bootstrapper.Instance.SaveLocalSettings();
+                Bootstrapper.SaveLocalSettings();
             }
         }
 
@@ -417,10 +433,84 @@ namespace MiningApp.UI
                 Bootstrapper.Settings.Mining.UseBlackList = UseBlacklistCheckBox.IsChecked == true;
                 Bootstrapper.Settings.Mining.BlacklistedItems = _blacklistedItems.ToList();
 
-                Bootstrapper.Instance.SaveLocalSettings();
+                Bootstrapper.SaveLocalSettings();
             }
         }
 
+        public class ServerVM
+        {
+            SettingsHomeVM View { get; set; } = Instance;
+
+            Grid ViewGrid { get; set; } = Instance.SecondaryGrid;
+
+            TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Server", 40, width: ElementValues.Grids.SecondaryNormal);
+
+            CheckBox UseServerCheckBox { get; set; } = ElementHelper.CreateCheckBox("Use Server Features", width: 400, fontSize: 20);
+
+            CheckBox RequireLoginCheckBox { get; set; } = ElementHelper.CreateCheckBox("Require Login on Startup", width: 400, fontSize: 20);
+
+            Button SaveButton { get; set; } = ElementHelper.CreateButton("Save", height: 60, width: 150, style: ButtonStyleEnum.Finish);
+
+
+            private double nextLeft = 20;
+
+            private double nextTop = 12;
+
+            private double padding = 15;
+
+
+            public ServerVM()
+            {
+                Show();
+            }
+
+            void Show()
+            {
+                DisplayElement(TitleTextBlock);
+
+                nextLeft = nextLeft + padding * 4;
+                DisplayElement(UseServerCheckBox, topPadding: padding * 4);
+                UseServerCheckBox.IsChecked = Bootstrapper.Settings.Server.UseServer;
+                UseServerCheckBox.Click += (s, e) => UseServerCheckBox_Clicked();
+
+                DisplayElement(RequireLoginCheckBox);
+                RequireLoginCheckBox.IsChecked = Bootstrapper.Settings.User.RequireLogin;
+                RequireLoginCheckBox.Click += (s, e) => RequireLoginCheckBox_Clicked();
+
+                nextLeft = ElementValues.Grids.SecondaryNormal - SaveButton.Width - padding;
+                nextTop = ViewGrid.Height - SaveButton.Height - padding;
+                DisplayElement(SaveButton);
+                SaveButton.Click += (s, e) => SaveButton_Clicked();
+            }
+
+            void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
+            {
+                element.Margin = new Thickness((nextLeft + leftPadding), nextTop + topPadding, 0, 0);
+
+                ViewGrid.Children.Add(element);
+
+                nextTop = element.Margin.Top + element.Height + padding;
+            }
+
+            void UseServerCheckBox_Clicked()
+            {
+
+            }
+
+            void RequireLoginCheckBox_Clicked()
+            {
+
+            }
+
+            void SaveButton_Clicked()
+            {
+                Bootstrapper.Settings.Server.UseServer = UseServerCheckBox.IsChecked == true;
+                Bootstrapper.User.RequiresLogin = RequireLoginCheckBox.IsChecked == true;
+                Bootstrapper.SaveLocalSettings();
+
+                Task.Run(() => ServerHelper.UpdateUser(Bootstrapper.User));
+            }
+        }
 
         public class UpdatesVM
         {

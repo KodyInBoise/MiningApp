@@ -39,7 +39,6 @@ namespace MiningApp
 
         public class GeneralSettings
         {
-            public bool UseServer { get; set; } = true;
             public bool LaunchOnStartup { get; set; } = false;
             public int LaunchConfigID { get; set; } = -1;
             public bool CheckForUpdates { get; set; } = false;
@@ -48,8 +47,9 @@ namespace MiningApp
         public class UserSettings
         {
             public string UserID { get; set; }
-            public string EmailAddress { get; set; }
-            public bool RequiresLogin { get; set; } = true;
+            public string Email { get; set; }
+            [JsonIgnore]
+            public bool RequireLogin => Bootstrapper.User?.RequiresLogin ?? true;
         }
 
         public class MiningSettings
@@ -85,10 +85,10 @@ namespace MiningApp
 
         public class ServerSettings
         {
+            public bool UseServer { get; set; } = true;
             public string LocalClientID { get; set; }
             public bool UserAuthenticated { get; set; } = false;
             public DateTime LastCheckin { get; set; }
-            public string UserID => Bootstrapper.User.ID;
         }
     }    
 }

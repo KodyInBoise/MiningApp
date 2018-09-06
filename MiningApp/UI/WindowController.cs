@@ -65,10 +65,7 @@ namespace MiningApp.UI
             Instance = this;
             Bootstrapper.Startup();
 
-            User = new UserModel();
             MiningSessions = new List<SessionModel>();
-
-            NavView = new NavBarVM();
 
             _logHelper = new LogHelper();
             _cryptoHelper = new CryptoHelper();
@@ -77,8 +74,31 @@ namespace MiningApp.UI
 
             _processWatcher.BlacklistedProcsDelegate += BlacklistedProcsDelegate_Invoked;
 
+            Startup();
+
             // TESTING
             //LocalClientModel.Test();
+        }
+
+        async void Startup()
+        {
+            NavView = new NavBarVM();
+
+            if (Bootstrapper.User == null)
+            {
+                ShowLogin();
+            }
+            else
+            {
+                if (!String.IsNullOrEmpty(Bootstrapper.User.Email) && !Bootstrapper.User.RequiresLogin)
+                {
+                    ShowHome();
+                }
+                else
+                {
+                    ShowLogin();
+                }
+            }
         }
 
         private void DisplayViewModel(ViewModelType viewType, DisplayGrid display = DisplayGrid.Primary,
@@ -181,14 +201,7 @@ namespace MiningApp.UI
 
         public void ShowHome(SessionModel launchSession = null)
         {
-            if (Bootstrapper.Settings.User.RequiresLogin && !Bootstrapper.Settings.Server.UserAuthenticated)
-            {
-                DisplayViewModel(ViewModelType.Login, DisplayGrid.Primary);
-            }
-            else
-            {
-                DisplayViewModel(ViewModelType.Home, DisplayGrid.Primary, launchSession);
-            }
+            DisplayViewModel(ViewModelType.Home, DisplayGrid.Primary, launchSession);
         }
 
         public void ShowConfigurationsHome()
@@ -308,7 +321,7 @@ namespace MiningApp.UI
             };
 
             Bootstrapper.Settings.App.AppVersion = version;
-            Bootstrapper.Instance.SaveLocalSettings();
+            Bootstrapper.SaveLocalSettings();
         }
 
         public static void InvokeOnMainThread(Action action)

@@ -55,6 +55,11 @@ namespace MiningApp.UI
                 }
             };
 
+            if (!String.IsNullOrEmpty(Bootstrapper.Settings.User.Email))
+            {
+                EmailTextBox.Text = Bootstrapper.Settings.User.Email;
+            }
+
             DisplayElement(PasswordBox, topPadding: 5);
             PasswordBox.KeyDown += (s, e) =>
             {
@@ -78,7 +83,14 @@ namespace MiningApp.UI
             PasswordLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
             DisplayElement(PasswordLabel, ignoreMargin: true);
 
-            EmailTextBox.Focus();
+            if (String.IsNullOrEmpty(EmailTextBox.Text))
+            {
+                EmailTextBox.Focus();
+            }
+            else
+            {
+                PasswordBox.Focus();
+            }
         }
 
         public void Dispose()
@@ -101,21 +113,27 @@ namespace MiningApp.UI
 
         async void LoginButton_Clicked()
         {
-            LoginButton.Visibility = Visibility.Collapsed;
+            var email = EmailTextBox.Text;
+            var pass = PasswordBox.Password;
 
-            Bootstrapper.Settings.Server.UserAuthenticated = await ServerHelper.Instance.AuthenticateUser(EmailTextBox.Text, PasswordBox.Password);
-
-            if (Bootstrapper.Settings.Server.UserAuthenticated)
+            if (!String.IsNullOrEmpty(email) && !String.IsNullOrEmpty(pass))
             {
-                WindowController.Instance.ShowHome();
+                LoginButton.Visibility = Visibility.Collapsed;
 
-                Bootstrapper.User = await ServerHelper.GetUserByEmail(EmailTextBox.Text);
-            }
-            else
-            {
-                MessageBox.Show("Authentication failed!");
+                Bootstrapper.Settings.Server.UserAuthenticated = await Task.Run(() => ServerHelper.Instance.AuthenticateUser(email, pass));
 
-                LoginButton.Visibility = Visibility.Visible;
+                if (Bootstrapper.Settings.Server.UserAuthenticated)
+                {
+                    Bootstrapper.Instance.SetUser(await Task.Run(() => ServerHelper.GetUserByEmail(email)));
+
+                    WindowController.Instance.ShowHome();
+                }
+                else
+                {
+                    MessageBox.Show("Authentication failed!");
+
+                    LoginButton.Visibility = Visibility.Visible;
+                }
             }
         }
     }
