@@ -86,9 +86,9 @@ namespace MiningApp
         public class ServerSettings
         {
             public string LocalClientID { get; set; }
-            public string UserID => Bootstrapper.Settings.User.UserID;
             public bool UserAuthenticated { get; set; } = false;
             public DateTime LastCheckin { get; set; }
+            public string UserID => Bootstrapper.User.ID;
         }
     }    
 }

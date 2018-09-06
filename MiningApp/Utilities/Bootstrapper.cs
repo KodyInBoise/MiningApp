@@ -21,6 +21,8 @@ namespace MiningApp
 
         public static Bootstrapper Instance { get; set; }
 
+        public static UserModel User { get; set; }
+
         public static LocalClientModel Client { get; set; }
 
         public static ServerHelper ServerHelper { get; set; }

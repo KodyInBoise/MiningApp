@@ -48,8 +48,21 @@ namespace MiningApp.UI
             nextLeft += padding * 20;
             nextTop += padding * 15;
             DisplayElement(EmailTextBox);
+            EmailTextBox.KeyDown += (s, e) => {
+                if (e.Key == System.Windows.Input.Key.Enter)
+                {
+                    PasswordBox.Focus();
+                }
+            };
 
             DisplayElement(PasswordBox, topPadding: 5);
+            PasswordBox.KeyDown += (s, e) =>
+            {
+                if (e.Key == System.Windows.Input.Key.Enter)
+                {
+                    LoginButton_Clicked();
+                }
+            };
 
             nextLeft = PasswordBox.Margin.Left + PasswordBox.Width - LoginButton.Width;
             DisplayElement(LoginButton);
@@ -64,6 +77,8 @@ namespace MiningApp.UI
             PasswordLabel = ElementHelper.CreateLabel("Password", PasswordBox);
             PasswordLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
             DisplayElement(PasswordLabel, ignoreMargin: true);
+
+            EmailTextBox.Focus();
         }
 
         public void Dispose()
@@ -86,15 +101,21 @@ namespace MiningApp.UI
 
         async void LoginButton_Clicked()
         {
+            LoginButton.Visibility = Visibility.Collapsed;
+
             Bootstrapper.Settings.Server.UserAuthenticated = await ServerHelper.Instance.AuthenticateUser(EmailTextBox.Text, PasswordBox.Password);
 
-            if (!Bootstrapper.Settings.Server.UserAuthenticated)
+            if (Bootstrapper.Settings.Server.UserAuthenticated)
             {
-                MessageBox.Show("Authentication failed!");
+                WindowController.Instance.ShowHome();
+
+                Bootstrapper.User = await ServerHelper.GetUserByEmail(EmailTextBox.Text);
             }
             else
             {
-                WindowController.Instance.ShowHome();
+                MessageBox.Show("Authentication failed!");
+
+                LoginButton.Visibility = Visibility.Visible;
             }
         }
     }
