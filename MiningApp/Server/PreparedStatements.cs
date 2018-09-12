@@ -39,6 +39,19 @@ namespace MiningApp
             }
         }
 
+        public class GetUserClients
+        {
+            public static MySqlCommand GetCommand(string userID)
+            {
+                string sql = "SELECT * FROM Clients WHERE UserID = @userID";
+
+                var cmd = new MySqlCommand(sql, _connection);
+                AddParameter(cmd, "@userID", userID);
+
+                return cmd;
+            }
+        }
+
         public class GetUser
         {
             public static MySqlCommand GetCommand(string userEmail)

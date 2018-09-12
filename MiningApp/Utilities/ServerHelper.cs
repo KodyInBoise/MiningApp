@@ -17,12 +17,19 @@ namespace MiningApp
         public static ServerHelper Instance { get; set; }
 
         public MySqlConnection GetDatabaseConnection() => _databaseHelper.GetConnection();
+
+        #region Clients
         public string NewClientID => _databaseHelper.GetNewClientID();
         public static Task UpdateClient(string clientID, string userID) => Instance._databaseHelper.UpdateClient(clientID, userID);
-        public Task<LocalClientModel> GetClientInfo(string clientID) => _databaseHelper.GetClientInfo(clientID);
+        public static Task<LocalClientModel> GetClientInfo(string clientID) => Instance._databaseHelper.GetClientInfo(clientID);
+        public static Task<List<LocalClientModel>> GetUserClients(string userID) => Instance._databaseHelper.GetUserClients(userID);
+        #endregion
+
+        #region Users
         public static Task UpdateUser(UserModel user) => Instance._databaseHelper.UpdateUser(user);
         public static Task<UserModel> GetUserByEmail(string email) => Instance._databaseHelper.GetUser(email);
-        public Task<bool> AuthenticateUser(string email, string password) => _databaseHelper.AuthenticateUser(email, password);
+        public static Task<bool> AuthenticateUser(string email, string password) => Instance._databaseHelper.AuthenticateUser(email, password);
+        #endregion
 
 
         DatabaseHelper _databaseHelper { get; set; }

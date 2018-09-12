@@ -144,5 +144,35 @@ namespace MiningApp
                 return false;
             }
         }
+
+        public async Task<List<LocalClientModel>> GetUserClients(string userID)
+        {
+            var clients = new List<LocalClientModel>();
+
+            var cmd = PreparedStatements.GetUserClients.GetCommand(userID);
+
+            using (_connection)
+            {
+                await _connection.OpenAsync();
+
+                using (var rdr = await cmd.ExecuteReaderAsync())
+                {
+                    while (await rdr.ReadAsync())
+                    {
+                        var client = new LocalClientModel()
+                        {
+                            ID = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.ClientID)),
+                            LastCheckin = rdr.GetDateTime(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.LastCheckin))
+                        };
+
+                        clients.Add(client);
+                    }
+                }
+
+                await _connection.CloseAsync();
+            }
+
+            return clients;
+        }
     }
 }

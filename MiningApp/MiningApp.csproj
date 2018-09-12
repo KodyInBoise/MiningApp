@@ -111,7 +111,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controller\OldWindowController.cs" />
     <Compile Include="LoggingUtil\LogHelper.cs" />
     <Compile Include="LoggingUtil\ViewLogsWindow.xaml.cs">
       <DependentUpon>ViewLogsWindow.xaml</DependentUpon>

@@ -90,8 +90,6 @@ namespace MiningApp
             {
                 Settings.Server.UserAuthenticated = true;
                 User.LastServerLogin = args.Timestamp;
-
-                LocalClientModel.PerformCheckin();
             }
             else
             {

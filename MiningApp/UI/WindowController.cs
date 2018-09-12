@@ -77,7 +77,6 @@ namespace MiningApp.UI
             Startup();
 
             // TESTING
-            //LocalClientModel.Test();
         }
 
         async void Startup()

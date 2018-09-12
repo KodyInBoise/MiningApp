@@ -120,7 +120,7 @@ namespace MiningApp.UI
             {
                 LoginButton.Visibility = Visibility.Collapsed;
 
-                Bootstrapper.Settings.Server.UserAuthenticated = await Task.Run(() => ServerHelper.Instance.AuthenticateUser(email, pass));
+                Bootstrapper.Settings.Server.UserAuthenticated = await Task.Run(() => ServerHelper.AuthenticateUser(email, pass));
 
                 if (Bootstrapper.Settings.Server.UserAuthenticated)
                 {

@@ -20,10 +20,14 @@ namespace MiningApp
 
         public List<string> WatchingCryptos { get; set; }
 
+        public List<LocalClientModel> AllClients { get; set; }
+
         public UserModel()
         {
             WatchingCryptos = new List<string>();
             ID = Bootstrapper.Settings.User.UserID;
+
+            Bootstrapper.UserAuthenticationDelegate += UserAuthenticationChanged;
         }
 
         string CreateNewUserID()
@@ -44,6 +48,18 @@ namespace MiningApp
         public void SaveSettings()
         {
             DataHelper.SaveUserSettings(this);
+        }
+
+        async void UserAuthenticationChanged(UserAuthenticationChangedArgs args)
+        {
+            if (args.Status == UserAuthenticationStatus.Connected)
+            {
+                try
+                {
+                    AllClients = await Task.Run(() => ServerHelper.GetUserClients(ID));
+                }
+                catch (Exception ex) { ExceptionUtil.Handle(ex); }
+            }
         }
     }
 }

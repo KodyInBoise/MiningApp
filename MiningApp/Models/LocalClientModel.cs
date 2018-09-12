@@ -36,6 +36,15 @@ namespace MiningApp
             ID = Bootstrapper.Settings.LocalClient.LocalClientID;
 
             _checkinTimer = new TimerModel(this, PerformCheckin, interval: _checkinInterval);
+            Bootstrapper.UserAuthenticationDelegate += UserAuthenticationChanged;
+        }
+
+        void UserAuthenticationChanged(UserAuthenticationChangedArgs args)
+        {
+            if (args.Status == UserAuthenticationStatus.Connected)
+            {
+                PerformCheckin();
+            }
         }
 
         public static async void PerformCheckin()
