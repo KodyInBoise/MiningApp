@@ -40,9 +40,9 @@ namespace MiningApp
             return true;
         }
 
-        public async Task UpdateClient()
+        public async Task UpdateClient(string clientID, string userID)
         {
-            var cmd = PreparedStatements.UpdateClient.GetCommand(Bootstrapper.Settings.Server.LocalClientID, Bootstrapper.Settings.User.UserID, DateTime.Now);
+            var cmd = PreparedStatements.UpdateClient.GetCommand(clientID, userID, DateTime.Now);
 
             await _connection.OpenAsync();
             await cmd.ExecuteNonQueryAsync();

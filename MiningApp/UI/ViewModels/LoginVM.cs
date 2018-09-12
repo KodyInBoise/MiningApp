@@ -133,7 +133,17 @@ namespace MiningApp.UI
                     MessageBox.Show("Authentication failed!");
 
                     LoginButton.Visibility = Visibility.Visible;
+                    PasswordBox.Focus();
+                    PasswordBox.SelectAll();
                 }
+            }
+            else if (String.IsNullOrEmpty(email))
+            {
+                EmailTextBox.Focus();
+            }
+            else if (String.IsNullOrEmpty(pass))
+            {
+                PasswordBox.Focus();
             }
         }
     }

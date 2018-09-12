@@ -21,6 +21,8 @@ namespace MiningApp
 
         public ServerSettings Server { get; set; }
 
+        public LocalClientSettings LocalClient { get; set; }
+
 
         public SettingsModel()
         {
@@ -29,6 +31,7 @@ namespace MiningApp
             General = new GeneralSettings();
             Mining = new MiningSettings();
             Server = new ServerSettings();
+            LocalClient = new LocalClientSettings();
         }
 
         public class AppSettings
@@ -84,10 +87,15 @@ namespace MiningApp
         }
 
         public class ServerSettings
-        {
+        { 
             public bool UseServer { get; set; } = true;
-            public string LocalClientID { get; set; }
             public bool UserAuthenticated { get; set; } = false;
+            public DateTime LastCheckin { get; set; }
+        }
+
+        public class LocalClientSettings
+        {
+            public string LocalClientID { get; set; }
             public DateTime LastCheckin { get; set; }
         }
     }    

@@ -90,13 +90,15 @@ namespace MiningApp
             {
                 Settings.Server.UserAuthenticated = true;
                 User.LastServerLogin = args.Timestamp;
+
+                LocalClientModel.PerformCheckin();
             }
             else
             {
                 Settings.Server.UserAuthenticated = false;
             }
         }
-        
+
         void Heartbeat_Tick()
         {
             Task.Run(Blacklist_Heartbeat);
