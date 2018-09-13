@@ -31,6 +31,9 @@ namespace MiningApp
         public static Task<bool> AuthenticateUser(string email, string password) => Instance._databaseHelper.AuthenticateUser(email, password);
         #endregion
 
+        #region ClientMessages
+        public static Task InsertClientMessage(ClientMessageModel message) => Instance._databaseHelper.InsertClientMessage(message);
+        #endregion
 
         DatabaseHelper _databaseHelper { get; set; }
         FTPHelper _ftpHelper { get; set; }

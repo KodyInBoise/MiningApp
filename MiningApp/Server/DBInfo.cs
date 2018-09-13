@@ -90,6 +90,46 @@ namespace MiningApp
                 return (int)column;
             }
         }
+
+        public class ClientMessages
+        {
+            public enum Columns
+            {
+                ClientID = 0,
+                Timestamp = 1,
+                Message = 2,
+                Action = 3,
+            }
+
+            public static string GetColumnName(Columns column)
+            {
+                switch (column)
+                {
+                    case Columns.ClientID:
+                        return ColumnnNames.ClientMessages.ClientID;
+                    case Columns.Timestamp:
+                        return ColumnnNames.ClientMessages.Timestamp;
+                    case Columns.Message:
+                        return ColumnnNames.ClientMessages.Message;
+                    case Columns.Action:
+                        return ColumnnNames.ClientMessages.Action;
+                    default:
+                        return string.Empty;
+                }
+            }
+
+            public static string GetColumnName(int index)
+            {
+                var columnEnum = (Columns)index;
+
+                return GetColumnName(columnEnum);
+            }
+
+            public static int GetColumnIndex(Columns column)
+            {
+                return (int)column;
+            }
+        }
     }
 
     public static class ColumnnNames
@@ -109,6 +149,14 @@ namespace MiningApp
             public static string Created = "Created";
             public static string LastLogin = "LastLogin";
             public static string RequiresLogin = "RequiresLogin";
+        }
+
+        public static class ClientMessages
+        {
+            public static string ClientID = "ClientID";
+            public static string Timestamp = "Timestamp";
+            public static string Message = "Message";
+            public static string Action = "Action";
         }
     }
 }

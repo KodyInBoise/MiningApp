@@ -174,5 +174,17 @@ namespace MiningApp
 
             return clients;
         }
+
+        public async Task InsertClientMessage(ClientMessageModel message)
+        {
+            var cmd = PreparedStatements.InsertClientMessage.GetCommand(message);
+
+            using (_connection)
+            {
+                await _connection.OpenAsync();
+                await cmd.ExecuteNonQueryAsync();
+                await _connection.CloseAsync();
+            }
+        }
     }
 }

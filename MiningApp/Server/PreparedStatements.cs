@@ -85,6 +85,23 @@ namespace MiningApp
             }
         }
 
+        public class InsertClientMessage
+        {
+            public static MySqlCommand GetCommand(ClientMessageModel message)
+            {
+                string sql = $"INSERT INTO ClientMessages ({ColumnnNames.ClientMessages.ClientID}, {ColumnnNames.ClientMessages.Timestamp}," +
+                    $"{ColumnnNames.ClientMessages.Message}, {ColumnnNames.ClientMessages.Action}) VALUES (?clientID, ?timestamp, ?message, ?action)";
+
+                var cmd = new MySqlCommand(sql, _connection);
+                AddParameter(cmd, "?clientID", message.ClientID);
+                AddParameter(cmd, "?timestamp", message.Timestamp);
+                AddParameter(cmd, "?message", message.Message);
+                AddParameter(cmd, "?action", message.Action.Value);
+
+                return cmd;
+            }
+        }
+
         static void AddParameter(MySqlCommand cmd, string key, object value)
         {
             cmd.Parameters.Add(new MySqlParameter(key, value));
