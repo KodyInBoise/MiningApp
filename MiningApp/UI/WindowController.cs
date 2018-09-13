@@ -110,8 +110,8 @@ namespace MiningApp.UI
                 MainWindow.Instance.SecondaryBorder.Visibility = System.Windows.Visibility.Collapsed;
                 MainWindow.Instance.SecondaryGrid.Visibility = System.Windows.Visibility.Collapsed;
 
-                MainWindow.Instance.PrimaryBorder.Width = ElementValues.Grids.PrimaryNormal;
-                MainWindow.Instance.PrimaryStackPanel.Width = ElementValues.Grids.PrimaryNormal;
+                MainWindow.Instance.PrimaryBorder.Width = ElementValues.Grids.PrimaryNormalWidth;
+                MainWindow.Instance.PrimaryStackPanel.Width = ElementValues.Grids.PrimaryNormalWidth;
 
                 displayGrid = Window.PrimaryGrid;
             }

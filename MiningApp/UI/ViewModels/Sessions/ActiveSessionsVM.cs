@@ -169,6 +169,9 @@ namespace MiningApp.UI
             ViewingTextBlock.Text = $"{_currentIndex + 1} of {_allSessions.Count}";
 
             UpdateStatusButtons(_activeSession.CurrentStatus);
+
+            OutputTextBox.Focus();
+            OutputTextBox.ScrollToEnd();
         }
 
         async Task UpdateSessionUptime()

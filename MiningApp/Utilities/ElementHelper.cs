@@ -234,6 +234,18 @@ namespace MiningApp
             };
         }
 
+        public static Border CreateBorder(string header = "", int width = -1, int height = -1, int thickness = -1)
+        {
+            return new Border
+            {
+                BorderBrush = ElementValues.Borders.Color,
+                Width = width > 0 ? width : ElementValues.Borders.Width,
+                Height = height > 0 ? height : ElementValues.Borders.Height,
+                BorderThickness = new Thickness(thickness > 0 ? thickness : ElementValues.Borders.Thickness),
+                CornerRadius = new CornerRadius(ElementValues.Borders.CornerRadius)
+            };
+        }
+
         public static string TrimPath(string path, int length = -1)
         {
             try
@@ -416,9 +428,10 @@ namespace MiningApp
 
         public static class Grids
         {
+            public static int Height { get; set; } = 850;
             public static int NavWidth { get; set; } = 225;
-            public static int PrimaryNormal { get; set; } = 1025;
-            public static int PrimarySmall => PrimaryNormal - SecondaryNormal;
+            public static int PrimaryNormalWidth { get; set; } = 1025;
+            public static int PrimarySmall => PrimaryNormalWidth - SecondaryNormal;
             public static int SecondaryNormal { get; set; } = 775;
         }
 
@@ -499,6 +512,15 @@ namespace MiningApp
                 public static int Width { get; set; } = 935;
                 public static int Height { get; set; } = 600;
             }
+        }
+
+        public static class Borders
+        {
+            public static int Width { get; set; } = 350;
+            public static int Height { get; set; } = 150;
+            public static int Thickness { get; set; } = 3;
+            public static int CornerRadius { get; set; } = 3;
+            public static Brush Color { get; set; } = Brushes.Gray;
         }
     }
 }

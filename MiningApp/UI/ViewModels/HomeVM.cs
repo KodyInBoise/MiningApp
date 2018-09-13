@@ -14,10 +14,9 @@ namespace MiningApp.UI
 
         Grid ViewGrid { get; set; } = MainWindow.Instance.PrimaryGrid;
 
-        List<FrameworkElement> ActiveElements { get; set; } = new List<FrameworkElement>();
-
-
         ActiveSessionsVM _activeSessionsVM { get; set; }
+
+        Border HomeButtonsBorder { get; set; } 
 
 
 
@@ -38,6 +37,12 @@ namespace MiningApp.UI
             DisplayElement(TitleTextBlock);
 
             _activeSessionsVM = new ActiveSessionsVM(ViewGrid, launchSession);
+
+            HomeButtonsBorder = ElementHelper.CreateBorder(height: 100, width: (int)(ElementValues.Grids.PrimaryNormalWidth - padding * 4));
+
+            nextLeft = ElementValues.Grids.PrimaryNormalWidth - HomeButtonsBorder.Width - padding * 5;
+            nextTop = ElementValues.Grids.Height - HomeButtonsBorder.Height- padding * 3;
+            DisplayElement(HomeButtonsBorder);
         }
 
         public void Dispose()
@@ -50,7 +55,6 @@ namespace MiningApp.UI
             element.Margin = new Thickness((nextLeft + leftPadding), nextTop + topPadding, 0, 0);
 
             ViewGrid.Children.Add(element);
-            ActiveElements.Add(element);
 
             nextTop = element.Margin.Top + element.Height + padding;
         }
