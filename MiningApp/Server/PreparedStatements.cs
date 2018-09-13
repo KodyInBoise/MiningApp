@@ -102,6 +102,19 @@ namespace MiningApp
             }
         }
 
+        public class GetClientMessages
+        {
+            public static MySqlCommand GetCommand(string clientID)
+            {
+                string sql = "SELECT * FROM ClientMessages WHERE ClientID = @clientID";
+
+                var cmd = new MySqlCommand(sql, _connection);
+                AddParameter(cmd, "@clientID", clientID);
+
+                return cmd;
+            }
+        }
+
         static void AddParameter(MySqlCommand cmd, string key, object value)
         {
             cmd.Parameters.Add(new MySqlParameter(key, value));

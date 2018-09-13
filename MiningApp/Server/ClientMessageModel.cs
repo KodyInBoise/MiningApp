@@ -11,6 +11,16 @@ namespace MiningApp
         private ClientAction(string value) { Value = value; }
 
         public string Value { get; set; }
+        
+        public static ClientAction GetAction(string value)
+        {
+            return new ClientAction(value);
+        }
+
+        public override string ToString()
+        {
+            return Value;
+        }
 
         public static ClientAction StopSession { get { return new ClientAction("StopSession"); } }
         public static ClientAction PauseSession { get { return new ClientAction("PauseSession"); } }
@@ -28,5 +38,10 @@ namespace MiningApp
         public string Message { get; set; }
 
         public ClientAction Action { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Action} - {Message}";
+        }
     }
 }

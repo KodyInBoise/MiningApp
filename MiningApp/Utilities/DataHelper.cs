@@ -40,6 +40,9 @@ namespace MiningApp
 
         private LiteCollection<LogEntry> _sessionLogCollection => GetSessionLogCollection();
 
+        private LiteCollection<LogEntry> _serverLogCollection => GetServerLogCollection();
+
+
         public DataHelper()
         {
             Instance = this;
@@ -115,6 +118,14 @@ namespace MiningApp
             using (_database)
             {
                 return _database.GetCollection<LogEntry>("logs-session");
+            }
+        }
+
+        private LiteCollection<LogEntry> GetServerLogCollection()
+        {
+            using (_database)
+            {
+                return _database.GetCollection<LogEntry>("logs-server");
             }
         }
 
@@ -305,6 +316,9 @@ namespace MiningApp
                         case LogType.Session:
                             _sessionLogCollection.Insert(entry);
                             break;
+                        case LogType.Server:
+                            _serverLogCollection.Insert(entry);
+                            break;
                         default:
                             break;
                     }
@@ -346,9 +360,62 @@ namespace MiningApp
                         return _errorLogCollection.FindAll().ToList();
                     case LogType.Session:
                         return _sessionLogCollection.FindAll().ToList();
+                    case LogType.Server:
+                        return _serverLogCollection.FindAll().ToList();
                     default:
                         return new List<LogEntry>();
                 }
+            }
+        }
+
+        public async void ClearCategoryLogs(LogType type)
+        {
+            var entries = new List<LogEntry>();
+            LiteCollection<LogEntry> entryCollection = null;
+
+            switch (type)
+            {
+                case LogType.General:
+                    entries = _generalLogCollection.FindAll().ToList();
+                    entryCollection = _generalLogCollection;
+                    break;
+                case LogType.Error:
+                    entries = _errorLogCollection.FindAll().ToList();
+                    entryCollection = _errorLogCollection;
+                    break;
+                case LogType.Session:
+                    entries = _sessionLogCollection.FindAll().ToList();
+                    entryCollection = _sessionLogCollection;
+                    break;
+                case LogType.Server:
+                    entries = _serverLogCollection.FindAll().ToList();
+                    entryCollection = _serverLogCollection;
+                    break;
+                default:
+                    break;
+            }
+
+            if (entries.Any() && entryCollection != null)
+            {
+                foreach (var entry in entries)
+                {
+                    await Task.Run(() => DeleteLogEntry(entry, entryCollection));
+                }
+            }
+        }
+
+        async Task DeleteLogEntry(LogEntry entry, LiteCollection<LogEntry> collection)
+        {
+            try
+            {
+                using (_database)
+                {
+                    collection.Delete(entry.ID);
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.Handle(ex);
             }
         }
 

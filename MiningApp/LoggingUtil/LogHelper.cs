@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace MiningApp.LoggingUtil
 {
+    public enum LogType : int
+    {
+        General = 0, //App startup, shutdown, config / setting changes, etc
+        Error = 1,
+        Session = 2, //Start, stop, restarts, etc
+        Server = 3,
+    }
+
     public class LogException : Exception
     {
         public void Handle()
@@ -41,6 +49,8 @@ namespace MiningApp.LoggingUtil
         public static List<LogEntry> ErrorLogEntries => AppData.GetLogEntries(LogType.Error);
 
         public static List<LogEntry> SessionLogEntries => AppData.GetLogEntries(LogType.Session);
+
+        public static List<LogEntry> ServerLogEntries => AppData.GetLogEntries(LogType.Server);
 
 
         private ViewLogsWindow _logWindow { get; set; }
@@ -98,7 +108,13 @@ namespace MiningApp.LoggingUtil
                 "General",
                 "Error",
                 "Session",
+                "Server",
             };
+        }
+
+        public static async Task ClearEntries(LogType type)
+        {
+            AppData.ClearCategoryLogs(type);
         }
     }
 }

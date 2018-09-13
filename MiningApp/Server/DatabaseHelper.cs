@@ -186,5 +186,37 @@ namespace MiningApp
                 await _connection.CloseAsync();
             }
         }
+
+        public async Task<List<ClientMessageModel>> GetClientMessages(string clientID)
+        {
+            var messages = new List<ClientMessageModel>();
+
+            var cmd = PreparedStatements.GetClientMessages.GetCommand(clientID);
+
+            using (_connection)
+            {
+                await _connection.OpenAsync();
+
+                using (var rdr = await cmd.ExecuteReaderAsync())
+                {
+                    while (await rdr.ReadAsync())
+                    {
+                        var msg = new ClientMessageModel()
+                        {
+                            ClientID = rdr.GetString(DBInfo.ClientMessages.GetColumnIndex(DBInfo.ClientMessages.Columns.ClientID)),
+                            Timestamp = rdr.GetDateTime(DBInfo.ClientMessages.GetColumnIndex(DBInfo.ClientMessages.Columns.Timestamp)),
+                            Message = rdr.GetString(DBInfo.ClientMessages.GetColumnIndex(DBInfo.ClientMessages.Columns.Message)),
+                            Action = ClientAction.GetAction(rdr.GetString(DBInfo.ClientMessages.GetColumnIndex(DBInfo.ClientMessages.Columns.Action))),
+                        };
+
+                        messages.Add(msg);
+                    }
+                }
+
+                await _connection.CloseAsync();
+            }
+
+            return messages;
+        }
     }
 }

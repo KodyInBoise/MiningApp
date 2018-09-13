@@ -25,6 +25,8 @@ namespace MiningApp.UI
 
         DataGridColumn MessageColumn { get; set; } = ElementHelper.CreateGridTextColumn("Message", binding: "Message", width: 740);
 
+        Button ClearLogsButton { get; set; } = ElementHelper.CreateButton("Clear", style: ButtonStyleEnum.Delete);
+
 
         double nextLeft = 10;
 
@@ -63,6 +65,10 @@ namespace MiningApp.UI
             LogTypeComboBox.SelectedIndex = 0;
 
             ShowLogs(LogType.General);
+
+            nextLeft = DataGrid.Margin.Left + DataGrid.Width - ClearLogsButton.Width;
+            DisplayElement(ClearLogsButton);
+            ClearLogsButton.Click += (s, e) => ClearLogsButton_Clicked();
         }
 
         public void Dispose()
@@ -92,6 +98,9 @@ namespace MiningApp.UI
                 case LogType.Session:
                     DataGrid.ItemsSource = LogHelper.SessionLogEntries;
                     break;
+                case LogType.Server:
+                    DataGrid.ItemsSource = LogHelper.ServerLogEntries;
+                    break;
             }
         }
 
@@ -106,6 +115,15 @@ namespace MiningApp.UI
 
                 _currentCategory = (string)LogTypeComboBox.SelectedItem;
             }
+        }
+
+        void ClearLogsButton_Clicked()
+        {
+            DataGrid.ItemsSource = null;
+            DataGrid.Items.Refresh();
+
+            var type = (LogType)LogTypeComboBox.SelectedIndex;
+            Task.Run(() => LogHelper.ClearEntries(type));
         }
     }
 }
