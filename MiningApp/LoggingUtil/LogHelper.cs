@@ -80,7 +80,7 @@ namespace MiningApp.LoggingUtil
                     Message = message
                 };
 
-                AppData.InsertLogEntry(entry);
+                AppData?.InsertLogEntry(entry);
             }
             catch (LogException ex)
             {

@@ -74,37 +74,46 @@ namespace MiningApp
         UserModel _cachedLocalUser { get; set; }
         public async Task<UserModel> GetUser(string email, bool refresh = false)
         {
-            if (!refresh)
+            try
             {
-                if (_cachedLocalUser != null && _cachedLocalUser.Email == email)
+                if (!refresh)
                 {
-                    return _cachedLocalUser;
-                }
-            }
-
-            var cmd = PreparedStatements.GetUser.GetCommand(email);
-            var user = new UserModel();
-
-            using (_connection)
-            {
-                await _connection.OpenAsync();
-
-                using (var rdr = await cmd.ExecuteReaderAsync())
-                {
-                    while (await rdr.ReadAsync())
+                    if (_cachedLocalUser != null && _cachedLocalUser.Email == email)
                     {
-                        user.ID = rdr.GetString(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.UserID));
-                        user.Email = rdr.GetString(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.Email));
-                        user.Password = rdr.GetString(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.Password));
-                        user.LastServerLogin = rdr.GetDateTime(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.LastLogin));
-                        user.RequiresLogin = rdr.GetBoolean(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.RequiresLogin));
+                        return _cachedLocalUser;
                     }
                 }
+
+                var cmd = PreparedStatements.GetUser.GetCommand(email);
+                var user = new UserModel();
+
+                using (_connection)
+                {
+                    await _connection.OpenAsync();
+
+                    using (var rdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await rdr.ReadAsync())
+                        {
+                            user.ID = rdr.GetString(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.UserID));
+                            user.Email = rdr.GetString(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.Email));
+                            user.Password = rdr.GetString(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.Password));
+                            user.LastServerLogin = rdr.GetDateTime(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.LastLogin));
+                            user.RequiresLogin = rdr.GetBoolean(DBInfo.Users.GetColumnIndex(DBInfo.Users.Columns.RequiresLogin));
+                        }
+                    }
+                }
+
+                _cachedLocalUser = user;
+
+                return user;
             }
+            catch (Exception ex)
+            {
+                HandleServerException(ex);
 
-            _cachedLocalUser = user;
-
-            return user;
+                return null;
+            }
         }
 
         public async Task UpdateUser(UserModel user)
@@ -217,6 +226,11 @@ namespace MiningApp
             }
 
             return messages;
+        }
+
+        void HandleServerException(Exception ex)
+        {
+
         }
     }
 }
