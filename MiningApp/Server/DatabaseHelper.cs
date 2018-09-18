@@ -49,9 +49,9 @@ namespace MiningApp
             await _connection.CloseAsync();
         }
 
-        public async Task<LocalClientModel> GetClientInfo(string clientID)
+        public async Task<ServerClientModel> GetClientInfo(string clientID)
         {
-            var client = new LocalClientModel();
+            var client = new ServerClientModel();
             var cmd = PreparedStatements.GetClient.GetCommand(clientID);
 
             using (_connection)
@@ -154,9 +154,9 @@ namespace MiningApp
             }
         }
 
-        public async Task<List<LocalClientModel>> GetUserClients(string userID)
+        public async Task<List<ServerClientModel>> GetUserClients(string userID)
         {
-            var clients = new List<LocalClientModel>();
+            var clients = new List<ServerClientModel>();
 
             var cmd = PreparedStatements.GetUserClients.GetCommand(userID);
 
@@ -168,7 +168,7 @@ namespace MiningApp
                 {
                     while (await rdr.ReadAsync())
                     {
-                        var client = new LocalClientModel()
+                        var client = new ServerClientModel()
                         {
                             ID = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.ClientID)),
                             LastCheckin = rdr.GetDateTime(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.LastCheckin))

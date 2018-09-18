@@ -20,7 +20,7 @@ namespace MiningApp
 
         public List<string> WatchingCryptos { get; set; }
 
-        public List<LocalClientModel> AllClients { get; set; }
+        public List<ServerClientModel> AllClients { get; set; }
 
         public UserModel()
         {

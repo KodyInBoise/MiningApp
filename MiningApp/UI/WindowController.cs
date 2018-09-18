@@ -48,6 +48,8 @@ namespace MiningApp.UI
 
         public ConfigSetupVM ConfigSetupView { get; set; } = null;
 
+        public ClientsHomeVM ClientsHomeView { get; set; } = null;
+
         public MainWindow Window => MainWindow.Instance;
 
 
@@ -195,6 +197,10 @@ namespace MiningApp.UI
                     SettingsHomeView?.Dispose();
                     SettingsHomeView = new SettingsHomeVM();
                     break;
+                case ViewModelType.ClientsHome:
+                    ClientsHomeView?.Dispose();
+                    ClientsHomeView = new ClientsHomeVM();
+                    break;
                 default:
                     HomeView?.Dispose();
                     HomeView = new HomeVM();
@@ -266,7 +272,11 @@ namespace MiningApp.UI
         {
             DisplayViewModel(ViewModelType.ConfigSetup, DisplayGrid.Secondary);
         }
-
+        
+        public void ShowClientsHome()
+        {
+            DisplayViewModel(ViewModelType.ClientsHome, DisplayGrid.Secondary);
+        }
         public async Task Shutdown()
         {
             CloseSessions();

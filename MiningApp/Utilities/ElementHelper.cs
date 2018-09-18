@@ -390,6 +390,7 @@ namespace MiningApp
         MinerSetup,
         PoolSetup,
         ConfigSetup,
+        ClientsHome,
     }
 
     public class ElementValues

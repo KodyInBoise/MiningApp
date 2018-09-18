@@ -49,6 +49,7 @@ namespace MiningApp.UI
             nextLeft = HomeButtonsBorder.Margin.Left + (padding * 3) + 5;
             nextTop = HomeButtonsBorder.Margin.Top + (padding * 2) + 5;
             DisplayElement(ClientsButton);
+            ClientsButton.Click += (s, e) => ClientsButton_Clicked();
         }
 
         public void Dispose()
@@ -63,6 +64,11 @@ namespace MiningApp.UI
             ViewGrid.Children.Add(element);
 
             nextTop = element.Margin.Top + element.Height + padding;
+        }
+
+        void ClientsButton_Clicked()
+        {
+            WindowController.Instance.ShowClientsHome();
         }
     }
 }

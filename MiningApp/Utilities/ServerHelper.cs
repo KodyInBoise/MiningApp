@@ -21,8 +21,8 @@ namespace MiningApp
         #region Clients
         public string NewClientID => _databaseHelper.GetNewClientID();
         public static Task UpdateClient(string clientID, string userID) => Instance._databaseHelper.UpdateClient(clientID, userID);
-        public static Task<LocalClientModel> GetClientInfo(string clientID) => Instance._databaseHelper.GetClientInfo(clientID);
-        public static Task<List<LocalClientModel>> GetUserClients(string userID) => Instance._databaseHelper.GetUserClients(userID);
+        public static Task<ServerClientModel> GetClientInfo(string clientID) => Instance._databaseHelper.GetClientInfo(clientID);
+        public static Task<List<ServerClientModel>> GetUserClients(string userID) => Instance._databaseHelper.GetUserClients(userID);
         #endregion
 
         #region Users
