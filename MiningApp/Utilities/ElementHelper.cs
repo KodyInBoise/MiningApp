@@ -31,20 +31,6 @@ namespace MiningApp
         public static Button CreateButton(string content, string name = "", ButtonStyleEnum style = ButtonStyleEnum.Normal, int fontSize = -1,
             int height = -1, int width = -1)
         {
-            if (String.IsNullOrEmpty(name))
-            {
-                var words = content.Split(' ').ToList();
-
-                if (words.Count > 1)
-                {
-                    foreach (var word in words) name += word;
-                }
-                else
-                {
-                    name = content;
-                }
-            }
-
             var backgroundColor = ElementValues.Buttons.Colors.Normal;
             switch(style)
             {
@@ -69,7 +55,6 @@ namespace MiningApp
 
             return new Button()
             {
-                //Name = $"{name}Button",
                 Content = content,
                 FontFamily = ElementValues.Fonts.Family,
                 FontSize = fontSize > 0 ? fontSize : ElementValues.Buttons.FontSize,

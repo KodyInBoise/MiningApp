@@ -16,7 +16,9 @@ namespace MiningApp.UI
 
         ActiveSessionsVM _activeSessionsVM { get; set; }
 
-        Border HomeButtonsBorder { get; set; } 
+        Border HomeButtonsBorder { get; set; }
+
+        Button ClientsButton { get; set; } = ElementHelper.CreateButton("Clients");
 
 
 
@@ -43,6 +45,10 @@ namespace MiningApp.UI
             nextLeft = ElementValues.Grids.PrimaryNormalWidth - HomeButtonsBorder.Width - padding * 5;
             nextTop = ElementValues.Grids.Height - HomeButtonsBorder.Height- padding * 3;
             DisplayElement(HomeButtonsBorder);
+
+            nextLeft = HomeButtonsBorder.Margin.Left + (padding * 3) + 5;
+            nextTop = HomeButtonsBorder.Margin.Top + (padding * 2) + 5;
+            DisplayElement(ClientsButton);
         }
 
         public void Dispose()
