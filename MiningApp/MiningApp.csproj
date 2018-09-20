@@ -125,7 +125,6 @@
     <Compile Include="Server\ClientMessageModel.cs" />
     <Compile Include="Server\DatabaseHelper.cs" />
     <Compile Include="Server\DBInfo.cs" />
-    <Compile Include="Server\Indexes.cs" />
     <Compile Include="Server\PreparedStatements.cs" />
     <Compile Include="UI\ViewModels\LoginVM.cs" />
     <Compile Include="UI\ViewModels\Server\ClientsHomeVM.cs" />

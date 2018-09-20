@@ -15,8 +15,8 @@ namespace MiningApp
         {
             public static MySqlCommand GetCommand(LocalClientModel client, string userID)
             {
-                string sql = "INSERT INTO Clients (ClientID, UserID, LastCheckin, PublicIP, PrivateIP) VALUES (?id, ?userID, ?timestamp, ?publicIP, ?privateIP) " +
-                    "ON DUPLICATE KEY UPDATE UserID=?userID, LastCheckin=?timestamp, PublicIP=?publicIP, PrivateIP=?privateIP";
+                string sql = "INSERT INTO Clients (ClientID, UserID, LastCheckin, PublicIP, PrivateIP, FriendlyName) VALUES (?id, ?userID, ?timestamp, ?publicIP, ?privateIP, ?friendlyName) " +
+                    "ON DUPLICATE KEY UPDATE UserID=?userID, LastCheckin=?timestamp, PublicIP=?publicIP, PrivateIP=?privateIP, FriendlyName=?friendlyName";
 
                 var cmd = new MySqlCommand(sql, _connection);
                 AddParameter(cmd, "?id", client.ID);
@@ -24,6 +24,7 @@ namespace MiningApp
                 AddParameter(cmd, "?timestamp", DateTime.Now);
                 AddParameter(cmd, "?publicIP", client.PublicIP);
                 AddParameter(cmd, "?privateIP", client.PrivateIP);
+                AddParameter(cmd, "?friendlyName", client.FriendlyName);
 
                 return cmd;
             }

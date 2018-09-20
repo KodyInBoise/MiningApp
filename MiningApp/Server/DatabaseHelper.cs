@@ -73,6 +73,7 @@ namespace MiningApp
                         client.LastCheckin = rdr.GetDateTime(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.LastCheckin));
                         client.PublicIP = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.PublicIP));
                         client.PrivateIP = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.PrivateIP));
+                        client.FriendlyName = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.FriendlyName));
                     }
                 }
             }
@@ -180,7 +181,10 @@ namespace MiningApp
                         var client = new LocalClientModel()
                         {
                             ID = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.ClientID)),
-                            LastCheckin = rdr.GetDateTime(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.LastCheckin))
+                            LastCheckin = rdr.GetDateTime(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.LastCheckin)),
+                            PublicIP = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.PublicIP)),
+                            PrivateIP = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.PrivateIP)),
+                            FriendlyName = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.FriendlyName))
                         };
 
                         clients.Add(client);

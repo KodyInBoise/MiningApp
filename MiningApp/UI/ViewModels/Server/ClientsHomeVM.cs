@@ -57,6 +57,11 @@ namespace MiningApp.UI
             _secondaryVM = new SecondaryVM(client);
         }
 
+        public void UpdateButtonContent(string clientID, string newContent)
+        {
+            _primaryVM.UpdateClientButtonContent(clientID, newContent);
+        }
+
         public class PrimaryVM
         {
             ClientsHomeVM View { get; set; } = Instance;
@@ -115,7 +120,7 @@ namespace MiningApp.UI
                     {
                         if (client.ID !=  LocalClientModel.Instance.ID)
                         {
-                            var button = ElementHelper.CreateButton(client.ID);
+                            var button = ElementHelper.CreateButton(client.GetDisplayName());
                             _clientButtons.Add(button);
                             _buttonDictionary.Add(button, client.ID);
 
@@ -153,6 +158,16 @@ namespace MiningApp.UI
             {
                 View.DisplaySecondary(LocalClientModel.Instance);
             }
+
+            public void UpdateClientButtonContent(string clientID, string newName)
+            {
+                var button = _buttonDictionary.FirstOrDefault(x => x.Value == clientID).Key;
+
+                if (button != null)
+                {
+                    button.Content = newName;
+                }
+            }
         }
 
         public class SecondaryVM
@@ -171,6 +186,8 @@ namespace MiningApp.UI
             TextBox PublicIPTextBox { get; set; } = ElementHelper.CreateTextBox("PublicIP", readOnly: true);
 
             TextBox LastCheckinTextBox { get; set; } = ElementHelper.CreateTextBox("LastCheckin", readOnly: true);
+
+            Button UpdateButton { get; set; } = ElementHelper.CreateButton("Update", style: ButtonStyleEnum.New);
 
 
             Label NameLabel { get; set; }
@@ -214,6 +231,11 @@ namespace MiningApp.UI
                 DisplayElement(PublicIPTextBox);
 
                 DisplayElement(LastCheckinTextBox);
+
+                nextLeft = ElementValues.Grids.SecondaryNormal - UpdateButton.Width - padding * 2;
+                nextTop = ElementValues.Grids.Height - UpdateButton.Height - padding * 2;
+                DisplayElement(UpdateButton);
+                UpdateButton.Click += (s, e) => UpdateButton_Clicked();
 
                 nextTop = NameTextBox.Margin.Top;
                 NameLabel = ElementHelper.CreateLabel("Name", NameTextBox);
@@ -261,10 +283,41 @@ namespace MiningApp.UI
                     TitleTextBlock.Text = "Client Details";
                 }
 
-                NameTextBox.Text = _activeClient.ID;
+                NameTextBox.Text = _activeClient.GetDisplayName();
                 PublicIPTextBox.Text = _activeClient.PublicIP;
                 PrivateIPTextBox.Text = _activeClient.PrivateIP;
                 LastCheckinTextBox.Text = _activeClient.LastCheckin.ToString();
+            }
+
+            async void UpdateButton_Clicked()
+            {
+                try
+                {
+                    UpdateButton.Visibility = Visibility.Collapsed;
+
+                    if (!string.IsNullOrEmpty(NameTextBox.Text) && NameTextBox.Text != _activeClient.ID)
+                    {
+                        _activeClient.FriendlyName = NameTextBox.Text;
+
+                        if (_activeClient.ID == LocalClientModel.Instance.ID)
+                        {
+                            LocalClientModel.Instance.FriendlyName = NameTextBox.Text;
+                        }
+                        else
+                        {
+                            // Update client button name in PrimaryVM
+                            Instance.UpdateButtonContent(_activeClient.ID, NameTextBox.Text);
+                        }
+                    }
+
+                    await Task.Run(() => ServerHelper.UpdateClient(_activeClient, Bootstrapper.User.ID));
+
+                    UpdateButton.Visibility = Visibility.Visible;
+                }
+                catch (Exception ex)
+                {
+                    ExceptionUtil.Handle(ex, message: $"An error occurred updating client information on the server: {ex.Message}");
+                }
             }
         }
     }

@@ -17,6 +17,7 @@ namespace MiningApp
                 LastCheckin = 2,
                 PublicIP = 3,
                 PrivateIP = 4,
+                FriendlyName = 5,
             }
 
             public static string GetColumnName(Columns column)
@@ -33,6 +34,8 @@ namespace MiningApp
                         return ColumnNames.Clients.PublicIP;
                     case Columns.PrivateIP:
                         return ColumnNames.Clients.PrivateIP;
+                    case Columns.FriendlyName:
+                        return ColumnNames.Clients.FriendlyName;
                     default:
                         return string.Empty;
                 }
@@ -147,6 +150,7 @@ namespace MiningApp
             public static string LastCheckin = "LastCheckin";
             public static string PublicIP = "PublicIP";
             public static string PrivateIP = "PrivateIP";
+            public static string FriendlyName = "FriendlyName";
         }
 
         public static class Users

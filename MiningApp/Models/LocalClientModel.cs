@@ -37,6 +37,8 @@ namespace MiningApp
 
         public string PrivateIP { get; set; }
 
+        public string FriendlyName { get; set; }
+
 
         TimerModel _checkinTimer { get; set; }
 
@@ -179,6 +181,11 @@ namespace MiningApp
 
                 return "";
             }
+        }
+
+        public string GetDisplayName()
+        {
+            return !string.IsNullOrEmpty(FriendlyName) ? FriendlyName : ID;
         }
     }
 }
