@@ -62,9 +62,8 @@ namespace MiningApp
             Bootstrapper.UserAuthenticationDelegate += UserAuthenticationChanged;
             MessageReceivedDelegate += MessageReceived_Invoked;
 
-            // TESTING
-            PrivateIP = GetPrivateIP();
-            PublicIP = GetPublicIP();
+            PublicIP = Task.Run(GetPrivateIP).Result;
+            PrivateIP = Task.Run(GetPublicIP).Result;
         }
 
         void UserAuthenticationChanged(UserAuthenticationChangedArgs args)
@@ -81,6 +80,16 @@ namespace MiningApp
             {
                 if (Bootstrapper.Settings.Server.UseServer && Bootstrapper.Settings.Server.UserAuthenticated)
                 {
+                    // If private or public IP addresses are empty, attempt to resolve them
+                    if (string.IsNullOrEmpty(Instance.PrivateIP))
+                    {
+                        Instance.PrivateIP = await Task.Run(Instance.GetPrivateIP);
+                    }
+                    if (string.IsNullOrEmpty(Instance.PublicIP))
+                    {
+                        Instance.PublicIP = await Task.Run(Instance.GetPublicIP);
+                    }
+
                     await Task.Run(() => 
                     ServerHelper.UpdateClient(Instance, Bootstrapper.Settings.User.UserID));
 
@@ -93,7 +102,7 @@ namespace MiningApp
             }
             catch (Exception ex)
             {
-                ExceptionUtil.Handle(ex);
+                ExceptionUtil.Handle(ex, message: $"Error occurred during server checkin: {ex.Message}");
             }
         }
 
@@ -124,14 +133,23 @@ namespace MiningApp
             await ServerHelper.UpdateUser(user);
         }
 
-        public static string GetPrivateIP()
+        public async Task<string> GetPrivateIP()
         {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
+            try
+            {
+                var host = Dns.GetHostEntry(Dns.GetHostName());
 
-            return host.AddressList[0].MapToIPv4().ToString();
+                return host.AddressList.FirstOrDefault(x => x.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).ToString();
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.Handle(ex, message: $"Failed to resolve Private IP address: {ex.Message}");
+
+                return "";
+            }
         }
 
-        public static string GetPublicIP()
+        public async Task<string> GetPublicIP()
         {
             try
             {
@@ -157,7 +175,7 @@ namespace MiningApp
             }
             catch (Exception ex)
             {
-                ExceptionUtil.Handle(ex);
+                ExceptionUtil.Handle(ex, message: $"Failed to resolve Public IP address: {ex.Message}");
 
                 return "";
             }
