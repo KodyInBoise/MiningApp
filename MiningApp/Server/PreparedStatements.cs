@@ -13,7 +13,7 @@ namespace MiningApp
 
         public class UpdateClient
         {
-            public static MySqlCommand GetCommand(ServerClientModel client, string userID)
+            public static MySqlCommand GetCommand(LocalClientModel client, string userID)
             {
                 string sql = "INSERT INTO Clients (ClientID, UserID, LastCheckin, PublicIP, PrivateIP) VALUES (?id, ?userID, ?timestamp, ?publicIP, ?privateIP) " +
                     "ON DUPLICATE KEY UPDATE UserID=?userID, LastCheckin=?timestamp, PublicIP=?publicIP, PrivateIP=?privateIP";

@@ -45,7 +45,7 @@ namespace MiningApp
 
         public static UserAuthenticationChangedDelegate UserAuthenticationDelegate { get; set; }
 
-        public static ServerClientModel Client { get; set; }
+        public static LocalClientModel Client { get; set; }
 
         public static ServerHelper ServerHelper { get; set; }
 
@@ -72,7 +72,7 @@ namespace MiningApp
 
             ServerHelper = new ServerHelper();
             ServerHelper = new ServerHelper();
-            Client = new ServerClientModel();
+            Client = new LocalClientModel();
 
             SetLocalUser();
 

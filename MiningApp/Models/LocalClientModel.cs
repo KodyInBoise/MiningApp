@@ -22,9 +22,9 @@ namespace MiningApp
         }
     }
 
-    public class ServerClientModel
+    public class LocalClientModel
     {
-        public static ServerClientModel Instance { get; private set; }
+        public static LocalClientModel Instance { get; private set; }
 
         public static ClientMessageReceivedDelegate MessageReceivedDelegate { get; private set; }
 
@@ -45,7 +45,7 @@ namespace MiningApp
         bool _useServer => Bootstrapper.Settings.Server.UseServer;
 
 
-        public ServerClientModel()
+        public LocalClientModel()
         {
             Instance = this;
 

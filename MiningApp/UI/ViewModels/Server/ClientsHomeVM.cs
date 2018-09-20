@@ -34,14 +34,13 @@ namespace MiningApp.UI
         private void Show()
         {
             _primaryVM = new PrimaryVM();
-            _secondaryVM = new SecondaryVM();
         }
 
         public void Dispose()
         {
             Instance = null;
 
-            WindowController.Instance.WalletSetupView = null;
+            WindowController.Instance.ClientsHomeView = null;
         }
 
         public void DisplayPrimary()
@@ -51,11 +50,11 @@ namespace MiningApp.UI
             _primaryVM = new PrimaryVM();
         }
 
-        public void DisplaySecondary(ServerClientModel client)
+        public void DisplaySecondary(LocalClientModel client)
         {
             SecondaryGrid.Children.Clear();
 
-            _secondaryVM = new SecondaryVM();
+            _secondaryVM = new SecondaryVM(client);
         }
 
         public class PrimaryVM
@@ -79,7 +78,7 @@ namespace MiningApp.UI
             private double padding = 15;
 
 
-            private List<ServerClientModel> _clients { get; set; } = new List<ServerClientModel>();
+            private List<LocalClientModel> _clients { get; set; } = new List<LocalClientModel>();
 
             private List<Button> _clientButtons { get; set; } = new List<Button>();
 
@@ -99,6 +98,8 @@ namespace MiningApp.UI
                 DisplayElement(LoalClientButton);
                 LoalClientButton.Click += (s, e) => LocalClientButton_Clicked();
 
+                Instance.DisplaySecondary(LocalClientModel.Instance);
+
                 DisplayExisting();
             }
 
@@ -112,13 +113,16 @@ namespace MiningApp.UI
 
                     foreach (var client in _clients)
                     {
-                        var button = ElementHelper.CreateButton(client.ID);
-                        _clientButtons.Add(button);
-                        _buttonDictionary.Add(button, client.ID);
+                        if (client.ID !=  LocalClientModel.Instance.ID)
+                        {
+                            var button = ElementHelper.CreateButton(client.ID);
+                            _clientButtons.Add(button);
+                            _buttonDictionary.Add(button, client.ID);
 
-                        DisplayElement(button);
+                            DisplayElement(button);
 
-                        button.Click += ExistingClientClicked;
+                            button.Click += ExistingClientClicked;
+                        }
                     }
                 }
                 else
@@ -141,11 +145,13 @@ namespace MiningApp.UI
                 var button = (Button)sender;
 
                 var client = _clients.Find(x => x.ID == _buttonDictionary[button]);
+
+                Instance.DisplaySecondary(client);
             }
 
             private void LocalClientButton_Clicked()
             {
-                View.DisplaySecondary(null);
+                View.DisplaySecondary(LocalClientModel.Instance);
             }
         }
 
@@ -158,8 +164,24 @@ namespace MiningApp.UI
 
             TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("View Client", 40, width: ElementValues.Grids.SecondaryNormal);
 
+            TextBox NameTextBox { get; set; } = ElementHelper.CreateTextBox("Name");
 
-            private static int buttonHeight = 60;
+            TextBox PrivateIPTextBox { get; set; } = ElementHelper.CreateTextBox("PrivateIP", readOnly: true);
+
+            TextBox PublicIPTextBox { get; set; } = ElementHelper.CreateTextBox("PublicIP", readOnly: true);
+
+            TextBox LastCheckinTextBox { get; set; } = ElementHelper.CreateTextBox("LastCheckin", readOnly: true);
+
+
+            Label NameLabel { get; set; }
+
+            Label PrivateIPLabel { get; set; }
+
+            Label PublicIPLabel { get; set; }
+
+            Label LastCheckinLabel { get; set; }
+
+            LocalClientModel _activeClient { get; set; }
 
             private double nextLeft = 20;
 
@@ -167,27 +189,82 @@ namespace MiningApp.UI
 
             private double padding = 15;
 
+            private double labelRight = 600;
 
-            public SecondaryVM()
+            private double labelOffset = -5;
+
+
+            public SecondaryVM(LocalClientModel client)
             {
+                _activeClient = client;
+
                 Show();
             }
 
             private void Show()
             {
                 DisplayElement(TitleTextBlock, leftPadding: 25);
-                nextTop = 75;
 
+                nextLeft = 200;
+                nextTop = 250;
+                DisplayElement(NameTextBox);
 
+                DisplayElement(PrivateIPTextBox, topPadding: padding * 2);
+
+                DisplayElement(PublicIPTextBox);
+
+                DisplayElement(LastCheckinTextBox);
+
+                nextTop = NameTextBox.Margin.Top;
+                NameLabel = ElementHelper.CreateLabel("Name", NameTextBox);
+                NameLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
+                DisplayElement(NameLabel, ignoreMargin: true);
+
+                nextTop = PrivateIPTextBox.Margin.Top;
+                PrivateIPLabel = ElementHelper.CreateLabel("Private IP", PrivateIPTextBox);
+                PrivateIPLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
+                DisplayElement(PrivateIPLabel, ignoreMargin: true);
+
+                nextTop = PublicIPTextBox.Margin.Top;
+                PublicIPLabel = ElementHelper.CreateLabel("Public IP", PublicIPTextBox);
+                PublicIPLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
+                DisplayElement(PublicIPLabel, ignoreMargin: true);
+
+                nextTop = LastCheckinTextBox.Margin.Top;
+                LastCheckinLabel = ElementHelper.CreateLabel("Last Checkin", LastCheckinTextBox);
+                LastCheckinLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
+                DisplayElement(LastCheckinLabel, ignoreMargin: true);
+
+                DisplayClient();
             }
 
-            private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
+            void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0, bool ignoreMargin = false)
             {
-                element.Margin = new Thickness((nextLeft + leftPadding), nextTop + topPadding, 0, 0);
+                if (!ignoreMargin)
+                {
+                    element.Margin = new Thickness((nextLeft + leftPadding), nextTop + topPadding, 0, 0);
+                }
 
                 ViewGrid.Children.Add(element);
 
                 nextTop = element.Margin.Top + element.Height + padding;
+            }
+
+            void DisplayClient()
+            {
+                if (_activeClient.ID == Bootstrapper.Settings.LocalClient.LocalClientID)
+                {
+                    TitleTextBlock.Text = "Local Client";
+                }
+                else
+                {
+                    TitleTextBlock.Text = "Client Details";
+                }
+
+                NameTextBox.Text = _activeClient.ID;
+                PublicIPTextBox.Text = _activeClient.PublicIP;
+                PrivateIPTextBox.Text = _activeClient.PrivateIP;
+                LastCheckinTextBox.Text = _activeClient.LastCheckin.ToString();
             }
         }
     }
