@@ -164,6 +164,18 @@ namespace MiningApp
             }
         }
 
+        public async Task DeleteClient(string clientID)
+        {
+            var cmd = PreparedStatements.DeleteClient.GetCommand(clientID);
+
+            using (_connection)
+            {
+                await _connection.OpenAsync();
+                await cmd.ExecuteNonQueryAsync();
+                await _connection.CloseAsync();
+            }
+        }
+
         public async Task<List<LocalClientModel>> GetUserClients(string userID)
         {
             var clients = new List<LocalClientModel>();

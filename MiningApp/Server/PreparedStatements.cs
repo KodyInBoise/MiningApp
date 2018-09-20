@@ -34,10 +34,23 @@ namespace MiningApp
         {
             public static MySqlCommand GetCommand(string clientID)
             {
-                string sql = "SELECT * FROM Clients WHERE ClientID = @clientID";
+                string sql = "SELECT * FROM Clients WHERE ClientID = ?clientID";
 
                 var cmd = new MySqlCommand(sql, _connection);
-                AddParameter(cmd, "@clientID", clientID);
+                AddParameter(cmd, "?clientID", clientID);
+
+                return cmd;
+            }
+        }
+
+        public class DeleteClient
+        {
+            public static MySqlCommand GetCommand(string clientID)
+            {
+                string sql = "DELETE FROM Clients WHERE ClientID=?clientID";
+
+                var cmd = new MySqlCommand(sql, _connection);
+                AddParameter(cmd, "?clientID", clientID);
 
                 return cmd;
             }

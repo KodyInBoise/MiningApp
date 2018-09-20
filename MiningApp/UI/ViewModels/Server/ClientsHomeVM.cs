@@ -62,6 +62,11 @@ namespace MiningApp.UI
             _primaryVM.UpdateClientButtonContent(clientID, newContent);
         }
 
+        public void DeleteClient(string clientID)
+        {
+            _primaryVM.DeleteClient(clientID);
+        }
+
         public class PrimaryVM
         {
             ClientsHomeVM View { get; set; } = Instance;
@@ -168,6 +173,21 @@ namespace MiningApp.UI
                     button.Content = newName;
                 }
             }
+
+            public void DeleteClient(string clientID)
+            {
+                var button = _buttonDictionary.FirstOrDefault(x => x.Value == clientID).Key;
+
+                if (button != null)
+                {
+                    _clients.Remove(_clients.Find(x => x.ID == clientID));
+                    _buttonDictionary.Remove(button);
+
+                    ViewGrid.Children.Remove(button);
+
+                    Instance.DisplaySecondary(LocalClientModel.Instance);
+                }
+            }
         }
 
         public class SecondaryVM
@@ -186,6 +206,8 @@ namespace MiningApp.UI
             TextBox PublicIPTextBox { get; set; } = ElementHelper.CreateTextBox("PublicIP", readOnly: true);
 
             TextBox LastCheckinTextBox { get; set; } = ElementHelper.CreateTextBox("LastCheckin", readOnly: true);
+
+            Button DeleteButton { get; set; } = ElementHelper.CreateButton("Delete", style: ButtonStyleEnum.Delete);
 
             Button UpdateButton { get; set; } = ElementHelper.CreateButton("Update", style: ButtonStyleEnum.New);
 
@@ -232,6 +254,11 @@ namespace MiningApp.UI
 
                 DisplayElement(LastCheckinTextBox);
 
+                nextLeft = padding * 2;
+                nextTop = ElementValues.Grids.Height - DeleteButton.Height - padding * 2;
+                DisplayElement(DeleteButton);
+                DeleteButton.Click += (s, e) => DeleteButton_Clicked();
+
                 nextLeft = ElementValues.Grids.SecondaryNormal - UpdateButton.Width - padding * 2;
                 nextTop = ElementValues.Grids.Height - UpdateButton.Height - padding * 2;
                 DisplayElement(UpdateButton);
@@ -277,16 +304,33 @@ namespace MiningApp.UI
                 if (_activeClient.ID == Bootstrapper.Settings.LocalClient.LocalClientID)
                 {
                     TitleTextBlock.Text = "Local Client";
+                    DeleteButton.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
                     TitleTextBlock.Text = "Client Details";
+                    DeleteButton.Visibility = Visibility.Visible;
                 }
 
                 NameTextBox.Text = _activeClient.GetDisplayName();
                 PublicIPTextBox.Text = _activeClient.PublicIP;
                 PrivateIPTextBox.Text = _activeClient.PrivateIP;
                 LastCheckinTextBox.Text = _activeClient.LastCheckin.ToString();
+            }
+
+            void DeleteButton_Clicked()
+            {
+                // Need to possibly check against online clients an not allow deletion if online.
+                var result = MessageBox.Show("Are you sure you want to remove this client?", "Delete Client", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    DeleteButton.Visibility = Visibility.Collapsed;
+
+                    Task.Run(() => ServerHelper.DeleteClient(_activeClient.ID));
+
+                    Instance.DeleteClient(_activeClient.ID);
+                }
             }
 
             async void UpdateButton_Clicked()
