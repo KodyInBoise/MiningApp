@@ -64,12 +64,10 @@ namespace MiningApp.UI
 
             Grid ViewGrid { get; set; } = Instance.PrimaryGrid;
 
-            List<FrameworkElement> ActiveElements { get; set; } = new List<FrameworkElement>();
-
 
             TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("Clients", 40);
 
-            Button LoalClientButton { get; set; } = ElementHelper.CreateButton("Local Client", height: buttonHeight, style: ButtonStyleEnum.Normal);
+            Button LoalClientButton { get; set; } = ElementHelper.CreateButton("Local Client", height: buttonHeight, style: ButtonStyleEnum.New);
 
 
             private static int buttonHeight = 60;
@@ -126,7 +124,6 @@ namespace MiningApp.UI
                 else
                 {
                     // NEED TO ADD CODE TO HANDLE CLIENT DISPLAY WHEN THERE'S NO ACTIVE USER
-
                 }
             }
 
@@ -135,7 +132,6 @@ namespace MiningApp.UI
                 element.Margin = new Thickness((nextLeft + leftPadding), nextTop + topPadding, 0, 0);
 
                 ViewGrid.Children.Add(element);
-                ActiveElements.Add(element);
 
                 nextTop = element.Margin.Top + element.Height + padding;
             }
@@ -145,8 +141,6 @@ namespace MiningApp.UI
                 var button = (Button)sender;
 
                 var client = _clients.Find(x => x.ID == _buttonDictionary[button]);
-
-                //Instance.DisplaySecondary(wallet);
             }
 
             private void LocalClientButton_Clicked()
@@ -161,8 +155,40 @@ namespace MiningApp.UI
 
             Grid ViewGrid { get; set; } = Instance.SecondaryGrid;
 
-            
 
+            TextBlock TitleTextBlock { get; set; } = ElementHelper.CreateTextBlock("View Client", 40, width: ElementValues.Grids.SecondaryNormal);
+
+
+            private static int buttonHeight = 60;
+
+            private double nextLeft = 20;
+
+            private double nextTop = 12;
+
+            private double padding = 15;
+
+
+            public SecondaryVM()
+            {
+                Show();
+            }
+
+            private void Show()
+            {
+                DisplayElement(TitleTextBlock, leftPadding: 25);
+                nextTop = 75;
+
+
+            }
+
+            private void DisplayElement(FrameworkElement element, double leftPadding = 0, double topPadding = 0)
+            {
+                element.Margin = new Thickness((nextLeft + leftPadding), nextTop + topPadding, 0, 0);
+
+                ViewGrid.Children.Add(element);
+
+                nextTop = element.Margin.Top + element.Height + padding;
+            }
         }
     }
 }

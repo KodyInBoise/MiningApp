@@ -13,14 +13,17 @@ namespace MiningApp
 
         public class UpdateClient
         {
-            public static MySqlCommand GetCommand(string id, string userID, DateTime timestamp)
+            public static MySqlCommand GetCommand(ServerClientModel client, string userID)
             {
-                string sql = "INSERT INTO Clients (ClientID, UserID, LastCheckin) VALUES (?id, ?userID, ?timestamp) ON DUPLICATE KEY UPDATE UserID=?userID, LastCheckin=?timestamp";
+                string sql = "INSERT INTO Clients (ClientID, UserID, LastCheckin, PublicIP, PrivateIP) VALUES (?id, ?userID, ?timestamp, ?publicIP, ?privateIP) " +
+                    "ON DUPLICATE KEY UPDATE UserID=?userID, LastCheckin=?timestamp, PublicIP=?publicIP, PrivateIP=?privateIP";
 
                 var cmd = new MySqlCommand(sql, _connection);
-                AddParameter(cmd, "?id", id);
+                AddParameter(cmd, "?id", client.ID);
                 AddParameter(cmd, "?userID", userID);
-                AddParameter(cmd, "?timestamp", timestamp);
+                AddParameter(cmd, "?timestamp", DateTime.Now);
+                AddParameter(cmd, "?publicIP", client.PublicIP);
+                AddParameter(cmd, "?privateIP", client.PrivateIP);
 
                 return cmd;
             }
@@ -56,7 +59,7 @@ namespace MiningApp
         {
             public static MySqlCommand GetCommand(string userEmail)
             {
-                string sql = $"SELECT * FROM Users WHERE {ColumnnNames.Users.Email} = @email";
+                string sql = $"SELECT * FROM Users WHERE {ColumnNames.Users.Email} = @email";
 
                 var cmd = new MySqlCommand(sql, _connection);
                 AddParameter(cmd, "@email", userEmail);
@@ -69,9 +72,9 @@ namespace MiningApp
         {
             public static MySqlCommand GetCommand(UserModel user)
             {
-                string sql = $"INSERT INTO Users ({ColumnnNames.Users.UserID}, {ColumnnNames.Users.Email}, {ColumnnNames.Users.Password}, {ColumnnNames.Users.Created}, " +
-                    $"{ColumnnNames.Users.LastLogin}, {ColumnnNames.Users.RequiresLogin}) VALUES (?userID, ?email, ?password, ?created, ?lastlogin, ?requiresLogin) " +
-                    $"ON DUPLICATE KEY UPDATE {ColumnnNames.Users.Email}=?email, {ColumnnNames.Users.LastLogin}=?lastlogin, {ColumnnNames.Users.RequiresLogin}=?requiresLogin";
+                string sql = $"INSERT INTO Users ({ColumnNames.Users.UserID}, {ColumnNames.Users.Email}, {ColumnNames.Users.Password}, {ColumnNames.Users.Created}, " +
+                    $"{ColumnNames.Users.LastLogin}, {ColumnNames.Users.RequiresLogin}) VALUES (?userID, ?email, ?password, ?created, ?lastlogin, ?requiresLogin) " +
+                    $"ON DUPLICATE KEY UPDATE {ColumnNames.Users.Email}=?email, {ColumnNames.Users.LastLogin}=?lastlogin, {ColumnNames.Users.RequiresLogin}=?requiresLogin";
 
                 var cmd = new MySqlCommand(sql, _connection);
                 AddParameter(cmd, "?userID", user.ID);
@@ -89,8 +92,8 @@ namespace MiningApp
         {
             public static MySqlCommand GetCommand(ClientMessageModel message)
             {
-                string sql = $"INSERT INTO ClientMessages ({ColumnnNames.ClientMessages.ClientID}, {ColumnnNames.ClientMessages.Timestamp}," +
-                    $"{ColumnnNames.ClientMessages.Message}, {ColumnnNames.ClientMessages.Action}) VALUES (?clientID, ?timestamp, ?message, ?action)";
+                string sql = $"INSERT INTO ClientMessages ({ColumnNames.ClientMessages.ClientID}, {ColumnNames.ClientMessages.Timestamp}," +
+                    $"{ColumnNames.ClientMessages.Message}, {ColumnNames.ClientMessages.Action}) VALUES (?clientID, ?timestamp, ?message, ?action)";
 
                 var cmd = new MySqlCommand(sql, _connection);
                 AddParameter(cmd, "?clientID", message.ClientID);

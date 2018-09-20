@@ -15,6 +15,8 @@ namespace MiningApp
                 ClientID = 0,
                 UserID = 1,
                 LastCheckin = 2,
+                PublicIP = 3,
+                PrivateIP = 4,
             }
 
             public static string GetColumnName(Columns column)
@@ -22,11 +24,15 @@ namespace MiningApp
                 switch (column)
                 {
                     case Columns.ClientID:
-                        return ColumnnNames.Clients.ClientID;
+                        return ColumnNames.Clients.ClientID;
                     case Columns.UserID:
-                        return ColumnnNames.Clients.UserID;
+                        return ColumnNames.Clients.UserID;
                     case Columns.LastCheckin:
-                        return ColumnnNames.Clients.LastCheckin;
+                        return ColumnNames.Clients.LastCheckin;
+                    case Columns.PublicIP:
+                        return ColumnNames.Clients.PublicIP;
+                    case Columns.PrivateIP:
+                        return ColumnNames.Clients.PrivateIP;
                     default:
                         return string.Empty;
                 }
@@ -62,17 +68,17 @@ namespace MiningApp
                 switch (column)
                 {
                     case Columns.UserID:
-                        return ColumnnNames.Users.UserID;
+                        return ColumnNames.Users.UserID;
                     case Columns.Email:
-                        return ColumnnNames.Users.Email;
+                        return ColumnNames.Users.Email;
                     case Columns.Password:
-                        return ColumnnNames.Users.Password;
+                        return ColumnNames.Users.Password;
                     case Columns.Created:
-                        return ColumnnNames.Users.Created;
+                        return ColumnNames.Users.Created;
                     case Columns.LastLogin:
-                        return ColumnnNames.Users.LastLogin;
+                        return ColumnNames.Users.LastLogin;
                     case Columns.RequiresLogin:
-                        return ColumnnNames.Users.RequiresLogin;
+                        return ColumnNames.Users.RequiresLogin;
                     default:
                         return string.Empty;
                 }
@@ -106,13 +112,13 @@ namespace MiningApp
                 switch (column)
                 {
                     case Columns.ClientID:
-                        return ColumnnNames.ClientMessages.ClientID;
+                        return ColumnNames.ClientMessages.ClientID;
                     case Columns.Timestamp:
-                        return ColumnnNames.ClientMessages.Timestamp;
+                        return ColumnNames.ClientMessages.Timestamp;
                     case Columns.Message:
-                        return ColumnnNames.ClientMessages.Message;
+                        return ColumnNames.ClientMessages.Message;
                     case Columns.Action:
-                        return ColumnnNames.ClientMessages.Action;
+                        return ColumnNames.ClientMessages.Action;
                     default:
                         return string.Empty;
                 }
@@ -132,13 +138,15 @@ namespace MiningApp
         }
     }
 
-    public static class ColumnnNames
+    public static class ColumnNames
     {
         public static class Clients
         {
             public static string ClientID = "ClientID";
             public static string UserID = "UserID";
             public static string LastCheckin = "LastCheckin";
+            public static string PublicIP = "PublicIP";
+            public static string PrivateIP = "PrivateIP";
         }
 
         public static class Users

@@ -1,7 +1,9 @@
 ﻿using MiningApp.LoggingUtil;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,6 +33,10 @@ namespace MiningApp
 
         public DateTime LastCheckin { get; set; }
 
+        public string PublicIP { get; set; }
+
+        public string PrivateIP { get; set; }
+
 
         TimerModel _checkinTimer { get; set; }
 
@@ -55,6 +61,10 @@ namespace MiningApp
 
             Bootstrapper.UserAuthenticationDelegate += UserAuthenticationChanged;
             MessageReceivedDelegate += MessageReceived_Invoked;
+
+            // TESTING
+            PrivateIP = GetPrivateIP();
+            PublicIP = GetPublicIP();
         }
 
         void UserAuthenticationChanged(UserAuthenticationChangedArgs args)
@@ -72,7 +82,7 @@ namespace MiningApp
                 if (Bootstrapper.Settings.Server.UseServer && Bootstrapper.Settings.Server.UserAuthenticated)
                 {
                     await Task.Run(() => 
-                    ServerHelper.UpdateClient(Bootstrapper.Settings.LocalClient.LocalClientID, Bootstrapper.Settings.User.UserID));
+                    ServerHelper.UpdateClient(Instance, Bootstrapper.Settings.User.UserID));
 
                     var messages = await Task.Run(() => ServerHelper.GetClientMessages(Instance.ID));
                     if (messages.Any())
@@ -112,6 +122,45 @@ namespace MiningApp
             };
 
             await ServerHelper.UpdateUser(user);
+        }
+
+        public static string GetPrivateIP()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+
+            return host.AddressList[0].MapToIPv4().ToString();
+        }
+
+        public static string GetPublicIP()
+        {
+            try
+            {
+                string ip = "";
+
+                string url = "http://checkip.dyndns.org";
+                WebRequest req = System.Net.WebRequest.Create(url);
+                WebResponse resp = req.GetResponse();
+
+                using (var rdr = new StreamReader(resp.GetResponseStream()))
+                {
+                    var response = rdr.ReadToEnd().Trim();
+
+                    var part1 = response.Split(':');
+                    var part2 = part1[1].Substring(1);
+                    var part3 = part2.Split('<');
+
+                    ip = part3[0];
+                };
+
+
+                return ip;
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.Handle(ex);
+
+                return "";
+            }
         }
     }
 }
