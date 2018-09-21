@@ -178,35 +178,44 @@ namespace MiningApp
 
         public async Task<List<LocalClientModel>> GetUserClients(string userID)
         {
-            var clients = new List<LocalClientModel>();
-
-            var cmd = PreparedStatements.GetUserClients.GetCommand(userID);
-
-            using (_connection)
+            try
             {
-                await _connection.OpenAsync();
+                var clients = new List<LocalClientModel>();
 
-                using (var rdr = await cmd.ExecuteReaderAsync())
+                var cmd = PreparedStatements.GetUserClients.GetCommand(userID);
+
+                using (_connection)
                 {
-                    while (await rdr.ReadAsync())
-                    {
-                        var client = new LocalClientModel()
-                        {
-                            ID = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.ClientID)),
-                            LastCheckin = rdr.GetDateTime(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.LastCheckin)),
-                            PublicIP = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.PublicIP)),
-                            PrivateIP = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.PrivateIP)),
-                            FriendlyName = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.FriendlyName))
-                        };
+                    await _connection.OpenAsync();
 
-                        clients.Add(client);
+                    using (var rdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await rdr.ReadAsync())
+                        {
+                            var client = new LocalClientModel()
+                            {
+                                ID = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.ClientID)),
+                                LastCheckin = rdr.GetDateTime(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.LastCheckin)),
+                                PublicIP = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.PublicIP)),
+                                PrivateIP = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.PrivateIP)),
+                                FriendlyName = rdr.GetString(DBInfo.Clients.GetColumnIndex(DBInfo.Clients.Columns.FriendlyName))
+                            };
+
+                            clients.Add(client);
+                        }
                     }
+
+                    await _connection.CloseAsync();
                 }
 
-                await _connection.CloseAsync();
+                return clients;
             }
+            catch (Exception ex)
+            {
+                HandleServerException(ex);
 
-            return clients;
+                return new List<LocalClientModel>();
+            }
         }
 
         public async Task InsertClientMessage(ClientMessageModel message)
@@ -255,7 +264,7 @@ namespace MiningApp
 
         void HandleServerException(Exception ex)
         {
-
+            ExceptionUtil.Handle(ex);
         }
     }
 }

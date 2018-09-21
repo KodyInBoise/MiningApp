@@ -24,7 +24,7 @@ namespace MiningApp
                 AddParameter(cmd, "?timestamp", DateTime.Now);
                 AddParameter(cmd, "?publicIP", client.PublicIP);
                 AddParameter(cmd, "?privateIP", client.PrivateIP);
-                AddParameter(cmd, "?friendlyName", client.FriendlyName);
+                AddParameter(cmd, "?friendlyName", client.GetDisplayName());
 
                 return cmd;
             }
