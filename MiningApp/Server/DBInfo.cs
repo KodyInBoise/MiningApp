@@ -104,16 +104,19 @@ namespace MiningApp
         {
             public enum Columns
             {
-                ClientID = 0,
-                Timestamp = 1,
-                Message = 2,
-                Action = 3,
+                MessageID = 0,
+                ClientID = 1,
+                Timestamp = 2,
+                Message = 3,
+                Action = 4,
             }
 
             public static string GetColumnName(Columns column)
             {
                 switch (column)
                 {
+                    case Columns.MessageID:
+                        return ColumnNames.ClientMessages.MessageID;
                     case Columns.ClientID:
                         return ColumnNames.ClientMessages.ClientID;
                     case Columns.Timestamp:
@@ -165,6 +168,7 @@ namespace MiningApp
 
         public static class ClientMessages
         {
+            public static string MessageID = "MessageID";
             public static string ClientID = "ClientID";
             public static string Timestamp = "Timestamp";
             public static string Message = "Message";

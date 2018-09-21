@@ -106,14 +106,29 @@ namespace MiningApp
         {
             public static MySqlCommand GetCommand(ClientMessageModel message)
             {
-                string sql = $"INSERT INTO ClientMessages ({ColumnNames.ClientMessages.ClientID}, {ColumnNames.ClientMessages.Timestamp}," +
-                    $"{ColumnNames.ClientMessages.Message}, {ColumnNames.ClientMessages.Action}) VALUES (?clientID, ?timestamp, ?message, ?action)";
+                string sql = $"INSERT INTO ClientMessages ({ColumnNames.ClientMessages.MessageID}, {ColumnNames.ClientMessages.ClientID}, " +
+                    $"{ColumnNames.ClientMessages.Timestamp}, {ColumnNames.ClientMessages.Message}, {ColumnNames.ClientMessages.Action}) " +
+                    $"VALUES (?messageID, ?clientID, ?timestamp, ?message, ?action)";
 
                 var cmd = new MySqlCommand(sql, _connection);
+                AddParameter(cmd, "?messageID", message.MessageID);
                 AddParameter(cmd, "?clientID", message.ClientID);
                 AddParameter(cmd, "?timestamp", message.Timestamp);
                 AddParameter(cmd, "?message", message.Message);
                 AddParameter(cmd, "?action", message.Action.Value);
+
+                return cmd;
+            }
+        }
+
+        public class DeleteClientMessage
+        {
+            public static MySqlCommand GetCommand(ClientMessageModel message)
+            {
+                string sql = $"DELETE FROM ClientMessages WHERE MessageID=?messageID";
+
+                var cmd = new MySqlCommand(sql, _connection);
+                AddParameter(cmd, "?messageID", message.MessageID);
 
                 return cmd;
             }

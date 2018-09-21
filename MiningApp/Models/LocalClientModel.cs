@@ -108,19 +108,34 @@ namespace MiningApp
             }
         }
 
-        void MessageReceived_Invoked(ClientMessageReceivedArgs args)
+        async void MessageReceived_Invoked(ClientMessageReceivedArgs args)
         {
             foreach (var message in args.Messages)
             {
                 try
                 {
-                    LogHelper.AddEntry(LogType.Server, $"Received message from server: {message}");
+                    await Task.Run(() => HandleServerMessage(message));
                 }
                 catch (Exception ex)
                 {
                     ExceptionUtil.Handle(ex);
                 }
             }
+        }
+
+        async Task HandleServerMessage(ClientMessageModel message)
+        {
+            // If the message has a different client id, do nothing
+            if (message.ClientID != Instance.ID)
+            {
+                return;
+            }
+
+            LogHelper.AddEntry(LogType.Server, $"Received message from server: {message.Action} - {message.Message}");
+
+            // Do our functions or whatever here
+
+            await ServerHelper.DeleteClientMessage(message);
         }
 
         public static async void Test()

@@ -34,6 +34,7 @@ namespace MiningApp
 
         #region ClientMessages
         public static Task InsertClientMessage(ClientMessageModel message) => Instance._databaseHelper.InsertClientMessage(message);
+        public static Task DeleteClientMessage(ClientMessageModel message) => Instance._databaseHelper.DeleteClientMessage(message);
         public static Task<List<ClientMessageModel>> GetClientMessages(string clientID) => Instance._databaseHelper.GetClientMessages(clientID);
         #endregion
 

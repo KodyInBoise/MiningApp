@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,21 @@ namespace MiningApp
         public MySqlConnection GetConnection()
         {
             return _connection;
+        }
+
+        async Task OpenConnection()
+        {
+            try
+            {
+                if (_connection.State != ConnectionState.Open)
+                {
+                    await _connection.OpenAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleServerException(ex);
+            }
         }
 
         private string GetConnectionString()
@@ -220,7 +236,26 @@ namespace MiningApp
 
         public async Task InsertClientMessage(ClientMessageModel message)
         {
-            var cmd = PreparedStatements.InsertClientMessage.GetCommand(message);
+            try
+            {
+                var cmd = PreparedStatements.InsertClientMessage.GetCommand(message);
+
+                using (_connection)
+                {
+                    await _connection.OpenAsync();
+                    await cmd.ExecuteNonQueryAsync();
+                    await _connection.CloseAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleServerException(ex);
+            }
+        }
+
+        public async Task DeleteClientMessage(ClientMessageModel message)
+        {
+            var cmd = PreparedStatements.DeleteClientMessage.GetCommand(message);
 
             using (_connection)
             {
@@ -244,8 +279,9 @@ namespace MiningApp
                 {
                     while (await rdr.ReadAsync())
                     {
-                        var msg = new ClientMessageModel()
+                        var msg = new ClientMessageModel
                         {
+                            MessageID = rdr.GetString(DBInfo.ClientMessages.GetColumnIndex(DBInfo.ClientMessages.Columns.MessageID)),
                             ClientID = rdr.GetString(DBInfo.ClientMessages.GetColumnIndex(DBInfo.ClientMessages.Columns.ClientID)),
                             Timestamp = rdr.GetDateTime(DBInfo.ClientMessages.GetColumnIndex(DBInfo.ClientMessages.Columns.Timestamp)),
                             Message = rdr.GetString(DBInfo.ClientMessages.GetColumnIndex(DBInfo.ClientMessages.Columns.Message)),

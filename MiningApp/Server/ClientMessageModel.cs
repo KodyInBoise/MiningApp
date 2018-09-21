@@ -31,6 +31,8 @@ namespace MiningApp
 
     public class ClientMessageModel
     {
+        public string MessageID { get; set; }
+
         public string ClientID { get; set; }
 
         public DateTime Timestamp { get; set; }
@@ -38,6 +40,11 @@ namespace MiningApp
         public string Message { get; set; }
 
         public ClientAction Action { get; set; }
+
+        public ClientMessageModel()
+        {
+            MessageID = ElementHelper.GetNewGuid(8);
+        }
 
         public override string ToString()
         {

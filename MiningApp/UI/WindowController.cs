@@ -90,7 +90,7 @@ namespace MiningApp.UI
             //Task.Run(() => ServerHelper.InsertClientMessage(message));
         }
 
-        async void Startup()
+        void Startup()
         {
             NavView = new NavBarVM();
 
