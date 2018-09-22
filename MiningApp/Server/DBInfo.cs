@@ -174,5 +174,30 @@ namespace MiningApp
             public static string Message = "Message";
             public static string Action = "Action";
         }
+
+        public static class ClientConfigs
+        {
+            public static string ServerID = "ServerID";
+            public static string ClientID = "ClientID";
+            public static string Name = "Name";
+            public static string MinerName = "MinerName";
+            public static string CryptoName = "CryptoName";
+            public static string Status = "Status";
+        }
     }
+
+    public static class ColumnIndexes
+    {
+        public static class ClientConfigs
+        {
+            public static int ServerID = 0;
+            public static int ClientID = 1;
+            public static int Name = 2;
+            public static int MinerName = 3;
+            public static int CryptoName = 4;
+            public static int Status = 5;
+        }
+    }
+
+
 }

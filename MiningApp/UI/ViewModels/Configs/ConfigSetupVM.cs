@@ -449,8 +449,16 @@ namespace MiningApp.UI
                     {
                         _config.StaleOutputThreshold = -1;
                     }
+
                 }
-                catch { _config.StaleOutputThreshold = -1; }               
+                catch { _config.StaleOutputThreshold = -1; }
+
+                if (Bootstrapper.Settings.Server.UseServer)
+                {
+                    _config.ServerID = !String.IsNullOrEmpty(_config.ServerID) ? _config.ServerID : ElementHelper.GetNewGuid(8);
+
+                    Task.Run(() => ServerHelper.InsertClientConfig(_config, LocalClientModel.Instance.ID));
+                }
             }
 
             private void MinersComboBox_Closed()

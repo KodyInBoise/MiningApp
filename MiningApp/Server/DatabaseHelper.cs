@@ -321,6 +321,25 @@ namespace MiningApp
             return messages;
         }
 
+        public async Task InsertClientConfig(SessionConfigModel config, string clientID)
+        {
+            try
+            {
+                var cmd = PreparedStatements.InsertClientConfig.GetCommand(config, clientID);
+
+                using (_connection)
+                {
+                    await OpenConnection();
+                    await cmd.ExecuteNonQueryAsync();
+                    await CloseConnection();
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleServerException(ex);
+            }
+        }
+
         void HandleServerException(Exception ex)
         {
             ExceptionUtil.Handle(ex);

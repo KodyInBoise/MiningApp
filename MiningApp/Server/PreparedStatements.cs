@@ -147,6 +147,26 @@ namespace MiningApp
             }
         }
 
+        public class InsertClientConfig
+        {
+            public static MySqlCommand GetCommand(SessionConfigModel config, string clientID)
+            {
+                string sql = $"INSERT INTO ClientConfigs ({ColumnNames.ClientConfigs.ServerID}, {ColumnNames.ClientConfigs.ClientID}, " +
+                    $"{ColumnNames.ClientConfigs.Name}, {ColumnNames.ClientConfigs.MinerName}, {ColumnNames.ClientConfigs.CryptoName}, {ColumnNames.ClientConfigs.Status}) " +
+                    $"VALUES (?serverID, ?clientID, ?name, ?minerName, ?cryptoName, ?status)";
+
+                var cmd = new MySqlCommand(sql, _connection);
+                AddParameter(cmd, "?serverID", config.ServerID);
+                AddParameter(cmd, "?clientID", clientID);
+                AddParameter(cmd, "?name", config.Name);
+                AddParameter(cmd, "?minerName", config.Miner.Name);
+                AddParameter(cmd, "?cryptoName", config.CryptoName);
+                AddParameter(cmd, "?status", config.Session?.CurrentStatus ?? 0);
+
+                return cmd;
+            }
+        }
+
         static void AddParameter(MySqlCommand cmd, string key, object value)
         {
             cmd.Parameters.Add(new MySqlParameter(key, value));

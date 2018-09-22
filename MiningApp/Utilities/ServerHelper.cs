@@ -38,6 +38,10 @@ namespace MiningApp
         public static Task<List<ClientMessageModel>> GetClientMessages(string clientID) => Instance._databaseHelper.GetClientMessages(clientID);
         #endregion
 
+        #region ClientConfigs
+        public static Task InsertClientConfig(SessionConfigModel config, string clientID) => Instance._databaseHelper.InsertClientConfig(config, clientID);
+        #endregion
+
         DatabaseHelper _databaseHelper { get; set; }
         FTPHelper _ftpHelper { get; set; }
         VersionHelper _versionHelper { get; set; }

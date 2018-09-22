@@ -13,6 +13,8 @@ namespace MiningApp
     {
         public int ID { get; set; }
 
+        public string ServerID { get; set; }
+
         public SessionType Type { get; set; }
 
         public int MinerID { get; set; }

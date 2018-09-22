@@ -193,7 +193,7 @@ namespace MiningApp.UI
 
         void SessionOutputReceived(OutputReceivedArgs args)
         {
-            if (args.SessionID == _activeSession.SessionID)
+            if (args.SessionID == _activeSession?.SessionID)
             {
                 WindowController.InvokeOnMainThread(new Action(() => UpdateSessionOutput(args)));
             }

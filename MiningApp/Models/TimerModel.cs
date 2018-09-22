@@ -161,7 +161,7 @@ namespace MiningApp
                     break;
             }
 
-            HistoryDictionary.Add(timestamp, action);
+            HistoryDictionary?.Add(timestamp, action);
         }
         
         public void Dispose()
