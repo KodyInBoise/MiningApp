@@ -131,11 +131,33 @@ namespace MiningApp
                 return;
             }
 
-            LogHelper.AddEntry(LogType.Server, $"Received message from server: {message.Action} - {message.Message}");
+            try
+            {
+                LogHelper.AddEntry(LogType.Server, $"Received message from server: {message.Action} - {message.Message}");
 
-            // Do our functions or whatever here
+                if (message.Action == ClientAction.StartSession)
+                {
 
-            await ServerHelper.DeleteClientMessage(message);
+                }
+                else if (message.Action == ClientAction.StopSession)
+                {
+                    
+                }
+                else if (message.Action == ClientAction.PauseSession)
+                {
+
+                }
+                else if (message.Action.Value == ClientAction.CloseApp.Value)
+                {
+                    MainWindow.Instance.Shutdown();
+                }
+
+                await ServerHelper.DeleteClientMessage(message);
+            }
+            catch (Exception ex)
+            {
+                ExceptionUtil.Handle(ex);
+            }
         }
 
         public static async void Test()

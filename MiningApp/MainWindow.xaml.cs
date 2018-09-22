@@ -86,17 +86,28 @@ namespace MiningApp
         {
             try
             {
-                Visibility = Visibility.Collapsed;
+                // Probably need to clean this up eventually 
 
-                await Controller.Shutdown();
+                WindowController.InvokeOnMainThread(() =>
+                {
+                    Visibility = Visibility.Collapsed;
+                });
 
-                Application.Current.Shutdown();
+                await Task.Run(Controller.Shutdown);
+
+                WindowController.InvokeOnMainThread(() =>
+                {
+                    Application.Current.Shutdown();
+                });
             }
             catch (Exception ex)
             {
                 LogHelper.AddEntry(ex);
 
-                Application.Current.Shutdown();
+                WindowController.InvokeOnMainThread(() =>
+                {
+                    Application.Current.Shutdown();
+                });
             }
         }
 
