@@ -209,6 +209,8 @@ namespace MiningApp.UI
 
             ComboBox SessionsComboBox { get; set; } = ElementHelper.CreateComboBox("Sessions");
 
+            Button ToggleStatusButton { get; set; } = ElementHelper.CreateButton("Toggle", width: 150, height: 50);
+
             Button DeleteButton { get; set; } = ElementHelper.CreateButton("Delete", style: ButtonStyleEnum.Delete);
 
             Button UpdateButton { get; set; } = ElementHelper.CreateButton("Update", style: ButtonStyleEnum.New);
@@ -261,6 +263,9 @@ namespace MiningApp.UI
                 DisplayElement(LastCheckinTextBox);
 
                 DisplayElement(SessionsComboBox);
+
+                nextLeft = SessionsComboBox.Margin.Left + SessionsComboBox.Width - ToggleStatusButton.Width;
+                ToggleStatusButton.Margin = new Thickness(nextLeft, nextTop, 0, 0);
 
                 nextLeft = padding * 2;
                 nextTop = ElementValues.Grids.Height - DeleteButton.Height - padding * 2;
@@ -325,6 +330,7 @@ namespace MiningApp.UI
 
                     //SessionsLabel.Visibility = Visibility.Collapsed;
                     //SessionsComboBox.Visibility = Visibility.Collapsed;
+                    //ToggleStatusButton.Visibility = Visibility.Collapsed;
                     DeleteButton.Visibility = Visibility.Collapsed;
                 }
                 else
@@ -333,6 +339,7 @@ namespace MiningApp.UI
 
                     SessionsLabel.Visibility = Visibility.Visible;
                     SessionsComboBox.Visibility = Visibility.Visible;
+                    ToggleStatusButton.Visibility = Visibility.Visible;
                     DeleteButton.Visibility = Visibility.Visible;
 
                     //_clientConfigs = await Task.Run(() => ServerHelper.GetClientConfigs(_activeClient.ID));
@@ -347,6 +354,8 @@ namespace MiningApp.UI
                 {
                     SessionsComboBox.SelectedIndex = 0;
                 }
+
+                UpdateToggleStatusButton();
             }
 
             void DeleteButton_Clicked()
@@ -392,6 +401,41 @@ namespace MiningApp.UI
                 catch (Exception ex)
                 {
                     ExceptionUtil.Handle(ex, message: $"An error occurred updating client information on the server: {ex.Message}");
+                }
+            }
+
+            ClientConfigModel GetSelectedConfig()
+            {
+                return (ClientConfigModel)SessionsComboBox.SelectedItem;
+            }
+
+            void UpdateToggleStatusButton()
+            {
+                var selectedConfig = GetSelectedConfig();
+                var margin = ToggleStatusButton.Margin;
+
+                if (ViewGrid.Children.Contains(ToggleStatusButton))
+                {
+                    ViewGrid.Children.Remove(ToggleStatusButton);
+                    ToggleStatusButton = null;
+                }
+
+                if (selectedConfig != null)
+                {
+                    switch ((SessionStatusEnum)selectedConfig.Status)
+                    {
+                        case SessionStatusEnum.Running:
+                            ToggleStatusButton = ElementHelper.CreateButton("Pause", style: ButtonStyleEnum.Orange, width: 150, height: 50);
+                            ToggleStatusButton.Click += (s, e) => {
+                                Task.Run(() => LocalClientModel.Instance.SendClientMessage(_activeClient.ID, ClientAction.PauseSession, selectedConfig.ServerID));
+                            };
+                            break;
+                        default:
+                            break;
+                    }
+
+                    ToggleStatusButton.Margin = margin;
+                    DisplayElement(ToggleStatusButton, ignoreMargin: true);
                 }
             }
         }
