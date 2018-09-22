@@ -321,7 +321,7 @@ namespace MiningApp
             return messages;
         }
 
-        public async Task InsertClientConfig(SessionConfigModel config, string clientID)
+        public async Task UpdateClientConfig(SessionConfigModel config, string clientID)
         {
             try
             {

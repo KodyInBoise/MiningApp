@@ -207,6 +207,8 @@ namespace MiningApp.UI
 
             TextBox LastCheckinTextBox { get; set; } = ElementHelper.CreateTextBox("LastCheckin", readOnly: true);
 
+            ComboBox SessionsComboBox { get; set; } = ElementHelper.CreateComboBox("Sessions");
+
             Button DeleteButton { get; set; } = ElementHelper.CreateButton("Delete", style: ButtonStyleEnum.Delete);
 
             Button UpdateButton { get; set; } = ElementHelper.CreateButton("Update", style: ButtonStyleEnum.New);
@@ -220,7 +222,11 @@ namespace MiningApp.UI
 
             Label LastCheckinLabel { get; set; }
 
+            Label SessionsLabel { get; set; }
+
             LocalClientModel _activeClient { get; set; }
+
+            List<ClientConfigModel> _clientConfigs { get; set; }
 
             private double nextLeft = 20;
 
@@ -254,6 +260,8 @@ namespace MiningApp.UI
 
                 DisplayElement(LastCheckinTextBox);
 
+                DisplayElement(SessionsComboBox);
+
                 nextLeft = padding * 2;
                 nextTop = ElementValues.Grids.Height - DeleteButton.Height - padding * 2;
                 DisplayElement(DeleteButton);
@@ -284,6 +292,11 @@ namespace MiningApp.UI
                 LastCheckinLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
                 DisplayElement(LastCheckinLabel, ignoreMargin: true);
 
+                nextTop = SessionsComboBox.Margin.Top;
+                SessionsLabel = ElementHelper.CreateLabel("Sessions", SessionsComboBox);
+                SessionsLabel.Margin = new Thickness(0, nextTop + labelOffset, labelRight, 0);
+                DisplayElement(SessionsLabel, ignoreMargin: true);
+
                 DisplayClient();
             }
 
@@ -299,23 +312,41 @@ namespace MiningApp.UI
                 nextTop = element.Margin.Top + element.Height + padding;
             }
 
-            void DisplayClient()
+            async void DisplayClient()
             {
+                NameTextBox.Text = _activeClient.GetDisplayName();
+                PublicIPTextBox.Text = _activeClient.PublicIP;
+                PrivateIPTextBox.Text = _activeClient.PrivateIP;
+                LastCheckinTextBox.Text = _activeClient.LastCheckin.ToString();
+
                 if (_activeClient.ID == Bootstrapper.Settings.LocalClient.LocalClientID)
                 {
                     TitleTextBlock.Text = "Local Client";
+
+                    //SessionsLabel.Visibility = Visibility.Collapsed;
+                    //SessionsComboBox.Visibility = Visibility.Collapsed;
                     DeleteButton.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
                     TitleTextBlock.Text = "Client Details";
+
+                    SessionsLabel.Visibility = Visibility.Visible;
+                    SessionsComboBox.Visibility = Visibility.Visible;
                     DeleteButton.Visibility = Visibility.Visible;
+
+                    //_clientConfigs = await Task.Run(() => ServerHelper.GetClientConfigs(_activeClient.ID));
+
+                    //SessionsComboBox.ItemsSource = _clientConfigs;
                 }
 
-                NameTextBox.Text = _activeClient.GetDisplayName();
-                PublicIPTextBox.Text = _activeClient.PublicIP;
-                PrivateIPTextBox.Text = _activeClient.PrivateIP;
-                LastCheckinTextBox.Text = _activeClient.LastCheckin.ToString();
+                _clientConfigs = await Task.Run(() => ServerHelper.GetClientConfigs(_activeClient.ID));
+
+                SessionsComboBox.ItemsSource = _clientConfigs;
+                if (_clientConfigs.Any())
+                {
+                    SessionsComboBox.SelectedIndex = 0;
+                }
             }
 
             void DeleteButton_Clicked()

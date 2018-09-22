@@ -29,5 +29,10 @@ namespace MiningApp
             CryptoName = config.CryptoName;
             Status = config.Session == null ? 0 : (int)config.Session.CurrentStatus;
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

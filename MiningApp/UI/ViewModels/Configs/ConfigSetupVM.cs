@@ -432,7 +432,7 @@ namespace MiningApp.UI
                 _config.Miner = (MinerConfigModel)MinersComboBox.SelectedItem;
                 _config.MinerID = _config.Miner.ID;
                 _config.Pool = (PoolConfigModel)PoolsComboBox.SelectedItem;
-                _config.PoolID = _config.Pool.ID;
+                _config.PoolID = _config.Pool?.ID ?? -1;
                 _config.Wallet = (WalletConfigModel)WalletsComboBox.SelectedItem;
                 _config.WalletID = _config.Wallet.ID;
 
@@ -457,7 +457,7 @@ namespace MiningApp.UI
                 {
                     _config.ServerID = !String.IsNullOrEmpty(_config.ServerID) ? _config.ServerID : ElementHelper.GetNewGuid(8);
 
-                    Task.Run(() => ServerHelper.InsertClientConfig(_config, LocalClientModel.Instance.ID));
+                    Task.Run(() => ServerHelper.UpdateClientConfig(_config, LocalClientModel.Instance.ID));
                 }
             }
 
