@@ -158,10 +158,23 @@ namespace MiningApp
                 var cmd = new MySqlCommand(sql, _connection);
                 AddParameter(cmd, "?serverID", config.ServerID);
                 AddParameter(cmd, "?clientID", clientID);
-                AddParameter(cmd, "?name", config.Name);
-                AddParameter(cmd, "?minerName", config.Miner.Name);
-                AddParameter(cmd, "?cryptoName", config.CryptoName);
+                AddParameter(cmd, "?name", config.Name ?? "");
+                AddParameter(cmd, "?minerName", config.Miner.Name ?? "");
+                AddParameter(cmd, "?cryptoName", config.CryptoName ?? "");
                 AddParameter(cmd, "?status", config.Session?.CurrentStatus ?? 0);
+
+                return cmd;
+            }
+        }
+
+        public class GetClientConfigs
+        {
+            public static MySqlCommand GetCommand(string clientID)
+            {
+                string sql = "SELECT * FROM ClientConfigs WHERE ClientID = @clientID";
+
+                var cmd = new MySqlCommand(sql, _connection);
+                AddParameter(cmd, "@clientID", clientID);
 
                 return cmd;
             }

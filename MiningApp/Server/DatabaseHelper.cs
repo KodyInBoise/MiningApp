@@ -340,6 +340,49 @@ namespace MiningApp
             }
         }
 
+        public async Task<List<ClientConfigModel>> GetClientConfigs(string clientID)
+        {
+            try
+            {
+                var configs = new List<ClientConfigModel>();
+
+                var cmd = PreparedStatements.GetClientConfigs.GetCommand(clientID);
+
+                using (_connection)
+                {
+                    await OpenConnection();
+
+                    using (var rdr = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await rdr.ReadAsync())
+                        {
+                            var config = new ClientConfigModel
+                            {
+                                ServerID = rdr.GetString(ColumnIndexes.ClientConfigs.ServerID),
+                                ClientID = rdr.GetString(ColumnIndexes.ClientConfigs.ClientID),
+                                Name = rdr.GetString(ColumnIndexes.ClientConfigs.Name),
+                                MinerName = rdr.GetString(ColumnIndexes.ClientConfigs.MinerName),
+                                CryptoName = rdr.GetString(ColumnIndexes.ClientConfigs.CryptoName),
+                                Status = rdr.GetInt32(ColumnIndexes.ClientConfigs.Status),
+                            };
+
+                            configs.Add(config);
+                        }
+                    }
+
+                    await CloseConnection();
+                }
+
+                return configs;
+            }
+            catch (Exception ex)
+            {
+                HandleServerException(ex);
+
+                return new List<ClientConfigModel>();
+            }
+        }
+
         void HandleServerException(Exception ex)
         {
             ExceptionUtil.Handle(ex);

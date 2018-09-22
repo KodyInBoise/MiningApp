@@ -40,6 +40,7 @@ namespace MiningApp
 
         #region ClientConfigs
         public static Task InsertClientConfig(SessionConfigModel config, string clientID) => Instance._databaseHelper.InsertClientConfig(config, clientID);
+        public static Task<List<ClientConfigModel>> GetClientConfigs(string clientID) => Instance._databaseHelper.GetClientConfigs(clientID);
         #endregion
 
         DatabaseHelper _databaseHelper { get; set; }
