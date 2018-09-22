@@ -79,15 +79,15 @@ namespace MiningApp.UI
             Startup();
 
             //TESTING
-            var message = new ClientMessageModel()
-            {
-                ClientID = LocalClientModel.Instance.ID,
-                Timestamp = DateTime.Now,
-                Message = "Testing...",
-                Action = ClientAction.CloseApp,
-            };
+            //var message = new ClientMessageModel()
+            //{
+            //    ClientID = LocalClientModel.Instance.ID,
+            //    Timestamp = DateTime.Now,
+            //    Message = "Testing...",
+            //    Action = ClientAction.CloseApp,
+            //};
 
-            Task.Run(() => ServerHelper.InsertClientMessage(message));
+            //Task.Run(() => ServerHelper.InsertClientMessage(message));
         }
 
         void Startup()

@@ -92,8 +92,7 @@ namespace MiningApp
                         Instance.PublicIP = await Task.Run(Instance.GetPublicIP);
                     }
 
-                    await Task.Run(() => 
-                    ServerHelper.UpdateClient(Instance, Bootstrapper.Settings.User.UserID));
+                    await Task.Run(() => ServerHelper.UpdateClient(Instance, Bootstrapper.Settings.User.UserID));
 
                     var messages = await Task.Run(() => ServerHelper.GetClientMessages(Instance.ID));
                     if (messages.Any())
@@ -135,6 +134,9 @@ namespace MiningApp
             {
                 LogHelper.AddEntry(LogType.Server, $"Received message from server: {message.Action} - {message.Message}");
 
+                // Delete the message before handling to ensure it doesn't get consumed again which is likely if any errors are encountered
+                await ServerHelper.DeleteClientMessage(message);
+
                 if (message.Action == ClientAction.StartSession)
                 {
 
@@ -151,8 +153,6 @@ namespace MiningApp
                 {
                     MainWindow.Instance.Shutdown();
                 }
-
-                await ServerHelper.DeleteClientMessage(message);
             }
             catch (Exception ex)
             {
