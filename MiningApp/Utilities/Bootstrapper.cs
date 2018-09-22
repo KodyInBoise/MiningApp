@@ -239,11 +239,6 @@ namespace MiningApp
                 {
                     Settings.Server.UserAuthenticated = false;
                 }
-
-                if (Settings.Server.UserAuthenticated && Settings.Server.UseServer)
-                {
-                    Task.Run(() => ServerHelper.UpdateClient(LocalClientModel.Instance, User.ID));
-                }
             }
             catch (Exception ex)
             {

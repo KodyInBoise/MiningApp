@@ -87,21 +87,28 @@ namespace MiningApp.UI
 
         void ShowLogs(LogType type)
         {
+            var entries = new List<LogEntry>();
+
             switch (type)
             {
                 case LogType.Error:
-                    DataGrid.ItemsSource = LogHelper.ErrorLogEntries;
+                    entries = LogHelper.ErrorLogEntries;
                     break;
                 case LogType.General:
-                    DataGrid.ItemsSource = LogHelper.GeneralLogEntries;
+                    entries = LogHelper.GeneralLogEntries;
                     break;
                 case LogType.Session:
-                    DataGrid.ItemsSource = LogHelper.SessionLogEntries;
+                    entries = LogHelper.SessionLogEntries;
                     break;
                 case LogType.Server:
-                    DataGrid.ItemsSource = LogHelper.ServerLogEntries;
+                    entries = LogHelper.ServerLogEntries;
                     break;
             }
+
+            // Reverse the entries to show most recent at the top
+            entries.Reverse();
+
+            DataGrid.ItemsSource = entries;
         }
 
         string _currentCategory = LogHelper.LogCategories()[0];
