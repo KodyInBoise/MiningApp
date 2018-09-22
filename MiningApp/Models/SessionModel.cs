@@ -231,7 +231,8 @@ namespace MiningApp
                     WindowController.MiningSessions.Remove(this);
                 }
 
-                MinerProcess.Kill();
+                var procs = Process.GetProcessesByName(MinerProcess.ProcessName).ToList();
+                procs.ForEach(x => x.Kill());
             }
             catch (InvalidOperationException) { } // Swallow invalid operation exceptions when process is already killed
             catch (Exception ex)
