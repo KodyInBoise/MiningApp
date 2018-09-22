@@ -40,6 +40,21 @@ namespace MiningApp
             }
         }
 
+        async Task CloseConnection()
+        {
+            try
+            {
+                if (_connection.State != ConnectionState.Closed)
+                {
+                    await _connection.CloseAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleServerException(ex);
+            }
+        }
+
         private string GetConnectionString()
         {
             string s = $"Server=23.229.226.104; Database=mining-app; Uid={_user}; Pwd={_password}; SslMode=none";
@@ -62,13 +77,17 @@ namespace MiningApp
             {
                 var cmd = PreparedStatements.UpdateClient.GetCommand(client, userID);
 
-                await _connection.OpenAsync();
+                await OpenConnection();
+
                 await cmd.ExecuteNonQueryAsync();
-                await _connection.CloseAsync();
+
+                await CloseConnection();
             }
             catch (Exception ex)
             {
                 ExceptionUtil.Handle(ex);
+
+                await CloseConnection();
             }
         }
 
@@ -79,7 +98,7 @@ namespace MiningApp
 
             using (_connection)
             {
-                await _connection.OpenAsync();
+                await OpenConnection();
 
                 using (var rdr = await cmd.ExecuteReaderAsync())
                 {
@@ -115,7 +134,7 @@ namespace MiningApp
 
                 using (_connection)
                 {
-                    await _connection.OpenAsync();
+                    await OpenConnection();
 
                     using (var rdr = await cmd.ExecuteReaderAsync())
                     {
@@ -138,6 +157,8 @@ namespace MiningApp
             {
                 HandleServerException(ex);
 
+                await CloseConnection();
+
                 return null;
             }
         }
@@ -148,9 +169,9 @@ namespace MiningApp
 
             using (_connection) 
             {
-                await _connection.OpenAsync();
+                await OpenConnection();
                 await cmd.ExecuteNonQueryAsync();
-                await _connection.CloseAsync();
+                await CloseConnection();
             }
         }
 
@@ -186,9 +207,9 @@ namespace MiningApp
 
             using (_connection)
             {
-                await _connection.OpenAsync();
+                await OpenConnection();
                 await cmd.ExecuteNonQueryAsync();
-                await _connection.CloseAsync();
+                await CloseConnection();
             }
         }
 
@@ -202,7 +223,7 @@ namespace MiningApp
 
                 using (_connection)
                 {
-                    await _connection.OpenAsync();
+                    await OpenConnection();
 
                     using (var rdr = await cmd.ExecuteReaderAsync())
                     {
@@ -221,7 +242,7 @@ namespace MiningApp
                         }
                     }
 
-                    await _connection.CloseAsync();
+                    await CloseConnection();
                 }
 
                 return clients;
@@ -229,6 +250,8 @@ namespace MiningApp
             catch (Exception ex)
             {
                 HandleServerException(ex);
+
+                await CloseConnection();
 
                 return new List<LocalClientModel>();
             }
@@ -242,9 +265,9 @@ namespace MiningApp
 
                 using (_connection)
                 {
-                    await _connection.OpenAsync();
+                    await OpenConnection();
                     await cmd.ExecuteNonQueryAsync();
-                    await _connection.CloseAsync();
+                    await CloseConnection();
                 }
             }
             catch (Exception ex)
@@ -259,9 +282,9 @@ namespace MiningApp
 
             using (_connection)
             {
-                await _connection.OpenAsync();
+                await OpenConnection();
                 await cmd.ExecuteNonQueryAsync();
-                await _connection.CloseAsync();
+                await CloseConnection();
             }
         }
 
@@ -273,7 +296,7 @@ namespace MiningApp
 
             using (_connection)
             {
-                await _connection.OpenAsync();
+                await OpenConnection();
 
                 using (var rdr = await cmd.ExecuteReaderAsync())
                 {
@@ -292,7 +315,7 @@ namespace MiningApp
                     }
                 }
 
-                await _connection.CloseAsync();
+                await CloseConnection();
             }
 
             return messages;
