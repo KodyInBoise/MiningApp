@@ -37,13 +37,14 @@ namespace MiningApp
 
         public DateTime Timestamp { get; set; }
 
-        public string Message { get; set; }
-
         public ClientAction Action { get; set; }
+
+        public string Message { get; set; }
 
         public ClientMessageModel()
         {
             MessageID = ElementHelper.GetNewGuid(8);
+            Timestamp = DateTime.Now;
         }
 
         public override string ToString()

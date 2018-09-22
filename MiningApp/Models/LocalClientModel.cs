@@ -151,6 +151,7 @@ namespace MiningApp
                 }
                 else if (message.Action.Value == ClientAction.CloseApp.Value)
                 {
+                    LogHelper.AddEntry(LogType.General, $"Shutting down from server message: {message}");
                     MainWindow.Instance.Shutdown();
                 }
             }
@@ -218,6 +219,18 @@ namespace MiningApp
 
                 return "";
             }
+        }
+
+        public async Task SendClientMessage(string receivingID, ClientAction action, string message)
+        {
+            var newMessage = new ClientMessageModel()
+            {
+                ClientID = receivingID,
+                Action = action,
+                Message = message
+            };
+
+            await ServerHelper.InsertClientMessage(newMessage);
         }
 
         public string GetDisplayName()
