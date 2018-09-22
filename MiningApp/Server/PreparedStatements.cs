@@ -151,9 +151,10 @@ namespace MiningApp
         {
             public static MySqlCommand GetCommand(SessionConfigModel config, string clientID)
             {
-                string sql = $"INSERT INTO ClientConfigs ({ColumnNames.ClientConfigs.ServerID}, {ColumnNames.ClientConfigs.ClientID}, " +
-                    $"{ColumnNames.ClientConfigs.Name}, {ColumnNames.ClientConfigs.MinerName}, {ColumnNames.ClientConfigs.CryptoName}, {ColumnNames.ClientConfigs.Status}) " +
-                    $"VALUES (?serverID, ?clientID, ?name, ?minerName, ?cryptoName, ?status)";
+                string sql = $"INSERT INTO ClientConfigs ({ColumnNames.ClientConfigs.ServerID}, {ColumnNames.ClientConfigs.ClientID}, {ColumnNames.ClientConfigs.Name}, " +
+                    $"{ColumnNames.ClientConfigs.MinerName}, {ColumnNames.ClientConfigs.CryptoName}, {ColumnNames.ClientConfigs.Status}) VALUES (?serverID, ?clientID, " +
+                    $"?name, ?minerName, ?cryptoName, ?status) ON DUPLICATE KEY UPDATE {ColumnNames.ClientConfigs.Name}=?name, {ColumnNames.ClientConfigs.MinerName}=?minerName, " +
+                    $"{ColumnNames.ClientConfigs.CryptoName}=?cryptoName, {ColumnNames.ClientConfigs.Status}=?status";
 
                 var cmd = new MySqlCommand(sql, _connection);
                 AddParameter(cmd, "?serverID", config.ServerID);
