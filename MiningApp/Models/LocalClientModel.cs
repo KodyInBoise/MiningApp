@@ -46,6 +46,8 @@ namespace MiningApp
 
         bool _useServer => Bootstrapper.Settings.Server.UseServer;
 
+        List<ClientConfigModel> _activeSessions { get; set; } = new List<ClientConfigModel>();
+
 
         public LocalClientModel()
         {

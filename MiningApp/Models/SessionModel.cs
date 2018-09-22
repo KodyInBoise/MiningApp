@@ -121,6 +121,7 @@ namespace MiningApp
             OutputHelper = new OutputHelperModel(this);
 
             Config = config;
+            Config.Session = this;
             SessionID = Guid.NewGuid().ToString().Substring(0, 8);
         }
 
@@ -170,6 +171,11 @@ namespace MiningApp
                 StatusToggled?.Invoke(args);
 
                 LogHelper.AddEntry(LogType.Session, statusMessage);
+
+                if (Bootstrapper.Settings.Server.UseServer)
+                {
+                    await Task.Run(() => ServerHelper.UpdateClientConfig(Config, LocalClientModel.Instance.ID));
+                }
             }
             catch (Exception ex)
             {

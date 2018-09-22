@@ -32,7 +32,15 @@ namespace MiningApp
 
         public override string ToString()
         {
-            return Name;
+            var str = Name;
+
+            var status = (SessionStatusEnum)Status;
+            if (status == SessionStatusEnum.Running)
+            {
+                str += " (Active)";
+            }
+
+            return str;
         }
     }
 }
